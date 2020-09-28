@@ -1,0 +1,48 @@
+{
+  "name": "tms-web-app",
+  "version": "1.0.0",
+  "description": "Web App for a tutoring management system",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pablodavid97/tms-web-app.git"
+  },
+  "keywords": [
+    "Tutoring",
+    "University",
+    "College",
+    "Web",
+    "MySQL"
+  ],
+  "author": "Pablo Llanes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pablodavid97/tms-web-app/issues"
+  },
+  "homepage": "https://github.com/pablodavid97/tms-web-app#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.1.0",
+    "express-mysql-session": "^2.1.4",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.6.1",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "timeago.js": "^4.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.4"
+  }
+}
