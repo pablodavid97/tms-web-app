@@ -1,16 +1,20 @@
 const express = require('express');
-const db = require('../database');
+const pool = require('../database');
 
 const router = express.Router();
 
-db.query('SELECT * FROM usuario', function (error, results, fields) {
+pool.query('SELECT * FROM usuario', (error, results, fields) => {
   if (error) throw error;
   
   console.log('The number of users registered are: ', results.length);
 });
 
 router.get('/', (req, res) => {
-  res.send('Hello World');
+  res.render('auth/signin', {pageTitle: "USFQ Tutorías"});
+});
+
+router.get('/home', (req, res) => {
+  res.send("Success Login")
 });
 
 module.exports = router; 

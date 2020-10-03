@@ -1,0 +1,174 @@
+* {
+    margin: 0px; 
+    padding: 0px; 
+    box-sizing: border-box;
+}
+
+body, html {
+	height: 100%;
+	font-family: Poppins-Regular, sans-serif;
+}
+
+.form-container {
+    text-align: center;
+}
+
+.signin-container {
+    margin-top: 3rem!important; 
+    margin-bottom: 3rem!important;
+}
+
+.form-container .form-side-image {
+    background-image: url('../img/bg-01.jpg'); width: calc(100% - 560px);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+}
+
+.form-signin {
+    display: block; padding: 100px 15px 30px 15px; min-height: 80vh;
+}
+
+.form-header-logo {
+    margin-bottom: 1.5rem!important;
+    width:72px; 
+    height:72px
+}
+
+.form-header {
+    margin-bottom: 1.5rem!important;
+    text-align: center;
+}
+
+.form-input {
+    margin-bottom: 1.5rem!important;
+}
+
+.form-label-group {
+    position: relative;
+}
+
+.form-label-group input {
+    display: block;
+    margin: 0;
+}
+
+.form-label-group input, .form-label-group label {
+    height: 3.125rem;
+    padding: .75rem;
+}
+
+.form-label-group label {
+    position: absolute;
+    text-align: left;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    margin-bottom: 0;
+    line-height: 1.5;
+    color: #495057;
+    pointer-events: none;
+    cursor: text;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    transition: all .1s ease-in-out;
+}
+
+.form-label-group input:placeholder-shown ~ label {
+    visibility: hidden;
+    z-index: -1;
+}
+
+.form-label-group input:not(:placeholder-shown) {
+    padding-top: 1.25rem;
+    padding-bottom: .25rem;
+}
+
+.form-label-group input:not(:placeholder-shown) ~ label {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    font-size: 12px;
+    color: #777;
+  }
+
+.form-signin .row {
+    justify-content: space-between; padding: 0px 20px;
+}
+
+.form-signin .row .form-check-input {
+    margin-left: -1rem;
+    cursor: pointer;
+}
+
+.form-signin .row .form-check-label {
+    font-family: Poppins-Regular; font-size: 13px;
+    color: #999999;
+    cursor: pointer;
+}
+
+.txt1 {
+    font-family: Montserrat-Regular;
+    font-size: 13px;
+    color: #555555;
+}
+
+.txt2 {
+    font-family: Montserrat-Regular;
+    font-size: 13px;
+    color: #999999;
+}
+
+.txt3 {
+    font-family: Montserrat-Regular;
+    font-size: 16px;
+    color: #555555;
+}
+
+.form-container-btn {
+    text-align: center;
+    padding: 1rem;
+}
+
+.btn.btn-primary {
+    font-size: 16px; min-width: 250px; height: 40px; border-radius: 20px; text-transform: uppercase;
+}
+
+.sign-in-question-container {
+    padding-top: 1.5rem!important;
+    padding-bottom: 1rem!important;
+}
+
+.usfq-footer {
+    padding-top: 3rem;
+    padding-bottom: 3rem; 
+    background: #f8f9fa!important;
+}
+
+/* Styles for reset password and create password forms */
+  
+  .page-header {
+    padding: 1rem 0;
+    margin: 0;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+  .password-container {
+    max-width: 650px;
+    background: #fff;
+    border: 1px solid #c9c9c9;
+    margin: 0 auto 5rem auto;
+    padding: 4rem;
+  }
+
+  .form-container .lead {
+      font-weight: 400;
+      margin-bottom: 3rem;
+  }
+
+  .redirect-container {
+      text-align: center;
+  }
