@@ -10,7 +10,7 @@ pool.query('SELECT * FROM usuario', (error, results, fields) => {
 });
 
 router.get('/', (req, res) => {
-  res.render('auth/signin', {pageTitle: "USFQ Tutorías"});
+  res.render('auth/signin', {website: true, pageTitle: "USFQ Tutorías"});
 });
 
 router.get('/home', (req, res) => {

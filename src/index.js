@@ -4,7 +4,6 @@ const hbs = require('express-handlebars');
 const path = require('path');
 const passport = require('passport');
 const reload = require('reload');
-const nodemailer = require('nodemailer');
 
 // initializations
 require('dotenv').config();
@@ -38,34 +37,12 @@ app.use((req, res, next) => {
   next();
 });
 
+global.appRoot = path.resolve(__dirname);
+
 // routes
 app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
-
-// nodemailer 
-let transport = nodemailer.createTransport({
-  host: process.env.MAIL_HOST,
-  port: process.env.MAIL_PORT,
-  auth: {
-    user: process.env.MAIL_USERNAME,
-    pass: process.env.MAIL_PASSWORD
-  }
-});
-
-const message = {
-  from: process.env.MAIL_SENDER,
-  to: process.env.MAIL_RECIPIENT,
-  subject: "Test",
-  text: "This is a test to see if email is being with nodemailer."
-};
-
-transport.sendMail(message, (err, info) => {
-  if(err) {
-    console.log(err);
-  } else {
-    console.log(info);
-  }
-});
+app.use(require('./routes/mail-api'));
 
 
 // public
