@@ -24,7 +24,6 @@ let transport = nodemailer.createTransport({
 transport.use("compile", hbs(options));
 
 const sendEmail = async (mailObj) => {
-    console.log("root: ", global.appRoot);
     const { from, to, subject, template, context} = mailObj;
     try {        
         let mailInfo = await transport.sendMail({ 

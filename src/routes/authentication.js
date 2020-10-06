@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../database');
-const passport = require('passport');
 const axios = require('axios');
+const passport = require('passport');
+const helpers = require('./../lib/helpers');
 
 const sendPasswordReset = async (user) => {
     console.log("Usuario: ", user.nombres);
@@ -63,9 +64,26 @@ router.post('/reset-password', (req, res) => {
 }); 
 
 // CREATE PASSWORD
-router.get('/create-password', (req, res) => {
-    res.render('auth/create-password', {website: true, headerTitle: "Restablecer Contraseña", isUserActive: false, createBtnText: "Crear Contraseña"})
+router.get('/create-password/:userId', (req, res) => {
+    console.log("Params: ", req.params);
+    res.render('auth/create-password', {website: true, headerTitle: "Restablecer Contraseña", isUserActive: false, createBtnText: "Crear Contraseña", userId: req.params.userId})
 });
+
+router.post('/create-password', async (req, res) => {
+    console.log("Request body: ", req.body);
+    try {
+        userPassword = await helpers.encryptPassword(req.body.newPassword);
+
+        pool.query("UPDATE usuario SET hash = ? WHERE usuario_id = ?", [userPassword, req.body.userId], (error, results, fields) => {
+            if(error) throw error;
+    
+            console.log("Resutls: ", results);
+            res.redirect('/')
+        });
+    } catch (error) {
+        throw error
+    }
+})
 
 // CHANGE PASSWORD
 router.get('/change-password', (req, res) => {

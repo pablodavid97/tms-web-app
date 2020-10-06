@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/home', (req, res) => {
-  res.send("Success Login")
+  res.render('home', {website: true})
 });
 
 module.exports = router; 
