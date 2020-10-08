@@ -3,7 +3,12 @@ const morgan = require('morgan');
 const hbs = require('express-handlebars');
 const path = require('path');
 const passport = require('passport');
+const flash = require('connect-flash');
 const reload = require('reload');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+
+// const { database } = require('./keys');
 
 // initializations
 require('dotenv').config();
@@ -11,6 +16,9 @@ const hostname = '127.0.0.1';
 const port = 4000;
 const app = express();
 require('./lib/passport');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session');
+const { body } = require('express-validator');
 
 
 // settings
@@ -27,15 +35,20 @@ app.set('view engine', '.hbs');
 
 // middlewares
 app.use(morgan('dev'));
+// app.use(bodyParser.urlencoded({extended: false}));
+// app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
+app.use(cookieParser());
+app.use(session({
+  cookie: {maxAge: 60000},
+  secret: 'session_cookie_secret',
+  resave: false,
+  saveUninitialized: false,
+}));
+app.use(flash());
 app.use(passport.initialize());
-
-// global variables
-app.use((req, res, next) => {
-  next();
-});
+app.use(passport.session());
 
 global.appRoot = path.resolve(__dirname);
 

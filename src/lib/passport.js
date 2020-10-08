@@ -12,21 +12,23 @@ passport.use('local.signin', new LocalStrategy ({
         passwordField: 'password',
         passReqToCallback: true
     }, async (req, email, password, done) => {
-        userPassword = await helpers.encryptPassword(password);
 
-        pool.query('SELECT * FROM usuario WHERE correo_institucional = ?', [email], async (error, results, fields) => {
-            if(error) return done(error);
-            console.log("Results: ", results);
+        const rows = await pool.query('SELECT * FROM usuario WHERE correo_institucional = ?', [email]);
 
-            const passwordMatch = await helpers.matchPassword(userPassword, results[0].hash) 
+        if (rows.length > 0) {
+            user = rows[0]
+
+            const passwordMatch = await helpers.matchPassword(password, user.hash) 
+            console.log("Passwords Match?: ", passwordMatch);
 
             if(passwordMatch){
-                return done(null, results[0])
+                return done(null, user, req.flash('success', 'Bienvenido/a ' + user.nombres))
             } else {
-                return done(null, false)
+                return done(null, false, req.flash('message', 'Contraseña incorrecta'));
             }
-        });
-
+        } else {
+            return done(null, false, req.flash('message', 'El usuario ingresado no está registrado'));
+        }
     }
 ));
 
@@ -35,6 +37,6 @@ passport.serializeUser((user, done) => {
   });
   
   passport.deserializeUser(async (id, done) => {
-    const rows = await pool.query('SELECT * FROM usuario WHERE id = ?', [id]);
+    const rows = await pool.query('SELECT * FROM usuario WHERE usuario_id = ?', [id]);
     done(null, rows[0]);
   });

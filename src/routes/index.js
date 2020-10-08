@@ -3,18 +3,31 @@ const pool = require('../database');
 
 const router = express.Router();
 
-pool.query('SELECT * FROM usuario', (error, results, fields) => {
-  if (error) throw error;
-  
-  console.log('The number of users registered are: ', results.length);
+router.get('/', async (req, res) => {
+  try {
+    const rows = await pool.query('SELECT * FROM usuario');
+
+    console.log("Rows", rows);
+
+    if (rows.length > 0) {
+      console.log('The number of users registered are: ', rows.length);
+    }
+  } catch (error) {
+    console.log("Error: ", error.message);
+  }
+
+  res.render('auth/signin', {website: true, pageTitle: "USFQ Tutorías", success: req.flash('success')});
 });
 
-router.get('/', (req, res) => {
-  res.render('auth/signin', {website: true, pageTitle: "USFQ Tutorías"});
+router.get('/flash', async (req, res) => {
+  console.log("Flash Message", "Flash is back!");
+
+  req.flash('success', "Flash is back!");
+  res.redirect('/')
 });
 
 router.get('/home', (req, res) => {
-  res.render('home', {website: true})
+  res.render('home', {website: true, success: req.flash('success'), message: req.flash('message')});
 });
 
 module.exports = router; 

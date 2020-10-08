@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const { promisify } = require('util');
+const util = require('util');
 const { database } = require('./keys');
 
 const pool = mysql.createPool(database);
@@ -25,6 +25,6 @@ pool.getConnection((err, connection) => {
 });
 
 // promisify pool queries
-promisify(pool.query);
+pool.query = util.promisify(pool.query)
 
 module.exports = pool;
