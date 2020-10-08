@@ -18,8 +18,12 @@ pool.getConnection((err, connection) => {
     }
 
     if(connection) {
-        connection.release();
-        console.log("DB is Connected");
+        console.log("DB is Connected as id: " + connection.threadId);
+        connection.query('SELECT * FROM usuario', (err, rows) => {
+            connection.release();
+            if(err) throw err;
+            console.log('The number of users registered are: ', rows.length);
+        });
         return;
     }
 });
