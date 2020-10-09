@@ -1,21 +1,25 @@
 const express = require('express');
 const pool = require('../database');
+const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  res.render('auth/signin', {website: true, pageTitle: "USFQ Tutorías", success: req.flash('success'), message: req.flash('message')});
+router.get('/', isNotLoggedIn, (req, res) => {
+  res.render('auth/signin', {website: true, pageTitle: "USFQ Tutorías", success: req.flash('success'), error: req.flash('error')});
 });
 
-router.get('/flash', async (req, res) => {
-  console.log("Flash Message", "Flash is back!");
+router.get('/home', isLoggedIn, async (req, res) => {
+  try{
+    console.log("Logged User: ", user);
 
-  req.flash('success', "Flash is back!");
-  res.redirect('/')
-});
-
-router.get('/home', (req, res) => {
-  res.render('home', {website: true, success: req.flash('success'), message: req.flash('message')});
+    const rows = await pool.query("SELECT * FROM rol WHERE rol_id = ?", [req.user.rol_id]);
+  
+    if(rows.length > 0) {
+      res.render('home', {website: true, user: req.user, role: rows[0], success: req.flash('success'), error: req.flash('error')});
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 module.exports = router; 

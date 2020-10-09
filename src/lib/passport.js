@@ -19,7 +19,7 @@ passport.use('local.signin', new LocalStrategy ({
             user = rows[0]
 
             const passwordMatch = await helpers.matchPassword(password, user.hash) 
-            console.log("Passwords Match?: ", passwordMatch);
+            // console.log("Passwords Match?: ", passwordMatch);
 
             if(passwordMatch){
                 return done(null, user, req.flash('success', 'Bienvenido/a ' + user.nombres))

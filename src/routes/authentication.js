@@ -4,6 +4,7 @@ const pool = require('../database');
 const axios = require('axios');
 const passport = require('passport');
 const helpers = require('../lib/helpers');
+const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 
 const sendPasswordReset = async (user) => {
     console.log("Usuario: ", user.nombres);
@@ -29,8 +30,8 @@ const sendPasswordReset = async (user) => {
 }
 
 // SIGN IN
-router.get('/signin', async (req, res, next) => {
-    res.render('auth/signin', {website: true, success: req.flash('success'), message: req.flash('message')});
+router.get('/signin', isNotLoggedIn, (req, res, next) => {
+    res.render('auth/signin', {website: true, success: req.flash('success'), error: req.flash('error')});
 });
 
 router.post('/signin', (req, res, next) => {
@@ -42,15 +43,15 @@ router.post('/signin', (req, res, next) => {
 });
 
 // RESET PASSWORD 
-router.get('/forgot-password', (req, res) => {
+router.get('/forgot-password', isNotLoggedIn, (req, res) => {
     res.render('auth/reset-password', {website: true, headerTitle: "¿Olvidaste Tu Contraseña?"})
 });
 
-router.get('/first-time-login', (req, res) => {
+router.get('/first-time-login', isNotLoggedIn, (req, res) => {
     res.render('auth/reset-password', {website: true, headerTitle: "¿Primera Vez Que Ingresas?"})
 });
 
-router.post('/reset-password', async (req, res) => {
+router.post('/reset-password',  async (req, res) => {
     console.log("Reset PWD Body: ", req.body);
 
     try {
@@ -62,22 +63,20 @@ router.post('/reset-password', async (req, res) => {
     
         req.flash('success', 'La contraseña fue cambiada con exito');
     
-        res.redirect('/home');
+        res.redirect('/singin');
     } catch (error) {
         throw error;
     }
 }); 
 
 // CREATE PASSWORD
-router.get('/create-password/:userId', (req, res) => {
+router.get('/create-password/:userId', isNotLoggedIn, (req, res) => {
     console.log("Params: ", req.params);
-    res.render('auth/create-password', {website: true, headerTitle: "Restablecer Contraseña", isUserActive: false, createBtnText: "Crear Contraseña", userId: req.params.userId, success: req.flash('success'), message: req.flash('message')})
+    res.render('auth/create-password', {website: true, headerTitle: "Restablecer Contraseña", isUserActive: false, createBtnText: "Crear Contraseña", userId: req.params.userId, success: req.flash('success'), error: req.flash('error')})
 });
 
-router.post('/create-password', async (req, res) => {
+router.post('/create-password', isNotLoggedIn, async (req, res) => {
     try {
-        console.log("Contraseñas: ", req.body);
-
         userId = req.body.userId;
         newPassword = req.body.newPassword;
         confirmation = req.body.confirmation;
@@ -95,7 +94,7 @@ router.post('/create-password', async (req, res) => {
 
             res.redirect('/home');
         } else {
-            req.flash('message', 'Las contraseñas no coinciden');
+            req.flash('error', 'Las contraseñas no coinciden');
             res.redirect('/create-password/' + userId);
         }
     } catch (error) {
@@ -104,7 +103,13 @@ router.post('/create-password', async (req, res) => {
 })
 
 // CHANGE PASSWORD
-router.get('/change-password', (req, res) => {
+router.get('/change-password', isLoggedIn, (req, res) => {
     res.render('auth/create-password', {website: true, headerTitle: "¿Quieres Cambiar tu Contraseña?", isUserActive: true, createBtnText: "Cambiar Contraseña"})
 });
+
+router.get('/logout', isLoggedIn, (req, res) => {
+    req.logOut();
+    res.redirect('/signin');
+});
+
 module.exports = router;
