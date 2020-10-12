@@ -63,7 +63,7 @@ router.post('/reset-password',  async (req, res) => {
     
         req.flash('success', 'La contraseña fue cambiada con exito');
     
-        res.redirect('/singin');
+        res.redirect('/signin');
     } catch (error) {
         throw error;
     }
@@ -75,7 +75,7 @@ router.get('/create-password/:userId', isNotLoggedIn, (req, res) => {
     res.render('auth/create-password', {website: true, headerTitle: "Restablecer Contraseña", isUserActive: false, createBtnText: "Crear Contraseña", userId: req.params.userId, success: req.flash('success'), error: req.flash('error')})
 });
 
-router.post('/create-password', isNotLoggedIn, async (req, res) => {
+router.post('/create-password', async (req, res) => {
     try {
         userId = req.body.userId;
         newPassword = req.body.newPassword;

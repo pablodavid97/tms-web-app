@@ -1,0 +1,25 @@
+        <div class="container profile-container">
+            <div class="row">
+                <div class="col-sm-6 personal-brand">
+                    <div class="img mb-4 user-img"></div>
+                    <h3>{{user.nombres}} {{user.apellidos}}</h3>
+                    <h4>{{role.nombre}}</h4>
+                </div>
+                <div class="col-sm-6 user-info">
+                    <p><span class="user-info-lbl">Código: </span> {{user.codigo}}</p>
+                    {{#if isStudent }}
+                        <p><span class="user-info-lbl">Carrera: </span> {{studentInfo.carrera}}</p>
+                        <p><span class="user-info-lbl">GPA: </span> {{studentInfo.gpa}}</p>
+                        <p><span class="user-info-lbl">Tutor: </span>{{tutor.nombres}} {{tutor.apellidos}}</p>
+                    {{/if}}
+                    <p><span class="user-info-lbl">Correo Institucional: </span>{{user.correo_institucional}}</p>
+                    <p><span class="user-info-lbl">Correo Personal: </span>{{user.correo_personal}}</p>
+                    <p><span class="user-info-lbl">Teléfono: </span>{{user.telefono}}</p>
+                    {{#if isStudent}}
+                        <p><span class="user-info-lbl">Periodo de Admisión: </span>{{studentInfo.periodo_de_admision}}</p>
+                        <p><span class="user-info-lbl">Tipo de Admisión: </span>{{studentInfo.tipo_de_admision}}</p>
+                        <p><span class="user-info-lbl">Status: </span>{{studentInfo.status}}</p>
+                    {{/if}}
+                </div>
+            </div>
+        </div>

@@ -172,3 +172,44 @@ body, html {
   .redirect-container {
       text-align: center;
   }
+
+    /* Profile Styles */
+
+    .profile-container {
+        min-height: 650px;
+        margin: 3rem auto;
+        padding: 5rem;
+        box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
+    }
+    
+    .personal-brand {
+        text-align: center;
+        padding-top: 5rem;
+    }
+    
+    .img {
+        width: 200px;
+        height: 200px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
+    
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    
+        margin: 0 auto;
+    }
+    
+    .user-img {
+        background-image: url(../img/estudiante-img.png);
+    }
+    
+    .user-info {
+        padding-top: 3rem;
+    }
+    
+    .user-info .user-info-lbl {
+        font-weight: 600;
+    }
