@@ -9,13 +9,18 @@ body, html {
 	font-family: Poppins-Regular, sans-serif;
 }
 
+.main-container {
+    padding: 5rem;
+}
+
 .form-container {
     text-align: center;
 }
 
 .signin-container {
-    margin-top: 3rem!important; 
-    margin-bottom: 3rem!important;
+    box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
+    /* margin-top: 3rem!important; 
+    margin-bottom: 3rem!important; */
 }
 
 .form-container .form-side-image {
@@ -160,7 +165,6 @@ body, html {
     max-width: 650px;
     background: #fff;
     border: 1px solid #c9c9c9;
-    margin: 0 auto 5rem auto;
     padding: 4rem;
   }
 
@@ -177,7 +181,6 @@ body, html {
 
     .profile-container {
         min-height: 650px;
-        margin: 3rem auto;
         padding: 5rem;
         box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
     }
@@ -213,3 +216,32 @@ body, html {
     .user-info .user-info-lbl {
         font-weight: 600;
     }
+
+    /* Meeting styles */
+.meeting-container {
+    padding: 3rem 15rem;
+    border: 1px solid #c9c9c9;
+
+}
+
+.meeting-container .form-header {
+    text-align: left;
+}
+
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.far {
+    font-size: 20px;
+    font-weight: 400;
+}
+

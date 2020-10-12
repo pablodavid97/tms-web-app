@@ -37,4 +37,12 @@ router.get('/home', isLoggedIn, async (req, res) => {
   }
 });
 
+router.get('/students', (req, res) => {
+  res.render('students', {website: true, user: req.user, isProfessor: true, success: req.flash('success'), error: req.flash('error')});
+});
+
+router.get('/meetings', (req, res) => {
+  res.render('create-meeting', {website: true, user: req.user, isProfessor: true, success: req.flash('success'), error: req.flash('error')})
+})
+
 module.exports = router; 
