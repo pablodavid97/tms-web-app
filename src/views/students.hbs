@@ -1,4 +1,14 @@
         <div class="container students-container">
+            <div class="container students-container">
+            <div class="page-header header-left">
+                <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>Estudiantes</h1>
+                    </div>
+                </div>
+                </div>
+            </div>
             <table class="table table-hover students-table">
                 <thead class="thead-dark">
                     <tr>
@@ -9,41 +19,15 @@
                         <th scope="col">GPA</th>
                     </tr>
                     <tbody>
-                        <tr>
-                            <td scope="row">132345</td>
-                            <td>Kevin</td>
-                            <td>Verdezoto</td>
-                            <td>kverdezoto@estud.usfq.edu.ec</td>
-                            <td>2.85</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">124567</td>
-                            <td>Daniela</td>
-                            <td>López</td>
-                            <td>dlopez@estud.usfq.edu.ec</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">132345</td>
-                            <td>Kevin</td>
-                            <td>Verdezoto</td>
-                            <td>kverdezoto@estud.usfq.edu.ec</td>
-                            <td>2.85</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">116789</td>
-                            <td>Marco</td>
-                            <td>Arévalo</td>
-                            <td>marevalo@estud.usfq.edu.ec</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">109011</td>
-                            <td>Juan</td>
-                            <td>Merino</td>
-                            <td>jmerino@estud.usfq.edu.ec</td>
-                            <td>3.2</td>
-                        </tr>
+                        {{#each students}}
+                            <tr>
+                                <td scope="row">{{this.codigo}}</td>
+                                <td>{{this.nombres}}</td>
+                                <td>{{this.apellidos}}</td>
+                                <td>{{this.correo_institucional}}</td>
+                                <td>{{this.gpa}}</td>
+                            </tr>
+                        {{/each}}
                     </tbody>
                 </thead>
     

@@ -24,10 +24,10 @@ passport.use('local.signin', new LocalStrategy ({
             if(passwordMatch){
                 return done(null, user, req.flash('success', 'Bienvenido/a ' + user.nombres))
             } else {
-                return done(null, false, req.flash('message', 'Contraseña incorrecta'));
+                return done(null, false, req.flash('error', 'Contraseña incorrecta'));
             }
         } else {
-            return done(null, false, req.flash('message', 'El usuario ingresado no está registrado'));
+            return done(null, false, req.flash('error', 'El usuario ingresado no está registrado'));
         }
     }
 ));

@@ -224,8 +224,12 @@ body, html {
 
 }
 
-.meeting-container .form-header {
+.header-left {
     text-align: left;
+}
+
+.page-header .btn-container {
+    padding-top: 0.5rem;
 }
 
 .input-group-addon {
@@ -243,5 +247,14 @@ body, html {
 .far {
     font-size: 20px;
     font-weight: 400;
+}
+
+.meeting-container .form-container-btn {
+    text-align: center;
+    padding: 1rem;
+}
+
+.meeting-container .form-container-btn .btn.btn-primary {
+    border-radius: 5px;
 }
 
