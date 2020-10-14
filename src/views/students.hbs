@@ -21,7 +21,7 @@
                     <tbody>
                         {{#each students}}
                             <tr>
-                                <td scope="row">{{this.codigo}}</td>
+                                <td scope="row"><a href="/student/{{this.usuario_id}}">{{this.codigo}}</a></td>
                                 <td>{{this.nombres}}</td>
                                 <td>{{this.apellidos}}</td>
                                 <td>{{this.correo_institucional}}</td>

@@ -204,8 +204,16 @@ body, html {
     
         margin: 0 auto;
     }
+
+    .dean-img {
+        background-image: url(../img/decano-img.jpg);
+    }
+
+    .professor-img {
+        background-image: url(../img/profesor-img.jpg);
+    }
     
-    .user-img {
+    .student-img {
         background-image: url(../img/estudiante-img.png);
     }
     
