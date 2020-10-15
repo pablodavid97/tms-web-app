@@ -88,48 +88,6 @@ router.get('/student/:userId', async (req, res) => {
   }
 });
 
-router.get('/meetings', async (req, res) => {
-  try {
-    isStudent = false;
-    isProfessor = false; 
-    studentInfo = {};
-    tutor = {};
-    students = {};
-    meetings = {}
-
-    if(req.user.rol_id == 3) {
-      isStudent = true;
-
-      const rows = await pool.query("SELECT * FROM estudiante WHERE usuario_id = ?", [req.user.usuario_id]);
-      studentInfo = rows[0]
-
-      const rows2 = await pool.query("SELECT * FROM usuario INNER JOIN profesor on usuario.usuario_id = profesor.usuario_id INNER JOIN estudiante on profesor.usuario_id = estudiante.profesor_usuario_id WHERE profesor.usuario_id = ?", [studentInfo.profesor_usuario_id])
-      tutor = rows2[0]
-
-      const rows3 = await pool.query("SELECT * FROM reunion_view WHERE estudiante_usuario_id = ?", [req.user.usuario_id])
-      meetings = rows3
-      console.log("Reuniones: ", meetings);
-
-    } else if (req.user.rol_id == 2) {
-      isProfessor = true;
-
-      const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE profesor_usuario_id = ?", [req.user.usuario_id])
-      students = rows;
-
-      const rows2 = await pool.query("SELECT * FROM reunion_view WHERE profesor_usuario_id = ?", [req.user.usuario_id])
-      meetings = rows2
-      console.log("Reuniones: ", meetings);
-    }
-
-    console.log("Estudiantes: ", students);
-
-    res.render('meetings', {website: true, user: req.user, meetings: meetings, isStudent: isStudent, tutor: tutor, studentInfo: studentInfo, isProfessor: isProfessor, students: students, success: req.flash('success'), error: req.flash('error')});
-
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
 router.post('/create-meeting', async (req, res) => {
   console.log("usuario: ", req.user);
 

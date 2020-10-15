@@ -105,6 +105,8 @@
                         <th scope="col">Profesor</th>
                         <th scope="col">Estudiante</th>
                         <th scope="col">Estado</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     <tbody>
                         {{#each meetings}}
@@ -116,6 +118,8 @@
                                 <td>{{this.nombres_profesor}} {{this.apellidos_profesor}}</td>
                                 <td>{{this.nombres_estudiante}} {{this.apellidos_estudiante}}</td>
                                 <td>Creada</td>
+                                <td><a href="/meetings/edit/{{this.reunion_id}}">Editar</a></td>
+                                <td><a href="/meetings/delete/{{this.reunion_id}}">Eliminar</a></td>
                             </tr>
                         {{/each}}
                     </tbody>

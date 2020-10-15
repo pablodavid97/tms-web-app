@@ -1,0 +1,68 @@
+        <div class="container meeting-container">
+            <form action="">
+                <h1 class="form-header header-left">Editar Reunión</h1>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Reunión No: </label>
+                    <div class="col-sm-10">
+                        {{meeting.reunion_id}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputMeetingSubject">Tema</label>
+                    <input type="text" class="form-control" id="exampleInputSubject" placeholder="Ingresa el tema de la reunión" value="{{meeting.tema}}">
+                </div>
+                <div class="form-group">
+                    <label for="inputMeetingDescription">Descripción</label>
+                    <textarea class="form-control" id="inputMeetingDescription" rows="3" placeholder="Ingresa la descripción de la reunión" value="{{meeting.descripcion}}"></textarea>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="meetingEmailCheck">
+                    <label class="form-check-label" for="meetingEmailCheck">Mandar notificaciones por correo</label>
+                  </div>
+                  <label for="meetingDatePicker">Fecha</label>
+                  <div class="row">
+                    <div class="form-group datepicker-container col-sm-6">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" value="{{date}}">
+                            <span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <select class="custom-select">
+                            <option value="{{time}}"selected>{{time}}</option>
+                            <option value="09:00">9:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                          </select>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <select class="custom-select">
+                            <option selected>AM</option>
+                            <option value="1">AM</option>
+                            <option value="2">PM</option>
+                          </select>
+                    </div>
+                  </div>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="professorMeetingInput">Profesor</label>
+                        <input type="text" id="professorMeetingInput" class="form-control" value="{{meeting.nombres_profesor}} {{meeting.apellidos_profesor}}" readonly>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="studentMeetingInput">Estudiante</label>
+                            <select class="custom-select">
+                                <option value={{meeting.estudiante_usuario_id}} selected>{{meeting.nombres_estudiante}} {{meeting.apellidos_estudiante}}</option>
+                                {{#each students}}
+                                    <option value={{this.usuario_id}}>
+                                        {{this.nombres}} {{this.apellidos}}
+                                    </option>
+                                {{/each}}
+                          </select>
+                    </div>
+                </div>
+                <div class="form-container-btn">
+                    <button type="button" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Reunión</button>
+                  </div>
+            </form>
+        </div>
