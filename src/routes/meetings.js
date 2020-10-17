@@ -5,6 +5,8 @@ const utils = require('../lib/utils');
 
 const router = express.Router();
 
+const deletedStatus = 5;
+
 
 router.get('/', async (req, res) => {
     try {
@@ -23,8 +25,8 @@ router.get('/', async (req, res) => {
   
         const rows2 = await pool.query("SELECT * FROM usuario INNER JOIN profesor on usuario.usuario_id = profesor.usuario_id INNER JOIN estudiante on profesor.usuario_id = estudiante.profesor_usuario_id WHERE profesor.usuario_id = ?", [studentInfo.profesor_usuario_id])
         tutor = rows2[0]
-  
-        const rows3 = await pool.query("SELECT * FROM reunion_view WHERE estudiante_usuario_id = ?", [req.user.usuario_id])
+        
+        const rows3 = await pool.query("SELECT * FROM reunion_view WHERE estudiante_usuario_id = ? and estado_id != ?", [req.user.usuario_id, deletedStatus])
         meetings = rows3
   
       } else if (req.user.rol_id == 2) {
@@ -33,12 +35,13 @@ router.get('/', async (req, res) => {
         const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE profesor_usuario_id = ?", [req.user.usuario_id])
         students = rows;
         
-        var deletedStatus = 5
         const rows2 = await pool.query("SELECT * FROM reunion_view WHERE profesor_usuario_id = ? and estado_id != ?", [req.user.usuario_id, deletedStatus])
         meetings = rows2
       }
 
       console.log("Reuniones: ", meetings);
+      console.log("Is Professor: ", isProfessor);
+      console.log("Is Student: ", isStudent);
 
       meetingsNum = meetings.length
 
@@ -85,8 +88,7 @@ router.get('/', async (req, res) => {
 router.get('/delete/:meetingId', async (req, res) => {
 
     try {
-        var meetingStatus = 5
-        await pool.query("UPDATE reunion SET estado_id = ? WHERE reunion_id = ?", [meetingStatus, req.params.meetingId]);
+        await pool.query("UPDATE reunion SET estado_id = ? WHERE reunion_id = ?", [deletedStatus, req.params.meetingId]);
 
         req.flash('success', 'La reunión fue eliminada con exito');
 

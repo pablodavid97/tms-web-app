@@ -107,30 +107,56 @@
             <table class="table table-hover meetings-table">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Número</th>
-                        <th scope="col">Tema</th>
-                        <th scope="col">Descripción</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Profesor</th>
-                        <th scope="col">Estudiante</th>
-                        <th scope="col">Estado</th>
-                        <th></th>
-                        <th></th>
+                        {{#if isProfessor}}
+                            <th scope="col">Número</th>
+                            <th scope="col">Tema</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Profesor</th>
+                            <th scope="col">Estudiante</th>
+                            <th scope="col">Estado</th>
+                            <th></th>
+                            <th></th>
+                        {{else }}
+                            <th scope="col">Número</th>
+                            <th scope="col">Tema</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Profesor</th>
+                            <th scope="col">Estudiante</th>
+                            <th scope="col">Estado</th>
+                        {{/if}}
                     </tr>
                     <tbody>
-                        {{#each meetings}}
-                            <tr>
-                                <td scope="row">{{this.reunion_id}}</td>
-                                <td>{{this.tema}}</td>
-                                <td>{{this.descripcion}}</td>
-                                <td>{{this.fecha}}</td>
-                                <td>{{this.nombres_profesor}} {{this.apellidos_profesor}}</td>
-                                <td>{{this.nombres_estudiante}} {{this.apellidos_estudiante}}</td>
-                                <td>{{this.estado}}</td>
-                                <td><a href="/meetings/edit/{{this.reunion_id}}">Editar</a></td>
-                                <td><a href="/meetings/delete/{{this.reunion_id}}">Eliminar</a></td>
-                            </tr>
-                        {{/each}}
+                        {{#if isProfessor}}
+                            {{#each meetings}}
+                                <tr>
+                                    <td scope="row">{{this.reunion_id}}</td>
+                                    <td>{{this.tema}}</td>
+                                    <td>{{this.descripcion}}</td>
+                                    <td>{{this.fecha}}</td>
+                                    <td>{{this.nombres_profesor}} {{this.apellidos_profesor}}</td>
+                                    <td>{{this.nombres_estudiante}} {{this.apellidos_estudiante}}</td>
+                                    <td>{{this.estado}}</td>
+                                    <td><a href="/meetings/edit/{{this.reunion_id}}">Editar</a></td>
+                                    <td><a href="/meetings/delete/{{this.reunion_id}}">Eliminar</a></td>
+                                </tr>
+                            {{/each}}
+
+                        {{else}}
+                            {{#each meetings}}
+                                <tr>
+                                    <td scope="row">{{this.reunion_id}}</td>
+                                    <td>{{this.tema}}</td>
+                                    <td>{{this.descripcion}}</td>
+                                    <td>{{this.fecha}}</td>
+                                    <td>{{this.nombres_profesor}} {{this.apellidos_profesor}}</td>
+                                    <td>{{this.nombres_estudiante}} {{this.apellidos_estudiante}}</td>
+                                    <td>{{this.estado}}</td>
+                                </tr>
+                            {{/each}}
+
+                        {{/if}}
                     </tbody>
                 </thead>
     
