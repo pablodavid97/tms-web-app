@@ -88,43 +88,4 @@ router.get('/student/:userId', async (req, res) => {
   }
 });
 
-router.post('/create-meeting', async (req, res) => {
-  console.log("usuario: ", req.user);
-
-  console.log("Datos Ingresados: ", req.body);
-
-  var dateValues = req.body.date.split("/")
-
-  var timeValues = req.body.time.split(':')
-
-  // Converts PM values to 24 value
-  if(req.body.format == 2 && timeValues[0] != "12") {
-    timeValues[0] = String((parseInt(timeValues[0]) + 12) % 24)
-  } else if (req.body.format == 1) {
-      // Convertas 12 Am to 00 in 24 hour format
-      if(timeValues[0] == "12") {
-        timeValues[0] = "00";
-      } else {
-        timeValues[0] = ("0" + timeValues[0]).slice(-2) 
-      }
-  }
-
-  // Creates date in standard datetime format YYYY-MM-DD hh:mm'
-  var time = timeValues[0] + ":" + timeValues[1];
-  var date = dateValues[2] + "-" + dateValues[1] + "-" + dateValues[0] + " " + time
-
-  console.log("Date: " + date);
-
-
-  try {
-    await pool.query("INSERT INTO reunion (tema, descripcion, fecha, profesor_usuario_id, estudiante_usuario_id) VALUES (?, ?, ?, ?, ?)", [req.body.subject, req.body.description, date, req.user.usuario_id, req.body.student])
-    
-    req.flash("success", "La reunión fue creada con exito!");
-    res.redirect('/meetings');
-  } catch (error) {
-    console.error(error.message);
-  }
-  // Create a new meeting
-});
-
 module.exports = router; 

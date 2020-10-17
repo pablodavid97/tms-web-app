@@ -266,3 +266,14 @@ body, html {
     border-radius: 5px;
 }
 
+/* Meeting modal styles */
+
+#createMeetingModal .modal-body {
+    padding: 2rem 6rem;
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 900px;
+    }
+}

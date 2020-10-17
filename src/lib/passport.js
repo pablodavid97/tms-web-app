@@ -1,7 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../database');
-const helpers = require('./helpers');
+const utils = require('./utils');
 
 
 /* ----- CONFIGURATION FILE FOR PASSPORT ----------*/
@@ -18,7 +18,7 @@ passport.use('local.signin', new LocalStrategy ({
         if (rows.length > 0) {
             user = rows[0]
 
-            const passwordMatch = await helpers.matchPassword(password, user.hash) 
+            const passwordMatch = await utils.matchPassword(password, user.hash) 
             // console.log("Passwords Match?: ", passwordMatch);
 
             if(passwordMatch){

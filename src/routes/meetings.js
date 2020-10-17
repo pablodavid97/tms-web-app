@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../database');
 const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
+const utils = require('../lib/utils');
 
 const router = express.Router();
 
@@ -25,58 +26,53 @@ router.get('/', async (req, res) => {
   
         const rows3 = await pool.query("SELECT * FROM reunion_view WHERE estudiante_usuario_id = ?", [req.user.usuario_id])
         meetings = rows3
-        console.log("Reuniones: ", meetings);
   
       } else if (req.user.rol_id == 2) {
         isProfessor = true;
   
         const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE profesor_usuario_id = ?", [req.user.usuario_id])
         students = rows;
-  
-        const rows2 = await pool.query("SELECT * FROM reunion_view WHERE profesor_usuario_id = ?", [req.user.usuario_id])
+        
+        var deletedStatus = 5
+        const rows2 = await pool.query("SELECT * FROM reunion_view WHERE profesor_usuario_id = ? and estado_id != ?", [req.user.usuario_id, deletedStatus])
         meetings = rows2
-        console.log("Reuniones: ", meetings);
+      }
+
+      console.log("Reuniones: ", meetings);
+
+      meetingsNum = meetings.length
+
+      for(var i = 0; i < meetingsNum; i++) {
+        console.log("Reunion: ", meetings[i]);
+        var dateTimeValues = getDateTimeValues(meetings[i].fecha)
+        meetings[i].fecha = dateTimeValues[0] + " " + dateTimeValues[1] + ":" + dateTimeValues[2] + dateTimeValues[3].text
       }
   
       console.log("Estudiantes: ", students);
+
+      hourValues = utils.getHourValues()
+      minuteValues = utils.getMinuteValues()
   
-      res.render('meetings/list', {website: true, user: req.user, meetings: meetings, isStudent: isStudent, tutor: tutor, studentInfo: studentInfo, isProfessor: isProfessor, students: students, success: req.flash('success'), error: req.flash('error')});
+      res.render('meetings/list', {website: true, user: req.user, meetings: meetings, isStudent: isStudent, tutor: tutor, studentInfo: studentInfo, isProfessor: isProfessor, students: students, hourValues: hourValues, minuteValues: minuteValues, success: req.flash('success'), error: req.flash('error')});
   
     } catch (error) {
       console.error(error.message);
     }
   });
 
-  router.post('/create-meeting', async (req, res) => {
+  router.post('/create', async (req, res) => {
     console.log("usuario: ", req.user);
   
     console.log("Datos Ingresados: ", req.body);
   
-    var dateValues = req.body.date.split("/")
+    dateTime = getDateTimeFormat(req.body.date, req.body.hours, req.body.minutes, req.body.format)
   
-    var timeValues = req.body.time.split(':')
-  
-    // Converts PM values to 24 value
-    if(req.body.format == 2 && timeValues[0] != "12") {
-      timeValues[0] = String((parseInt(timeValues[0]) + 12) % 24)
-    } else if (req.body.format == 1) {
-        // Convertas 12 Am to 00 in 24 hour format
-        if(timeValues[0] == "12") {
-          timeValues[0] = "00";
-        } else {
-          timeValues[0] = ("0" + timeValues[0]).slice(-2) 
-        }
-    }
-  
-    // Creates date in standard datetime format YYYY-MM-DD hh:mm'
-    var time = timeValues[0] + ":" + timeValues[1];
-    var date = dateValues[2] + "-" + dateValues[1] + "-" + dateValues[0] + " " + time
-  
-    console.log("Date: " + date);
-  
+    console.log("Date: " + dateTime);
+    
+    var meetingStatus = 1
   
     try {
-      await pool.query("INSERT INTO reunion (tema, descripcion, fecha, profesor_usuario_id, estudiante_usuario_id) VALUES (?, ?, ?, ?, ?)", [req.body.subject, req.body.description, date, req.user.usuario_id, req.body.student])
+      await pool.query("INSERT INTO reunion (tema, descripcion, fecha, profesor_usuario_id, estudiante_usuario_id, estado_id) VALUES (?, ?, ?, ?, ?, ?)", [req.body.subject, req.body.description, dateTime, req.user.usuario_id, req.body.student, meetingStatus])
       
       req.flash("success", "La reunión fue creada con exito!");
       res.redirect('/meetings');
@@ -89,7 +85,8 @@ router.get('/', async (req, res) => {
 router.get('/delete/:meetingId', async (req, res) => {
 
     try {
-        await pool.query("DELETE FROM reunion WHERE reunion_id = ?", [req.params.meetingId]);
+        var meetingStatus = 5
+        await pool.query("UPDATE reunion SET estado_id = ? WHERE reunion_id = ?", [meetingStatus, req.params.meetingId]);
 
         req.flash('success', 'La reunión fue eliminada con exito');
 
@@ -103,25 +100,104 @@ router.get('/edit/:meetingId', async (req, res) => {
     const rows = await pool.query("SELECT * FROM reunion_view WHERE reunion_id = ?", [req.params.meetingId]);
     meeting = rows[0];
 
-    var month = meeting.fecha.getMonth() + 1;
-    var day = meeting.fecha.getDate();
-    var year = meeting.fecha.getFullYear();
-    var date = day + "/" + month + "/" + year;
-
-    console.log("Meeting Date: ", date);
-
-    var hours = meeting.fecha.getHours();
-    var minutes = meeting.fecha.getMinutes();
-    var time = ("0" + hours).slice(-2)  + ":" + ("0" + minutes).slice(-2);
-
-    console.log("Meeting Time: ", time);
+    dateTime = getDateTimeValues(meeting.fecha)
+    console.log("Date Time: ", dateTime);
+    date = dateTime[0]
+    hours = dateTime[1]
+    minutes = dateTime[2]
+    format = dateTime[3]
 
     console.log("Reunion: ", meeting);
 
     const rows2 = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE profesor_usuario_id = ?", [req.user.usuario_id])
     students = rows2;
 
-    res.render('meetings/edit', {website: true, user: req.user, meeting: meeting, date: date, time: time, isStudent: false, isProfessor: true, students: students, success: req.flash('success'), error: req.flash('error')});
+    hourValues = utils.getHourValues()
+    minuteValues = utils.getMinuteValues()
+
+    res.render('meetings/edit', {website: true, user: req.user, meeting: meeting, date: date, hours: hours, minutes: minutes, format, isStudent: false, isProfessor: true, students: students, hourValues: hourValues, minuteValues: minuteValues, success: req.flash('success'), error: req.flash('error')});
 });
+
+router.post('/edit', async (req, res) => {
+  console.log("Datos Ingresados: ", req.body);
+
+  dateTime = getDateTimeFormat(req.body.date, req.body.hours, req.body.minutes, req.body.format)
+
+  try{
+    var meetingStatus = 2
+
+    console.log("Meeting Status: ", meetingStatus);
+    await pool.query("UPDATE reunion SET tema = ?, descripcion = ?, fecha = ?, estudiante_usuario_id = ?, estado_id = ? WHERE reunion_id = ?", [req.body.subject, req.body.description, dateTime, req.body.student, meetingStatus, req.body.meetingId])
+  
+    req.flash('success', 'La reunión fue actualizada con exito!')
+
+    res.redirect('/meetings')
+  } catch(error) {
+    console.log(error.message);
+  }
+});
+
+// function to save date into DB
+function getDateTimeFormat(date, hours, minutes, format) {
+  console.log("Date: ", date);
+  console.log("Hours: ", hours);
+  console.log("Minutes: ", minutes);
+  var dateValues = date.split("/")
+  
+  var hoursValue = hours
+
+  // Converts PM values to 24 value
+  if(format == 2 && hoursValue != "12") {
+    hoursValue = String((parseInt(hoursValue[0]) + 12) % 24)
+  } else if (format == 1) {
+      // Convertas 12 Am to 00 in 24 hour format
+      if(hoursValue == "12" && format == 1) {
+        hoursValue = "00";
+      } else {
+        hoursValue = ("0" + hoursValue[0]).slice(-2) 
+      }
+  }
+
+  var minutesValue = ("0" + minutes).slice(-2)
+
+  // Creates date in standard datetime format YYYY-MM-DD hh:mm'
+  var time = hoursValue + ":" + minutesValue;
+  var dateTime = dateValues[2] + "-" + dateValues[1] + "-" + dateValues[0] + " " + time
+
+  return dateTime
+}
+
+function getDateTimeValues(date) {
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+  var year = date.getFullYear();
+  var dateString = day + "/" + month + "/" + year;
+
+  console.log("Meeting Date: ", dateString);
+
+  var hours = date.getHours()
+
+  var format = {}
+
+  if(hours == 0) {
+    hours = 12
+    format = {text: "AM", value: 1}
+  } else if (hours < 12) {
+    format = {text: "AM", value: 1}
+  } else {
+    if(hours != 12){
+      hours = hours - 12
+    }
+    format = {text: "PM", value: 2}
+  }
+  var hoursString = String(hours)
+
+  var minutesString = ("0" + date.getMinutes()).slice(-2)
+
+  console.log("Meeting Hours: ", hoursString);
+  console.log("Meeting Minutes: ", minutesString);
+
+  return [dateString, hoursString, minutesString, format]
+}
 
 module.exports = router;

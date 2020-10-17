@@ -18,7 +18,7 @@
              <div id="createMeetingModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="/create-meeting" method="post">
+                        <form action="/meetings/create" method="POST">
                             <div class="modal-header">
                                 <h1 class="form-header header-left">Agendar Reunión</h1>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -28,8 +28,8 @@
                             <div class="modal-body">
             
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Reunión No: </label>
-                                        <div class="col-sm-10">
+                                        <label class="col-sm-6 col-form-label">Reunión No: </label>
+                                        <div class="col-sm-6">
                                             xxxxxxxx
                                         </div>
                                     </div>
@@ -53,14 +53,23 @@
                                                 <span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
                                             </div>
                                         </div>
-                                        <div class="form-group col-sm-3">
-                                            <select name="time" class="custom-select">
-                                                <option value="09:00" selected>9:00</option>
-                                                <option value="10:00">10:00</option>
-                                                <option value="11:00">11:00</option>
+                                        <div class="form-group col-sm-2">
+                                            <select name="hours" class="custom-select">
+                                                <option  selected>Hora</option>
+                                                {{#each hourValues}}
+                                                    <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
                                             </select>
                                         </div>
-                                        <div class="form-group col-sm-3">
+                                        <div class="form-group col-sm-2">
+                                            <select name="minutes" class="custom-select">
+                                                <option  selected>Min</option>
+                                                {{#each minuteValues}}
+                                                    <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
+                                        </select>
+                                        </div>
+                                        <div class="form-group col-sm-2">
                                             <select name="format" class="custom-select">
                                                 <option value="1" selected>AM</option>
                                                 <option value="2">PM</option>
@@ -117,7 +126,7 @@
                                 <td>{{this.fecha}}</td>
                                 <td>{{this.nombres_profesor}} {{this.apellidos_profesor}}</td>
                                 <td>{{this.nombres_estudiante}} {{this.apellidos_estudiante}}</td>
-                                <td>Creada</td>
+                                <td>{{this.estado}}</td>
                                 <td><a href="/meetings/edit/{{this.reunion_id}}">Editar</a></td>
                                 <td><a href="/meetings/delete/{{this.reunion_id}}">Eliminar</a></td>
                             </tr>

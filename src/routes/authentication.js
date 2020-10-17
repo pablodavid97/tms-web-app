@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../database');
 const axios = require('axios');
 const passport = require('passport');
-const helpers = require('../lib/helpers');
+const utils = require('../lib/utils');
 const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 
 const sendPasswordReset = async (user) => {
@@ -82,7 +82,7 @@ router.post('/create-password', async (req, res) => {
         confirmation = req.body.confirmation;
 
         if (newPassword == confirmation) {
-            userPassword = await helpers.encryptPassword(req.body.newPassword);
+            userPassword = await utils.encryptPassword(req.body.newPassword);
             
             await pool.query("UPDATE usuario SET hash = ?, first_time_login = ? WHERE usuario_id = ?", [userPassword, false, req.body.userId]);
 

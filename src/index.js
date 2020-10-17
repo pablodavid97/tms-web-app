@@ -29,7 +29,7 @@ app.engine('.hbs', hbs({
   layoutsDir: path.join(app.get('views'), 'layouts'),
   partialsDir: path.join(app.get('views'), 'partials'),
   extname: '.hbs',
-  helpers: require('./lib/handlebars')
+  helpers: require('./lib/helpers')
 }));
 app.set('view engine', '.hbs');
 
