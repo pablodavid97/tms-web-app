@@ -8,7 +8,7 @@ const router = express.Router();
 const deletedStatus = 5;
 
 
-router.get('/', async (req, res) => {
+router.get('/', isLoggedIn, async (req, res) => {
     try {
       isStudent = false;
       isProfessor = false; 
@@ -55,8 +55,15 @@ router.get('/', async (req, res) => {
 
       hourValues = utils.getHourValues()
       minuteValues = utils.getMinuteValues()
+
+      const lastIdRow = await pool.query("SELECT * FROM reunion ORDER BY reunion_id DESC LIMIT 1")
+      console.log("Last Reunion: ", lastIdRow);
+
+      lastId = lastIdRow[0].reunion_id + 1
+
+      console.log("Last Id: ", lastId);
   
-      res.render('meetings/list', {website: true, user: req.user, meetings: meetings, isStudent: isStudent, tutor: tutor, studentInfo: studentInfo, isProfessor: isProfessor, students: students, hourValues: hourValues, minuteValues: minuteValues, success: req.flash('success'), error: req.flash('error')});
+      res.render('meetings/list', {website: true, user: req.user, meetings: meetings, isStudent: isStudent, tutor: tutor, studentInfo: studentInfo, isProfessor: isProfessor, students: students, hourValues: hourValues, minuteValues: minuteValues, lastId: lastId, success: req.flash('success'), error: req.flash('error')});
   
     } catch (error) {
       console.error(error.message);
@@ -75,7 +82,7 @@ router.get('/', async (req, res) => {
     var meetingStatus = 1
   
     try {
-      await pool.query("INSERT INTO reunion (tema, descripcion, fecha, profesor_usuario_id, estudiante_usuario_id, estado_id) VALUES (?, ?, ?, ?, ?, ?)", [req.body.subject, req.body.description, dateTime, req.user.usuario_id, req.body.student, meetingStatus])
+      await pool.query("INSERT INTO reunion (tema, descripcion, fecha, profesor_usuario_id, estudiante_usuario_id, estado_id, created_on, created_by) VALUES (?, ?, ?, ?, ?, ?, now(), ?)", [req.body.subject, req.body.description, dateTime, req.user.usuario_id, req.body.student, meetingStatus, req.user.usuario_id])
       
       req.flash("success", "La reunión fue creada con exito!");
       res.redirect('/meetings');
@@ -85,10 +92,10 @@ router.get('/', async (req, res) => {
     // Create a new meeting
   });
 
-router.get('/delete/:meetingId', async (req, res) => {
+router.get('/delete/:meetingId', isLoggedIn, async (req, res) => {
 
     try {
-        await pool.query("UPDATE reunion SET estado_id = ? WHERE reunion_id = ?", [deletedStatus, req.params.meetingId]);
+        await pool.query("UPDATE reunion SET estado_id = ?, updated_on = now(), updated_by = ? WHERE reunion_id = ?", [deletedStatus, req.user.usuario_id, req.params.meetingId]);
 
         req.flash('success', 'La reunión fue eliminada con exito');
 
@@ -98,7 +105,7 @@ router.get('/delete/:meetingId', async (req, res) => {
     }
 });
 
-router.get('/edit/:meetingId', async (req, res) => {
+router.get('/edit/:meetingId', isLoggedIn, async (req, res) => {
     const rows = await pool.query("SELECT * FROM reunion_view WHERE reunion_id = ?", [req.params.meetingId]);
     meeting = rows[0];
 
@@ -129,7 +136,7 @@ router.post('/edit', async (req, res) => {
     var meetingStatus = 2
 
     console.log("Meeting Status: ", meetingStatus);
-    await pool.query("UPDATE reunion SET tema = ?, descripcion = ?, fecha = ?, estudiante_usuario_id = ?, estado_id = ? WHERE reunion_id = ?", [req.body.subject, req.body.description, dateTime, req.body.student, meetingStatus, req.body.meetingId])
+    await pool.query("UPDATE reunion SET tema = ?, descripcion = ?, fecha = ?, estudiante_usuario_id = ?, estado_id = ?, updated_on = now(), updated_by = ? WHERE reunion_id = ?", [req.body.subject, req.body.description, dateTime, req.body.student, meetingStatus, req.user.usuario_id, req.body.meetingId])
   
     req.flash('success', 'La reunión fue actualizada con exito!')
 

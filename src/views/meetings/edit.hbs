@@ -2,8 +2,8 @@
             <form action="/meetings/edit", method="POST">
                 <h1 class="form-header header-left">Editar Reunión</h1>
                 <div class="form-group row">
-                    <label for="meetingId" class="col-sm-6 col-form-label">Reunión No: </label>
-                    <div class="col-sm-6">
+                    <label for="meetingId" class="col-sm-3 col-form-label">Reunión No: </label>
+                    <div class="col-sm-2">
                         <input name="meetingId" type="text" id="meetingId" class="form-control" value="{{meeting.reunion_id}}" readonly>
                     </div>
                 </div>
@@ -13,7 +13,7 @@
                 </div>
                 <div class="form-group">
                     <label for="inputMeetingDescription">Descripción</label>
-                    <textarea name="description" class="form-control" id="inputMeetingDescription" rows="3" placeholder="Ingresa la descripción de la reunión" value="{{meeting.descripcion}}"></textarea>
+                    <textarea name="description" class="form-control" id="inputMeetingDescription" rows="3" placeholder="Ingresa la descripción de la reunión">{{meeting.descripcion}}</textarea>
                 </div>
                 <div class="form-group form-check">
                     <input name="emailNotification" type="checkbox" class="form-check-input" id="meetingEmailCheck">
@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <div class="form-container-btn">
-                    <button type="button" class="btn btn-secondary">Cancelar</button>
+                    <a class="btn btn-secondary" href="/meetings">Cancelar</a>
                     <button type="submit" class="btn btn-primary">Editar Reunión</button>
                   </div>
             </form>

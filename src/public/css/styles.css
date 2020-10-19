@@ -141,6 +141,18 @@ body, html {
     font-size: 16px; min-width: 250px; height: 40px; border-radius: 20px; text-transform: uppercase;
 }
 
+.btn.btn-secondary {
+    color: #fff;
+    background-color: #6c757d!important;
+    border-color: #6c757d!important;
+}
+
+.btn.btn-secondary:hover, .btn.btn-secondary:focus, .btn.btn-secondary:active {
+    color: #fff;
+    background-color: #6c757d!important;
+    border-color: #6c757d!important;
+}
+
 .sign-in-question-container {
     padding-top: 1.5rem!important;
     padding-bottom: 1rem!important;
@@ -156,7 +168,12 @@ body, html {
   
   .page-header {
     padding: 1rem 0;
-    margin: 0;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.section-header {
+    padding: 1rem 0;
     text-align: center;
     margin: 1rem 0;
 }
@@ -268,6 +285,11 @@ body, html {
 
 /* Meeting modal styles */
 
+.meeting-id {
+    padding: 1rem;
+    line-height: 0.5;
+}
+
 #createMeetingModal .modal-body {
     padding: 2rem 6rem;
 }
@@ -276,4 +298,37 @@ body, html {
     .modal-dialog {
         max-width: 900px;
     }
+}
+
+
+/* Reports Styles */
+
+.kpi-section{
+    margin: 3rem 0;
+    padding: 0 3rem;
+}
+
+.kpi-container {
+    padding: 0 2rem;
+}
+
+.kpi {
+    border: 10px solid black;
+    height: 180px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.kpi-header {
+    height: 50px;
+}
+
+.kpi-header h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.kpi-value {
+    font-size: 40px;
 }

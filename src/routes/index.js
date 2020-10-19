@@ -39,7 +39,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
 
 });
 
-router.get('/tutor', async (req, res) => {
+router.get('/tutor', isLoggedIn, async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM rol WHERE rol_id = ?", [req.user.rol_id]);
 
@@ -62,7 +62,7 @@ router.get('/tutor', async (req, res) => {
   }
 });
 
-router.get('/students', async (req, res) => {
+router.get('/students', isLoggedIn, async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE estudiante.profesor_usuario_id = ?", [req.user.usuario_id])
     console.log("Estudiantes: ", rows);
@@ -73,7 +73,7 @@ router.get('/students', async (req, res) => {
   }
 });
 
-router.get('/student/:userId', async (req, res) => {
+router.get('/student/:userId', isLoggedIn, async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE estudiante.usuario_id = ?", [req.params.userId]);
     
@@ -87,5 +87,24 @@ router.get('/student/:userId', async (req, res) => {
     console.error(error.message);
   }
 });
+
+router.get('/reports', isLoggedIn, async (req, res) => {
+  try {
+    rows = await pool.query("SELECT * FROM reunion_view WHERE estado_id != 5")
+    meetings = rows
+    console.log("Reuniones: ", rows);
+  
+    meetingsNum = rows.length
+    gpa = await pool.query("SELECT AVG(gpa) as gpa FROM estudiante")
+    console.log("GPA: ", gpa);
+    userNum = await pool.query("SELECT COUNT(*) as count FROM usuario WHERE first_time_login = 0")
+    conditionedNum = await pool.query("SELECT COUNT(*) as count FROM estudiante WHERE gpa < 3")
+  
+    res.render('reports', {website: true, user: req.user, isDean: true, meetings: meetings, meetingsNum: meetingsNum, gpa: gpa[0].gpa, userNum: userNum[0].count, conditionedNum: conditionedNum[0].count, success: req.flash('success'), error: req.flash('error')})
+  
+  } catch (error) {
+    console.error(error.message);
+  }
+})
 
 module.exports = router; 

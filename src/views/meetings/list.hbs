@@ -28,9 +28,9 @@
                             <div class="modal-body">
             
                                     <div class="form-group row">
-                                        <label class="col-sm-6 col-form-label">Reunión No: </label>
-                                        <div class="col-sm-6">
-                                            xxxxxxxx
+                                        <label class="col-sm-2 col-form-label">Reunión No: </label>
+                                        <div class="col-sm-2 meeting-id">
+                                            <span>{{lastId}}</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -103,30 +103,31 @@
                     </div>
                 </div>
             </div>
-
-            <table class="table table-hover meetings-table">
-                <thead class="thead-dark">
-                    <tr>
-                        {{#if isProfessor}}
-                            <th scope="col">Número</th>
-                            <th scope="col">Tema</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Profesor</th>
-                            <th scope="col">Estudiante</th>
-                            <th scope="col">Estado</th>
-                            <th></th>
-                            <th></th>
-                        {{else }}
-                            <th scope="col">Número</th>
-                            <th scope="col">Tema</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Profesor</th>
-                            <th scope="col">Estudiante</th>
-                            <th scope="col">Estado</th>
-                        {{/if}}
-                    </tr>
+            <div class="meetings-table-container">
+                <table id="meetingsTable"class="table table-hover meetings-table">
+                    <thead class="thead-dark">
+                        <tr>
+                            {{#if isProfessor}}
+                                <th scope="col">Número</th>
+                                <th scope="col">Tema</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Profesor</th>
+                                <th scope="col">Estudiante</th>
+                                <th scope="col">Estado</th>
+                                <th></th>
+                                <th></th>
+                            {{else }}
+                                <th scope="col">Número</th>
+                                <th scope="col">Tema</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Profesor</th>
+                                <th scope="col">Estudiante</th>
+                                <th scope="col">Estado</th>
+                            {{/if}}
+                        </tr>
+                    </thead>
                     <tbody>
                         {{#if isProfessor}}
                             {{#each meetings}}
@@ -158,7 +159,6 @@
 
                         {{/if}}
                     </tbody>
-                </thead>
-    
-            </table>
+                </table>
+            </div>
         </div>

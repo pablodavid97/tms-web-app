@@ -61,7 +61,7 @@ router.post('/reset-password',  async (req, res) => {
     
         console.log("Results: ", rows);
     
-        req.flash('success', 'La contraseña fue cambiada con exito');
+        req.flash('success', 'Se envió la información a tu correo');
     
         res.redirect('/signin');
     } catch (error) {
