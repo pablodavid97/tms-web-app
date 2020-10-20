@@ -17,24 +17,34 @@ module.exports = {
         }
     },
 
-    isDean(req, res, nex) {
-        if(req.user.usuario_id == 1) {
+    isDeanUser(req, res, next) {
+        console.log("usuario: ", req.user);
+        if(req.user.rol_id == 1) {
             return next()
         } else {
             return res.redirect('/home')
         }
     },
 
-    isProfessor(req, res, nex) {
-        if(req.user.usuario_id == 2) {
+    isProfessorUser(req, res, next) {
+        console.log("usuario: ", req.user);
+        if(req.user.rol_id == 2) {
             return next()
         } else {
             return res.redirect('/home')
         }
     },
 
-    isStudent(req, res, next) {
-        if(req.user.usuario_id == 3) {
+    isStudentUser(req, res, next) {
+        if(req.user.rol_id == 3) {
+            return next()
+        } else {
+            return res.redirect('/home')
+        }
+    },
+
+    isUserStudentOrProfessor(req, res, next) {
+        if(req.user.rol_id == 2 || req.user.rol_id == 3){
             return next()
         } else {
             return res.redirect('/home')

@@ -1,6 +1,6 @@
 const express = require('express');
 const pool = require('../database');
-const { isLoggedIn, isNotLoggedIn, isDean, isProfessor, isStudent } = require('../lib/auth');
+const { isLoggedIn, isNotLoggedIn, isDeanUser, isProfessorUser, isStudentUser } = require('../lib/auth');
 
 const router = express.Router();
 
@@ -39,7 +39,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
 
 });
 
-router.get('/tutor', isLoggedIn, isStudent, async (req, res) => {
+router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM rol WHERE rol_id = ?", [req.user.rol_id]);
 
@@ -62,7 +62,7 @@ router.get('/tutor', isLoggedIn, isStudent, async (req, res) => {
   }
 });
 
-router.get('/students', isLoggedIn, isProfessor, async (req, res) => {
+router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE estudiante.profesor_usuario_id = ?", [req.user.usuario_id])
     console.log("Estudiantes: ", rows);
@@ -73,7 +73,7 @@ router.get('/students', isLoggedIn, isProfessor, async (req, res) => {
   }
 });
 
-router.get('/student/:userId', isLoggedIn, isProfessor, async (req, res) => {
+router.get('/student/:userId', isLoggedIn, isProfessorUser, async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE estudiante.usuario_id = ?", [req.params.userId]);
     
@@ -88,7 +88,7 @@ router.get('/student/:userId', isLoggedIn, isProfessor, async (req, res) => {
   }
 });
 
-router.get('/reports', isLoggedIn, isDean, async (req, res) => {
+router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
   try {
     rows = await pool.query("SELECT * FROM reunion_view WHERE estado_id != 5")
     meetings = rows
