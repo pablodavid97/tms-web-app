@@ -5,7 +5,7 @@ const { isLoggedIn, isNotLoggedIn, isDeanUser, isProfessorUser, isStudentUser } 
 const router = express.Router();
 
 router.get('/', isNotLoggedIn, (req, res) => {
-  res.render('auth/signin', {website: true, pageTitle: "USFQ Tutorías", success: req.flash('success'), error: req.flash('error')});
+  res.render('auth/signin', {website: true, path: "signin", pageTitle: "USFQ Tutorías", success: req.flash('success'), error: req.flash('error')});
 });
 
 router.get('/home', isLoggedIn, async (req, res) => {
@@ -31,7 +31,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
         
       }
 
-      res.render('user-profile', {website: true, user: req.user, role: role, isStudent: isStudent, studentInfo: studentInfo, tutor: tutor, isProfessor: isProfessor, isDean: isDean, success: req.flash('success'), error: req.flash('error')});
+      res.render('user-profile', {website: true, path: "home", user: req.user, role: role, isStudent: isStudent, studentInfo: studentInfo, tutor: tutor, isProfessor: isProfessor, isDean: isDean, success: req.flash('success'), error: req.flash('error')});
     }
   } catch (error) {
     console.error(error.message);
@@ -54,7 +54,7 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
 
       console.log("Tutor: ", tutor.nombres, tutor.apellidos);
 
-      res.render('tutor', {website: true, user: req.user, role: role, isStudent: true, studentInfo: studentInfo, tutor: tutor, isProfessor: false, isDean: false, success: req.flash('success'), error: req.flash('error')})
+      res.render('tutor', {website: true, path: "tutor", user: req.user, role: role, isStudent: true, studentInfo: studentInfo, tutor: tutor, isProfessor: false, isDean: false, success: req.flash('success'), error: req.flash('error')})
     }
 
   } catch (error) {
@@ -67,7 +67,7 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
     const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE estudiante.profesor_usuario_id = ?", [req.user.usuario_id])
     console.log("Estudiantes: ", rows);
 
-    res.render('students', {website: true, user: req.user, isProfessor: true, students: rows, success: req.flash('success'), error: req.flash('error')});
+    res.render('students', {website: true, path: "students", user: req.user, isProfessor: true, students: rows, success: req.flash('success'), error: req.flash('error')});
   } catch(error) {
     console.error(error.message);
   }
@@ -81,7 +81,7 @@ router.get('/student/:userId', isLoggedIn, isProfessorUser, async (req, res) => 
       student = rows[0];
       console.log("Estudiante: ", student);
 
-      res.render('student', {website: true, user: req.user, isProfessor: true, student: student, success: req.flash('success'), error: req.flash('error')});
+      res.render('student', {website: true, path: "students", user: req.user, isProfessor: true, student: student, success: req.flash('success'), error: req.flash('error')});
     }
   } catch (error) {
     console.error(error.message);
@@ -100,7 +100,7 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
     userNum = await pool.query("SELECT COUNT(*) as count FROM usuario WHERE first_time_login = 0")
     conditionedNum = await pool.query("SELECT COUNT(*) as count FROM estudiante WHERE gpa < 3")
   
-    res.render('reports', {website: true, user: req.user, isDean: true, meetings: meetings, meetingsNum: meetingsNum, gpa: gpa[0].gpa, userNum: userNum[0].count, conditionedNum: conditionedNum[0].count, success: req.flash('success'), error: req.flash('error')})
+    res.render('reports', {website: true, path: "reports", user: req.user, isDean: true, meetings: meetings, meetingsNum: meetingsNum, gpa: gpa[0].gpa, userNum: userNum[0].count, conditionedNum: conditionedNum[0].count, success: req.flash('success'), error: req.flash('error')})
   
   } catch (error) {
     console.error(error.message);
