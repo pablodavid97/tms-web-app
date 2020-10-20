@@ -1,6 +1,6 @@
 const express = require('express');
 const pool = require('../database');
-const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
+const { isLoggedIn, isProfessor } = require('../lib/auth');
 const utils = require('../lib/utils');
 
 const router = express.Router();
@@ -8,7 +8,7 @@ const router = express.Router();
 const deletedStatus = 5;
 
 
-router.get('/', isLoggedIn, async (req, res) => {
+router.get('/', isLoggedIn, isProfessor, async (req, res) => {
     try {
       isStudent = false;
       isProfessor = false; 
@@ -92,7 +92,7 @@ router.get('/', isLoggedIn, async (req, res) => {
     // Create a new meeting
   });
 
-router.get('/delete/:meetingId', isLoggedIn, async (req, res) => {
+router.get('/delete/:meetingId', isLoggedIn, isProfessor, async (req, res) => {
 
     try {
         await pool.query("UPDATE reunion SET estado_id = ?, updated_on = now(), updated_by = ? WHERE reunion_id = ?", [deletedStatus, req.user.usuario_id, req.params.meetingId]);
@@ -105,7 +105,7 @@ router.get('/delete/:meetingId', isLoggedIn, async (req, res) => {
     }
 });
 
-router.get('/edit/:meetingId', isLoggedIn, async (req, res) => {
+router.get('/edit/:meetingId', isLoggedIn, isProfessor, async (req, res) => {
     const rows = await pool.query("SELECT * FROM reunion_view WHERE reunion_id = ?", [req.params.meetingId]);
     meeting = rows[0];
 
