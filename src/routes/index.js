@@ -1,6 +1,6 @@
 const express = require('express');
 const pool = require('../database');
-const { isLoggedIn, isNotLoggedIn, isDeanUser, isProfessorUser, isStudentUser } = require('../lib/auth');
+const { isLoggedIn, isNotLoggedIn, isDeanUser, isProfessorUser, isStudentUser, isUserStudentOrProfessor } = require('../lib/auth');
 
 const router = express.Router();
 
@@ -105,6 +105,25 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
   } catch (error) {
     console.error(error.message);
   }
-})
+});
+
+router.get('/notifications', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
+  const rows = await pool.query("SELECT * FROM rol WHERE rol_id = ?", [req.user.rol_id]);
+
+  if(rows.length > 0) {
+    role = rows[0];
+    const isStudent = (role.nombre === "Estudiante");
+    const isProfessor = (role.nombre === "Profesor");
+    const isDean = (role.nombre === "Decano");
+
+    res.render('notifications', {website: true, path: "notifications", user: req.user, isDean: isDean, isProfessor: isProfessor, isStudent: isStudent, success: req.flash('success'), error: req.flash('error')})
+  }
+});
+
+router.post('/notifications', (req, res) => {
+  console.log("datos ingresados: ", req.body);
+
+  res.redirect('/notifications')
+}); 
 
 module.exports = router; 
