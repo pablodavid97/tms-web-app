@@ -20,22 +20,22 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       if(req.user.rol_id == 3) {
         isStudent = true;
   
-        const rows = await pool.query("SELECT * FROM estudiante WHERE usuario_id = ?", [req.user.usuario_id]);
+        const rows = await pool.query("SELECT * FROM estudiante_view WHERE id = ?", [req.user.id]);
         studentInfo = rows[0]
   
-        const rows2 = await pool.query("SELECT * FROM usuario INNER JOIN profesor on usuario.usuario_id = profesor.usuario_id INNER JOIN estudiante on profesor.usuario_id = estudiante.profesor_usuario_id WHERE profesor.usuario_id = ?", [studentInfo.profesor_usuario_id])
+        const rows2 = await pool.query("SELECT * FROM usuario INNER JOIN profesor on usuario.id = profesor.id INNER JOIN estudiante on profesor.id = estudiante.profesor_id WHERE profesor.id = ?", [studentInfo.profesor_id])
         tutor = rows2[0]
         
-        const rows3 = await pool.query("SELECT * FROM reunion_view WHERE estudiante_usuario_id = ? and estado_id != ?", [req.user.usuario_id, deletedStatus])
+        const rows3 = await pool.query("SELECT * FROM reunion_view WHERE estudiante_id = ? and estado_id != ?", [req.user.id, deletedStatus])
         meetings = rows3
   
       } else if (req.user.rol_id == 2) {
         isProfessor = true;
   
-        const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE profesor_usuario_id = ?", [req.user.usuario_id])
+        const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.id = estudiante.usuario_id WHERE profesor_id = ?", [req.user.id])
         students = rows;
         
-        const rows2 = await pool.query("SELECT * FROM reunion_view WHERE profesor_usuario_id = ? and estado_id != ?", [req.user.usuario_id, deletedStatus])
+        const rows2 = await pool.query("SELECT * FROM reunion_view WHERE profesor_id = ? and estado_id != ?", [req.user.id, deletedStatus])
         meetings = rows2
       }
 
@@ -57,11 +57,16 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       minuteValues = utils.getMinuteValues()
 
       const lastIdRow = await pool.query("SELECT * FROM reunion ORDER BY reunion_id DESC LIMIT 1")
-      console.log("Last Reunion: ", lastIdRow);
+      
+      lastId = 1
+      
+      if(lastIdRow.length > 0) {
+        console.log("Last Reunion: ", lastIdRow);
 
-      lastId = lastIdRow[0].reunion_id + 1
-
-      console.log("Last Id: ", lastId);
+        lastId = lastIdRow[0].reunion_id + 1
+  
+        console.log("Last Id: ", lastId);
+      }
   
       res.render('meetings/list', {website: true, path: "meetings", user: req.user, meetings: meetings, isStudent: isStudent, tutor: tutor, studentInfo: studentInfo, isProfessor: isProfessor, students: students, hourValues: hourValues, minuteValues: minuteValues, lastId: lastId, success: req.flash('success'), error: req.flash('error')});
   
@@ -82,7 +87,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
     var meetingStatus = 1
   
     try {
-      await pool.query("INSERT INTO reunion (tema, descripcion, fecha, profesor_usuario_id, estudiante_usuario_id, estado_id, created_on, created_by) VALUES (?, ?, ?, ?, ?, ?, now(), ?)", [req.body.subject, req.body.description, dateTime, req.user.usuario_id, req.body.student, meetingStatus, req.user.usuario_id])
+      await pool.query("INSERT INTO reunion (tema, descripcion, fecha, profesor_id, estudiante_id, estado_id, created_on, created_by) VALUES (?, ?, ?, ?, ?, ?, now(), ?)", [req.body.subject, req.body.description, dateTime, req.user.id, req.body.student, meetingStatus, req.user.nombres + " " + req.user.apellidos])
       
       req.flash("success", "La reunión fue creada con exito!");
       res.redirect('/meetings');
@@ -95,7 +100,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
 router.get('/delete/:meetingId', isLoggedIn, isProfessorUser, async (req, res) => {
 
     try {
-        await pool.query("UPDATE reunion SET estado_id = ?, updated_on = now(), updated_by = ? WHERE reunion_id = ?", [deletedStatus, req.user.usuario_id, req.params.meetingId]);
+        await pool.query("UPDATE reunion SET estado_id = ?, updated_on = now(), updated_by = ? WHERE reunion_id = ?", [deletedStatus, req.user.id, req.params.meetingId]);
 
         req.flash('success', 'La reunión fue eliminada con exito');
 
@@ -118,7 +123,7 @@ router.get('/edit/:meetingId', isLoggedIn, isProfessorUser, async (req, res) => 
 
     console.log("Reunion: ", meeting);
 
-    const rows2 = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.usuario_id = estudiante.usuario_id WHERE profesor_usuario_id = ?", [req.user.usuario_id])
+    const rows2 = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.id = estudiante.usuario_id WHERE profesor_id = ?", [req.user.id])
     students = rows2;
 
     hourValues = utils.getHourValues()
@@ -136,7 +141,7 @@ router.post('/edit', async (req, res) => {
     var meetingStatus = 2
 
     console.log("Meeting Status: ", meetingStatus);
-    await pool.query("UPDATE reunion SET tema = ?, descripcion = ?, fecha = ?, estudiante_usuario_id = ?, estado_id = ?, updated_on = now(), updated_by = ? WHERE reunion_id = ?", [req.body.subject, req.body.description, dateTime, req.body.student, meetingStatus, req.user.usuario_id, req.body.meetingId])
+    await pool.query("UPDATE reunion SET tema = ?, descripcion = ?, fecha = ?, estudiante_id = ?, estado_id = ?, updated_on = now(), updated_by = ? WHERE reunion_id = ?", [req.body.subject, req.body.description, dateTime, req.body.student, meetingStatus, req.user.id, req.body.meetingId])
   
     req.flash('success', 'La reunión fue actualizada con exito!')
 

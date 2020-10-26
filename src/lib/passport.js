@@ -33,10 +33,10 @@ passport.use('local.signin', new LocalStrategy ({
 ));
 
 passport.serializeUser((user, done) => {
-    done(null, user.usuario_id);
+    done(null, user.id);
   });
   
   passport.deserializeUser(async (id, done) => {
-    const rows = await pool.query('SELECT * FROM usuario WHERE usuario_id = ?', [id]);
+    const rows = await pool.query('SELECT * FROM usuario WHERE id = ?', [id]);
     done(null, rows[0]);
   });

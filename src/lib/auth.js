@@ -19,7 +19,7 @@ module.exports = {
 
     isDeanUser(req, res, next) {
         console.log("usuario: ", req.user);
-        if(req.user.rol_id == 1) {
+        if(req.user.role_id == 1) {
             return next()
         } else {
             return res.redirect('/home')

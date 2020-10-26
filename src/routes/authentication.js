@@ -84,9 +84,9 @@ router.post('/create-password', async (req, res) => {
         if (newPassword == confirmation) {
             userPassword = await utils.encryptPassword(req.body.newPassword);
             
-            await pool.query("UPDATE usuario SET hash = ?, first_time_login = ? WHERE usuario_id = ?", [userPassword, false, req.body.userId]);
+            await pool.query("UPDATE usuario SET hash = ?, first_time_login = ? WHERE id = ?", [userPassword, false, req.body.userId]);
 
-            const rows = await pool.query("SELECT * from usuario WHERE usuario_id = ?", [userId]);
+            const rows = await pool.query("SELECT * from usuario WHERE id = ?", [userId]);
             
             usuario = rows[0];
 
