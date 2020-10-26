@@ -56,14 +56,14 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       hourValues = utils.getHourValues()
       minuteValues = utils.getMinuteValues()
 
-      const lastIdRow = await pool.query("SELECT * FROM reunion ORDER BY reunion_id DESC LIMIT 1")
+      const lastIdRow = await pool.query("SELECT * FROM reunion ORDER BY id DESC LIMIT 1")
       
       lastId = 1
       
       if(lastIdRow.length > 0) {
         console.log("Last Reunion: ", lastIdRow);
 
-        lastId = lastIdRow[0].reunion_id + 1
+        lastId = lastIdRow[0].id + 1
   
         console.log("Last Id: ", lastId);
       }
@@ -100,7 +100,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
 router.get('/delete/:meetingId', isLoggedIn, isProfessorUser, async (req, res) => {
 
     try {
-        await pool.query("UPDATE reunion SET estado_id = ?, updated_on = now(), updated_by = ? WHERE reunion_id = ?", [deletedStatus, req.user.id, req.params.meetingId]);
+        await pool.query("UPDATE reunion SET estado_id = ?, updated_on = now(), updated_by = ? WHERE id = ?", [deletedStatus, req.user.id, req.params.meetingId]);
 
         req.flash('success', 'La reunión fue eliminada con exito');
 
@@ -111,7 +111,7 @@ router.get('/delete/:meetingId', isLoggedIn, isProfessorUser, async (req, res) =
 });
 
 router.get('/edit/:meetingId', isLoggedIn, isProfessorUser, async (req, res) => {
-    const rows = await pool.query("SELECT * FROM reunion_view WHERE reunion_id = ?", [req.params.meetingId]);
+    const rows = await pool.query("SELECT * FROM reunion_view WHERE id = ?", [req.params.meetingId]);
     meeting = rows[0];
 
     dateTime = getDateTimeValues(meeting.fecha)
@@ -141,7 +141,7 @@ router.post('/edit', async (req, res) => {
     var meetingStatus = 2
 
     console.log("Meeting Status: ", meetingStatus);
-    await pool.query("UPDATE reunion SET tema = ?, descripcion = ?, fecha = ?, estudiante_id = ?, estado_id = ?, updated_on = now(), updated_by = ? WHERE reunion_id = ?", [req.body.subject, req.body.description, dateTime, req.body.student, meetingStatus, req.user.id, req.body.meetingId])
+    await pool.query("UPDATE reunion SET tema = ?, descripcion = ?, fecha = ?, estudiante_id = ?, estado_id = ?, updated_on = now(), updated_by = ? WHERE id = ?", [req.body.subject, req.body.description, dateTime, req.body.student, meetingStatus, req.user.id, req.body.meetingId])
   
     req.flash('success', 'La reunión fue actualizada con exito!')
 
