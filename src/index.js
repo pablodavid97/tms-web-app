@@ -1,12 +1,15 @@
 const express = require('express');
-const morgan = require('morgan');
 const hbs = require('express-handlebars');
 const path = require('path');
 const passport = require('passport');
 const flash = require('connect-flash');
-const reload = require('reload');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const uuid = require('uuid')
+const mysql = require('mysql')
+
+// Dev dependencies
+const reload = require('reload');
+const morgan = require('morgan');
 
 // const { database } = require('./keys');
 
@@ -17,7 +20,8 @@ const port = 4000;
 const app = express();
 require('./lib/passport');
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session');
+const MySQLStore = require('express-mysql-session')(session);
+const pool = require('./database')
 const { body } = require('express-validator');
 
 
@@ -35,16 +39,20 @@ app.set('view engine', '.hbs');
 
 // middlewares
 app.use(morgan('dev'));
-// app.use(bodyParser.urlencoded({extended: false}));
-// app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+// app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
 app.use(session({
-  cookie: {maxAge: 60000},
+  genId: (req) => {
+    console.log("Inside the session middleware");
+    console.log(req.sessionID);
+    return uuid()
+  },
   secret: 'session_cookie_secret',
   resave: false,
   saveUninitialized: false,
+  // store: new MySQLStore({}, pool)
 }));
 app.use(flash());
 app.use(passport.initialize());

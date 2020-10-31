@@ -25,11 +25,16 @@ const sendPasswordReset = async (user) => {
 
 // SIGN IN
 router.get('/signin', isNotLoggedIn, (req, res, next) => {
+    console.log('Inside GET /login callback function')
+    console.log(req.sessionID)
     res.render('auth/signin', {success: req.flash('success'), error: req.flash('error')});
 });
 
-router.post('/signin', (req, res, next) => {
-    passport.authenticate('local.signin', {
+router.post('/signin', async (req, res, next) => {
+    console.log('Inside POST /login callback function')
+    console.log(req.body)
+
+    await passport.authenticate('local.signin', {
         successRedirect: '/home',
         failureRedirect: '/signin',
         failureFlash: true
