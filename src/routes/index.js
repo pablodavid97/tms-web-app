@@ -1,8 +1,13 @@
 const express = require('express');
 const pool = require('../database');
 const { isLoggedIn, isNotLoggedIn, isDeanUser, isProfessorUser, isStudentUser, isUserStudentOrProfessor } = require('../lib/auth');
-
 const router = express.Router();
+const axios = require('axios')
+
+// Axios instance configurations
+const axiosInstance = axios.create({
+  baseURL: 'http://127.0.0.1:3000',
+});
 
 router.get('/', isNotLoggedIn, (req, res) => {
   res.render('auth/signin', {website: true, path: "signin", pageTitle: "USFQ Tutorías", success: req.flash('success'), error: req.flash('error')});
@@ -10,28 +15,27 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try{
-    const rows = await pool.query("SELECT * FROM rol WHERE id = ?", [req.user.rol_id]);
+    // const data = {"userId": String(req.user.id), "rolId": String(req.user.rol_id)}
+    // console.log("DAta: ", data);
+    const request = await axiosInstance.get('/home', {params: {userId: req.user.id, rolId: req.user.rol_id}})
+    const homeJSON = request.data
+
+    console.log("Objects: ", homeJSON);
   
-    if(rows.length > 0) {
-      console.log("Rol exists");
-      role = rows[0];
-      const isStudent = (role.nombre === "Estudiante");
-      const isProfessor = (role.nombre === "Profesor");
-      const isDean = (role.nombre === "Decano");
-      tutor = {}
-      studentInfo = {}
+    role = homeJSON.rol;
+    const isStudent = (role.id === 3);
+    const isProfessor = (role.id === 2);
+    const isDean = (role.id === 1);
+    tutor = {}
+    studentInfo = {}
 
-      if (isStudent) {
-        const rows2 = await pool.query("SELECT * FROM estudiante WHERE id = ?", [req.user.id]);
-        studentInfo = rows2[0]
-
-        const rows3 = await pool.query("SELECT * FROM usuario WHERE id = ?", [studentInfo.profesor_id]);
-        tutor = rows3[0];
-        
-      }
-
-      res.render('user-profile', {website: true, path: "home", user: req.user, role: role, isStudent: isStudent, studentInfo: studentInfo, tutor: tutor, isProfessor: isProfessor, isDean: isDean, success: req.flash('success'), error: req.flash('error')});
+    if (isStudent) {
+      studentInfo = homeJSON.studentInfo
+      tutor = homeJSON.tutor
     }
+
+    res.render('user-profile', {website: true, path: "home", user: req.user, role: role, isStudent: isStudent, studentInfo: studentInfo, tutor: tutor, isProfessor: isProfessor, isDean: isDean, success: req.flash('success'), error: req.flash('error')});
+  
   } catch (error) {
     console.error(error.message);
   }
@@ -40,21 +44,19 @@ router.get('/home', isLoggedIn, async (req, res) => {
 
 router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
   try {
-    const rows = await pool.query("SELECT * FROM rol WHERE id = ?", [req.user.rol_id]);
+    const request = await axiosInstance.get('/tutor', {params: {rolId: req.user.rol_id, estudianteId: req.user.id}})
+    const tutorJSON = request.data
 
-    if (rows.length > 0) {
-      role = rows[0]
-      
-      const rows2 = await pool.query("SELECT * FROM estudiante WHERE usuario_id = ?", [req.user.id]);
-      studentInfo = rows2[0]
+    console.log("JSON: ", tutorJSON);
 
-      const rows3 = await pool.query("SELECT * FROM usuario INNER JOIN profesor on usuario.id = profesor.usuario_id INNER JOIN estudiante on profesor.id = estudiante.profesor_id WHERE profesor.id = ?", [studentInfo.profesor_id])
-      tutor = rows3[0]
+    role = tutorJSON.rol
+    studentInfo = tutorJSON.studentInfo
+    tutor = tutorJSON.tutor
 
-      console.log("Tutor: ", tutor.nombres, tutor.apellidos);
+    console.log("Tutor: ", tutor);
 
-      res.render('tutor', {website: true, path: "tutor", user: req.user, role: role, isStudent: true, studentInfo: studentInfo, tutor: tutor, isProfessor: false, isDean: false, success: req.flash('success'), error: req.flash('error')})
-    }
+
+    res.render('tutor', {website: true, path: "tutor", user: req.user, role: role, isStudent: true, studentInfo: studentInfo, tutor: tutor, isProfessor: false, isDean: false, success: req.flash('success'), error: req.flash('error')})
 
   } catch (error) {
     console.error(error.message);
@@ -64,10 +66,13 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
 router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
   console.log("Got in!");
   try {
-    const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.id = estudiante.usuario_id WHERE estudiante.profesor_id = ?", [req.user.id])
-    console.log("Estudiantes: ", rows);
+    const request = await axiosInstance.get('/students', {params: {profesorId: req.user.id}})
+    const studentsJSON = request.data
 
-    res.render('students', {website: true, path: "students", user: req.user, isProfessor: true, students: rows, success: req.flash('success'), error: req.flash('error')});
+    console.log("Estudiantes: ", studentsJSON);
+    students = studentsJSON.estudiantes
+
+    res.render('students', {website: true, path: "students", user: req.user, isProfessor: true, students: students, success: req.flash('success'), error: req.flash('error')});
   } catch(error) {
     console.error(error.message);
   }
@@ -75,32 +80,41 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
 
 router.get('/student/:userId', isLoggedIn, isProfessorUser, async (req, res) => {
   try {
-    const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.id = estudiante.usuario_id WHERE estudiante.id = ?", [req.params.userId]);
-    
-    if(rows.length > 0) {
-      student = rows[0];
-      console.log("Estudiante: ", student);
+    const request = await axiosInstance.get('/student', {params: {userId: req.params.userId}});
+    const studentJSON = request.data
 
-      res.render('student', {website: true, path: "students", user: req.user, isProfessor: true, student: student, success: req.flash('success'), error: req.flash('error')});
-    }
+    console.log("Student JSON: ", studentJSON);
+
+    student = studentJSON.estudiante;
+    console.log("Estudiante: ", student);
+
+    res.render('student', {website: true, path: "student", user: req.user, isProfessor: true, student: student, success: req.flash('success'), error: req.flash('error')});
+ 
+    
   } catch (error) {
     console.error(error.message);
   }
 });
 
 router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
+  console.log("Entro!");
   try {
-    rows = await pool.query("SELECT * FROM reunion_view WHERE estado_id != 5")
-    meetings = rows
-    console.log("Reuniones: ", rows);
+    const request = await axiosInstance.get('/reports', {params: {decanoId: req.user.id}})
+    const reportsJSON = request.data
+
+    console.log("Reports JSON: ", reportsJSON);
+
+    meetings = reportsJSON.reuniones
+    console.log("Reuniones: ", meetings);
   
-    meetingsNum = rows.length
-    gpa = await pool.query("SELECT AVG(gpa) as gpa FROM estudiante")
+    meetingsNum = meetings.length
+
+    gpa = reportsJSON.gpa
     console.log("GPA: ", gpa);
-    userNum = await pool.query("SELECT COUNT(*) as count FROM usuario WHERE first_time_login = 0")
-    conditionedNum = await pool.query("SELECT COUNT(*) as count FROM estudiante WHERE gpa < 3")
+    userNum = reportsJSON.activeUsers.length
+    conditionedNum = reportsJSON.conditionedUsers.length
   
-    res.render('reports', {website: true, path: "reports", user: req.user, isDean: true, meetings: meetings, meetingsNum: meetingsNum, gpa: gpa[0].gpa, userNum: userNum[0].count, conditionedNum: conditionedNum[0].count, success: req.flash('success'), error: req.flash('error')})
+    res.render('reports', {website: true, path: "reports", user: req.user, isDean: true, meetings: meetings, meetingsNum: meetingsNum, gpa: gpa, userNum: userNum, conditionedNum: conditionedNum, success: req.flash('success'), error: req.flash('error')})
   
   } catch (error) {
     console.error(error.message);
@@ -108,16 +122,19 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
 });
 
 router.get('/notifications', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
-  const rows = await pool.query("SELECT * FROM rol WHERE id = ?", [req.user.rol_id]);
+  const request = await axiosInstance.get('/notifications', {params: {rolId: req.user.rol_id}})
+  const notificationsJSON = request.data
 
-  if(rows.length > 0) {
-    role = rows[0];
-    const isStudent = (role.nombre === "Estudiante");
-    const isProfessor = (role.nombre === "Profesor");
-    const isDean = (role.nombre === "Decano");
+  console.log("rol: ", notificationsJSON);
 
-    res.render('notifications', {website: true, path: "notifications", user: req.user, isDean: isDean, isProfessor: isProfessor, isStudent: isStudent, success: req.flash('success'), error: req.flash('error')})
-  }
+  role = notificationsJSON.rol
+
+  const isStudent = (role.id === 3);
+  const isProfessor = (role.id === 2);
+  const isDean = (role.id === 1);
+
+  res.render('notifications', {website: true, path: "notifications", user: req.user, isDean: isDean, isProfessor: isProfessor, isStudent: isStudent, success: req.flash('success'), error: req.flash('error')})
+
 });
 
 router.post('/notifications', (req, res) => {

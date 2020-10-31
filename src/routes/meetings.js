@@ -68,7 +68,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
         console.log("Last Id: ", lastId);
       }
   
-      res.render('meetings/list', {website: true, path: "meetings", user: req.user, meetings: meetings, isStudent: isStudent, tutor: tutor, studentInfo: studentInfo, isProfessor: isProfessor, students: students, hourValues: hourValues, minuteValues: minuteValues, lastId: lastId, success: req.flash('success'), error: req.flash('error')});
+      res.render('meetings/list', {path: "meetings", user: req.user, meetings: meetings, isStudent: isStudent, tutor: tutor, studentInfo: studentInfo, isProfessor: isProfessor, students: students, hourValues: hourValues, minuteValues: minuteValues, lastId: lastId, success: req.flash('success'), error: req.flash('error')});
   
     } catch (error) {
       console.error(error.message);
@@ -129,7 +129,7 @@ router.get('/edit/:meetingId', isLoggedIn, isProfessorUser, async (req, res) => 
     hourValues = utils.getHourValues()
     minuteValues = utils.getMinuteValues()
 
-    res.render('meetings/edit', {website: true, path: "meetings", user: req.user, meeting: meeting, date: date, hours: hours, minutes: minutes, format, isStudent: false, isProfessor: true, students: students, hourValues: hourValues, minuteValues: minuteValues, success: req.flash('success'), error: req.flash('error')});
+    res.render('meetings/edit', {path: "meetings", user: req.user, meeting: meeting, date: date, hours: hours, minutes: minutes, format, isStudent: false, isProfessor: true, students: students, hourValues: hourValues, minuteValues: minuteValues, success: req.flash('success'), error: req.flash('error')});
 });
 
 router.post('/edit', async (req, res) => {

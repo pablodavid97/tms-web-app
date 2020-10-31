@@ -55,7 +55,6 @@ global.appRoot = path.resolve(__dirname);
 // routes
 app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
-app.use(require('./routes/mail-api'));
 app.use('/meetings', require('./routes/meetings'));
 
 
