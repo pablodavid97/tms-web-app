@@ -86,7 +86,7 @@
                                             <select name="student" class="custom-select">
                                                 <option selected>--Estudiante--</option>
                                                 {{#each students}}
-                                                    <option value={{this.usuario_id}}>
+                                                    <option value={{this.id}}>
                                                         {{this.nombres}} {{this.apellidos}}
                                                     </option>
                                                 {{/each}}
@@ -136,8 +136,8 @@
                                     <td>{{this.tema}}</td>
                                     <td>{{this.descripcion}}</td>
                                     <td>{{this.fecha}}</td>
-                                    <td>{{this.nombres_profesor}} {{this.apellidos_profesor}}</td>
-                                    <td>{{this.nombres_estudiante}} {{this.apellidos_estudiante}}</td>
+                                    <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
+                                    <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
                                     <td>{{this.estado}}</td>
                                     <td><a href="/meetings/edit/{{this.id}}">Editar</a></td>
                                     <td><a href="/meetings/delete/{{this.id}}">Eliminar</a></td>
@@ -151,8 +151,8 @@
                                     <td>{{this.tema}}</td>
                                     <td>{{this.descripcion}}</td>
                                     <td>{{this.fecha}}</td>
-                                    <td>{{this.nombres_profesor}} {{this.apellidos_profesor}}</td>
-                                    <td>{{this.nombres_estudiante}} {{this.apellidos_estudiante}}</td>
+                                    <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
+                                    <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
                                     <td>{{this.estado}}</td>
                                 </tr>
                             {{/each}}

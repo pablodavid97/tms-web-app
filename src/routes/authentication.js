@@ -54,7 +54,7 @@ router.post('/reset-password',  async (req, res) => {
     console.log("Reset PWD Body: ", req.body);
 
     try {
-        const request = await axiosInstance.post('reset-password', {email: req.body.email})
+        const request = await axiosInstance.get('user-by-email', {params: {email: req.body.email}})
         const resetpwdJSON = request.data
 
         console.log("Request: ", resetpwdJSON);

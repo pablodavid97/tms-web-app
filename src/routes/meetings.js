@@ -2,42 +2,26 @@ const express = require('express');
 const pool = require('../database');
 const { isLoggedIn, isProfessorUser, isUserStudentOrProfessor } = require('../lib/auth');
 const utils = require('../lib/utils');
-
 const router = express.Router();
+const axios = require('axios')
 
-const deletedStatus = 5;
-
+// Axios instance configurations
+const axiosInstance = axios.create({
+  baseURL: 'http://127.0.0.1:3000',
+});
 
 router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
     try {
-      isStudent = false;
-      isProfessor = false; 
-      studentInfo = {};
-      tutor = {};
-      students = {};
-      meetings = {}
-  
-      if(req.user.rol_id == 3) {
-        isStudent = true;
-  
-        const rows = await pool.query("SELECT * FROM estudiante_view WHERE id = ?", [req.user.id]);
-        studentInfo = rows[0]
-  
-        const rows2 = await pool.query("SELECT * FROM usuario INNER JOIN profesor on usuario.id = profesor.id INNER JOIN estudiante on profesor.id = estudiante.profesor_id WHERE profesor.id = ?", [studentInfo.profesor_id])
-        tutor = rows2[0]
-        
-        const rows3 = await pool.query("SELECT * FROM reunion_view WHERE estudiante_id = ? and estado_id != ?", [req.user.id, deletedStatus])
-        meetings = rows3
-  
-      } else if (req.user.rol_id == 2) {
-        isProfessor = true;
-  
-        const rows = await pool.query("SELECT * FROM usuario INNER JOIN estudiante on usuario.id = estudiante.usuario_id WHERE profesor_id = ?", [req.user.id])
-        students = rows;
-        
-        const rows2 = await pool.query("SELECT * FROM reunion_view WHERE profesor_id = ? and estado_id != ?", [req.user.id, deletedStatus])
-        meetings = rows2
-      }
+      const request = await axiosInstance.get('/meetings', {params: {rolId: req.user.rolId, userId: req.user.id}})
+      const meetingsJSON = request.data
+
+      isStudent = req.user.rolId === 3;
+      isProfessor = req.user.rolId === 2; 
+      studentInfo = meetingsJSON.studentInfo;
+      tutor = meetingsJSON.tutor;
+      students = meetingsJSON.students;
+      meetings = meetingsJSON.meetings;
+      lastRowId = meetingsJSON.lastRowId
 
       console.log("Reuniones: ", meetings);
       console.log("Is Professor: ", isProfessor);
@@ -47,6 +31,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
 
       for(var i = 0; i < meetingsNum; i++) {
         console.log("Reunion: ", meetings[i]);
+        console.log("Fecha: ", meetings[i].fecha);
         var dateTimeValues = getDateTimeValues(meetings[i].fecha)
         meetings[i].fecha = dateTimeValues[0] + " " + dateTimeValues[1] + ":" + dateTimeValues[2] + dateTimeValues[3].text
       }
@@ -56,14 +41,12 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       hourValues = utils.getHourValues()
       minuteValues = utils.getMinuteValues()
 
-      const lastIdRow = await pool.query("SELECT * FROM reunion ORDER BY id DESC LIMIT 1")
-      
-      lastId = 1
-      
-      if(lastIdRow.length > 0) {
-        console.log("Last Reunion: ", lastIdRow);
+      lastId = 0
 
-        lastId = lastIdRow[0].id + 1
+      if(lastRowId > 0) {
+        console.log("Last Reunion: ", lastRowId);
+
+        lastId = lastRowId + 1
   
         console.log("Last Id: ", lastId);
       }
@@ -84,10 +67,11 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
   
     console.log("Date: " + dateTime);
     
-    var meetingStatus = 1
-  
     try {
-      await pool.query("INSERT INTO reunion (tema, descripcion, fecha, profesor_id, estudiante_id, estado_id, created_on, created_by) VALUES (?, ?, ?, ?, ?, ?, now(), ?)", [req.body.subject, req.body.description, dateTime, req.user.id, req.body.student, meetingStatus, req.user.nombres + " " + req.user.apellidos])
+      request = await axiosInstance.post('/meetings/create', {subject: req.body.subject, description: req.body.description, date: dateTime, professorId: req.user.id, studentId: req.body.student, email: req.user.correoInstitucional})
+      meetingJSON = request.data
+
+      console.log("meeting created: ", meetingJSON);
       
       req.flash("success", "La reunión fue creada con exito!");
       res.redirect('/meetings');
@@ -100,8 +84,11 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
 router.get('/delete/:meetingId', isLoggedIn, isProfessorUser, async (req, res) => {
 
     try {
-        await pool.query("UPDATE reunion SET estado_id = ?, updated_on = now(), updated_by = ? WHERE id = ?", [deletedStatus, req.user.id, req.params.meetingId]);
+        request = await axiosInstance.post('/meetings/delete', {meetingId: req.params.meetingId, email: req.user.correoInstitucional})
+        deleteJSON = request.data
 
+        console.log("Delete Response: ", deleteJSON);
+        
         req.flash('success', 'La reunión fue eliminada con exito');
 
         res.redirect('/meetings');
@@ -181,7 +168,10 @@ function getDateTimeFormat(date, hours, minutes, format) {
   return dateTime
 }
 
-function getDateTimeValues(date) {
+function getDateTimeValues(dateString) {
+  date = new Date(dateString)
+  console.log("Typeof: ", typeof(date));
+
   var month = date.getMonth() + 1;
   var day = date.getDate();
   var year = date.getFullYear();

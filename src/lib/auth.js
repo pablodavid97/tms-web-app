@@ -19,7 +19,7 @@ module.exports = {
 
     isDeanUser(req, res, next) {
         console.log("usuario: ", req.user);
-        if(req.user.rol_id == 1) {
+        if(req.user.rolId == 1) {
             return next()
         } else {
             return res.redirect('/home')
@@ -28,7 +28,7 @@ module.exports = {
 
     isProfessorUser(req, res, next) {
         console.log("usuario: ", req.user);
-        if(req.user.rol_id == 2) {
+        if(req.user.rolId == 2) {
             return next()
         } else {
             return res.redirect('/home')
@@ -36,7 +36,7 @@ module.exports = {
     },
 
     isStudentUser(req, res, next) {
-        if(req.user.rol_id == 3) {
+        if(req.user.rolId == 3) {
             return next()
         } else {
             return res.redirect('/home')
@@ -44,7 +44,7 @@ module.exports = {
     },
 
     isUserStudentOrProfessor(req, res, next) {
-        if(req.user.rol_id == 2 || req.user.rol_id == 3){
+        if(req.user.rolId == 2 || req.user.rolId == 3){
             return next()
         } else {
             return res.redirect('/home')

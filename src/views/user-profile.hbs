@@ -20,12 +20,12 @@
                         <p><span class="user-info-lbl">GPA: </span> {{studentInfo.gpa}}</p>
                         <p><span class="user-info-lbl">Tutor: </span>{{tutor.nombres}} {{tutor.apellidos}}</p>
                     {{/if}}
-                    <p><span class="user-info-lbl">Correo Institucional: </span>{{user.correo_institucional}}</p>
-                    <p><span class="user-info-lbl">Correo Personal: </span>{{user.correo_personal}}</p>
+                    <p><span class="user-info-lbl">Correo Institucional: </span>{{user.correoInstitucional}}</p>
+                    <p><span class="user-info-lbl">Correo Personal: </span>{{user.correoPersonal}}</p>
                     <p><span class="user-info-lbl">Teléfono: </span>{{user.telefono}}</p>
                     {{#if isStudent}}
-                        <p><span class="user-info-lbl">Periodo de Admisión: </span>{{studentInfo.periodo_de_admision}}</p>
-                        <p><span class="user-info-lbl">Tipo de Admisión: </span>{{studentInfo.tipo_de_admision}}</p>
+                        <p><span class="user-info-lbl">Periodo de Admisión: </span>{{studentInfo.periodoDeAdmision}}</p>
+                        <p><span class="user-info-lbl">Tipo de Admisión: </span>{{studentInfo.tipoDeAdmision}}</p>
                         <p><span class="user-info-lbl">Status: </span>{{studentInfo.status}}</p>
                     {{/if}}
                 </div>

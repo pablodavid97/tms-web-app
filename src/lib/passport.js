@@ -1,7 +1,12 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const pool = require('../database');
 const utils = require('./utils');
+const axios = require('axios');
+
+// Axios instance configurations
+const axiosInstance = axios.create({
+    baseURL: 'http://127.0.0.1:3000',
+  });
 
 
 /* ----- CONFIGURATION FILE FOR PASSPORT ----------*/
@@ -13,10 +18,11 @@ passport.use('local.signin', new LocalStrategy ({
         passReqToCallback: true
     }, async (req, email, password, done) => {
         try {
-            const rows = await pool.query('SELECT * FROM usuario WHERE correo_institucional = ?', [email]);
+            const request = await axiosInstance.get('/user-by-email', {params: {email: email}})
+            signInJSON = request.data
 
-            if (rows.length > 0) {
-                user = rows[0]
+            if (signInJSON) {
+                user = signInJSON
     
                 const passwordMatch = await utils.matchPassword(password, user.hash) 
                 // console.log("Passwords Match?: ", passwordMatch);
@@ -40,6 +46,10 @@ passport.serializeUser((user, done) => {
   });
   
   passport.deserializeUser(async (id, done) => {
-    const rows = await pool.query('SELECT * FROM usuario WHERE id = ?', [id]);
-    done(null, rows[0]);
+    const request = await axiosInstance.get('/user-by-id', {params: {userId: id}})
+    const userJSON = request.data
+
+    console.log("user: ", userJSON);
+
+    done(null, userJSON);
   });

@@ -17,9 +17,9 @@ router.get('/home', isLoggedIn, async (req, res) => {
   console.log('Inside the homepage callback function')
   console.log(req.sessionID)
   try{
-    // const data = {"userId": String(req.user.id), "rolId": String(req.user.rol_id)}
-    // console.log("DAta: ", data);
-    const request = await axiosInstance.get('/home', {params: {userId: req.user.id, rolId: req.user.rol_id}})
+    console.log("Req: ", user);
+
+    const request = await axiosInstance.get('/home', {params: {userId: req.user.id, rolId: req.user.rolId}})
     const homeJSON = request.data
 
     console.log("Objects: ", homeJSON);
@@ -46,7 +46,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
 
 router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
   try {
-    const request = await axiosInstance.get('/tutor', {params: {rolId: req.user.rol_id, estudianteId: req.user.id}})
+    const request = await axiosInstance.get('/tutor', {params: {rolId: req.user.rolId, estudianteId: req.user.id}})
     const tutorJSON = request.data
 
     console.log("JSON: ", tutorJSON);
@@ -124,7 +124,7 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
 });
 
 router.get('/notifications', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
-  const request = await axiosInstance.get('/notifications', {params: {rolId: req.user.rol_id}})
+  const request = await axiosInstance.get('/notifications', {params: {rolId: req.user.rolId}})
   const notificationsJSON = request.data
 
   console.log("rol: ", notificationsJSON);
