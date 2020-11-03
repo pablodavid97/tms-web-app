@@ -5,7 +5,9 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "dev": "nodemon src/index.js -e js,css,hbs"
+    "dev": "nodemon src/index.js -e js,css,hbs",
+    "lint": "eslint . --ext .js",
+    "format": "prettier --config .prettierrc 'src/**/*.js' --write && echo 'Prettier format complete'"
   },
   "repository": {
     "type": "git",
@@ -40,13 +42,16 @@
     "nodemailer-express-handlebars": "^4.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "prettier": "^2.1.2",
     "timeago.js": "^4.0.2",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
     "eslint": "^7.10.0",
     "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
     "nodemon": "^2.0.4",
     "reload": "^3.1.1"
   }

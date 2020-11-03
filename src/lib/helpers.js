@@ -1,7 +1,5 @@
-const helpers = {}
+const helpers = {};
 
-helpers.is = (path, text) => {
-    return path == text
-}
+helpers.is = (path, text) => path == text;
 
 module.exports = helpers;
