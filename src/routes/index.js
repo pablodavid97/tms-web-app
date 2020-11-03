@@ -205,13 +205,27 @@ router.get(
   isUserStudentOrProfessor,
   async (req, res) => {
     const request = await axiosInstance.get('/notifications', {
-      params: { rolId: req.user.rolId }
+      params: { rolId: req.user.rolId, userId: req.user.id }
     });
     const notificationsJSON = request.data;
 
-    console.log('rol: ', notificationsJSON);
-
     role = notificationsJSON.rol;
+    notifications = notificationsJSON.notifications;
+
+    const notificationsNum = notifications.length
+
+    for(i = 0; i < notificationsNum; i++) {
+      const dateTimeValues = utils.getDateTimeValues(notifications[i].fecha)
+      notifications[i].fecha = 
+      dateTimeValues[0] +
+      ' ' +
+      dateTimeValues[1] +
+      ':' +
+      dateTimeValues[2] +
+      dateTimeValues[3].text;
+    }
+
+    console.log('Notificaciones: ', notifications);
 
     const isStudent = role.id === 3;
     const isProfessor = role.id === 2;
@@ -220,9 +234,10 @@ router.get(
     res.render('notifications', {
       path: 'notifications',
       user: req.user,
-      isDean,
-      isProfessor,
-      isStudent,
+      notifications: notifications,
+      isDean: isDean,
+      isProfessor: isProfessor,
+      isStudent: isStudent,
       success: req.flash('success'),
       error: req.flash('error')
     });
