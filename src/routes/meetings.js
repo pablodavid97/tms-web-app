@@ -115,13 +115,14 @@ router.post('/create', async (req, res) => {
 });
 
 router.get(
-  '/delete/:meetingId',
+  '/delete/:meetingId/:studentId',
   isLoggedIn,
   isProfessorUser,
   async (req, res) => {
     try {
       request = await axiosInstance.post('/meetings/delete', {
         meetingId: req.params.meetingId,
+        studentId: req.params.studentId,
         email: req.user.correoInstitucional
       });
       deleteJSON = request.data;
@@ -224,5 +225,15 @@ router.post('/edit', async (req, res) => {
     console.log(error.message);
   }
 });
+
+router.get('/accept/:meetingId/:notificationId/:profesorId', async (req, res) => {
+  console.log("Meeting was accepted");
+
+  console.log("Params: ", req.params);
+
+  request = await axiosInstance.post('/meetings/accept', {meetingId: req.params.meetingId, notificationId: req.params.notificationId, profesorId: req.params.profesorId, email: req.user.correoInstitucional})
+
+  res.redirect('/notifications')
+})
 
 module.exports = router;

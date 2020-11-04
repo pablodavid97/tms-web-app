@@ -398,3 +398,42 @@ body, html {
     font-weight: 700;
     font-size: 16px;
 }
+
+.notification-link{
+    font-weight: 600;
+    color: #6c757d!important;
+}
+
+.notification-link:link {
+    text-decoration: none;
+  }
+  
+  .notification-link:visited {
+    text-decoration: none;
+  }
+  
+  .notification-link:hover {
+    text-decoration: none;
+  }
+  
+  .notification-link:active {
+    text-decoration: none;
+  }
+
+  /* Styles for meeting details pane */
+
+.meeting-details-content{
+    display: none;
+}
+
+  #studentResponseSection{
+      display: none;
+  }
+
+  #studentCommentsSection {
+    display: none;
+}
+
+  .meeting-details-pane #submitButtonContainer {
+      display: none;
+  }

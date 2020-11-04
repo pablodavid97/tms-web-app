@@ -244,8 +244,21 @@ router.get(
   }
 );
 
-router.post('/notifications', (req, res) => {
+router.post('/notifications', async (req, res) => {
   console.log('datos ingresados: ', req.body);
+
+  meetingOption = req.body.meetingOption
+  notificationId = req.body.notificationId
+  meetingId = req.body.meetingId
+  profesorId = req.body.profesorId
+  comment = req.body.comment
+  email = req.user.correoInstitucional
+
+  if (meetingOption === "1") {
+    request = await axiosInstance.post('/meetings/accept', {meetingId: meetingId, notificationId: notificationId, comment: comment, profesorId: profesorId, email: email})
+  } else {
+    request = await axiosInstance.post('/meetings/reject', {meetingId: meetingId, notificationId: notificationId, comment: comment, profesorId: profesorId, email: email})
+  }
 
   res.redirect('/notifications');
 });
