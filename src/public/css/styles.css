@@ -437,3 +437,18 @@ body, html {
   #studentCommentsSection {
     display: none;
 }
+
+/* Edit Profile Styles */
+.edit-profile-container {
+    padding: 0rem 5rem;
+    text-align: center
+}
+
+.form-edit-profile {
+    border: 1px solid black;
+    padding: 7rem;
+}
+
+.edit-personal-brand {
+    margin-bottom: 4rem;
+}

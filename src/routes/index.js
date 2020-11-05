@@ -263,4 +263,21 @@ router.post('/notifications', async (req, res) => {
   res.redirect('/notifications');
 });
 
+router.get('/edit-profile', async (req, res) => {
+  const isDean = req.user.rolId === 1
+  const isProfessor = req.user.rolId === 2
+  const isStudent = req.user.rolId === 3
+
+  console.log("Role: ", isDean, isProfessor, isStudent);
+
+  res.render('edit-profile', {
+    user: req.user,
+    isDean: isDean,
+    isProfessor: isProfessor,
+    isStudent: isStudent,
+    success: req.flash('success'),
+    error: req.flash('error')
+  })
+})
+
 module.exports = router;

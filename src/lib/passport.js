@@ -58,7 +58,7 @@ passport.deserializeUser(async (id, done) => {
   });
   const userJSON = request.data;
 
-  console.log('user: ', userJSON);
+  // console.log('user: ', userJSON);
 
   done(null, userJSON);
 });
