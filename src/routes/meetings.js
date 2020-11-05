@@ -59,6 +59,13 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       console.log('Last Id: ', lastId);
     }
 
+    const notificationsRequest = await axiosInstance.get('/notifications', {
+      params: { rolId: req.user.rolId, userId: req.user.id }
+    });
+    const notificationsJSON = notificationsRequest.data;
+
+    notifications = notificationsJSON.notifications;
+
     res.render('meetings/list', {
       path: 'meetings',
       user: req.user,
@@ -71,6 +78,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       hourValues,
       minuteValues,
       lastId,
+      notifications,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -173,6 +181,13 @@ router.get(
 
       console.log('Request test');
 
+      const notificationsRequest = await axiosInstance.get('/notifications', {
+        params: { rolId: req.user.rolId, userId: req.user.id }
+      });
+      const notificationsJSON = notificationsRequest.data;
+  
+      notifications = notificationsJSON.notifications;
+
       res.render('meetings/edit', {
         path: 'meetings',
         user: req.user,
@@ -186,6 +201,7 @@ router.get(
         students,
         hourValues,
         minuteValues,
+        notifications,
         success: req.flash('success'),
         error: req.flash('error')
       });
@@ -225,15 +241,5 @@ router.post('/edit', async (req, res) => {
     console.log(error.message);
   }
 });
-
-router.get('/accept/:meetingId/:notificationId/:profesorId', async (req, res) => {
-  console.log("Meeting was accepted");
-
-  console.log("Params: ", req.params);
-
-  request = await axiosInstance.post('/meetings/accept', {meetingId: req.params.meetingId, notificationId: req.params.notificationId, profesorId: req.params.profesorId, email: req.user.correoInstitucional})
-
-  res.redirect('/notifications')
-})
 
 module.exports = router;

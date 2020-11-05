@@ -46,6 +46,13 @@ router.get('/home', isLoggedIn, async (req, res) => {
       tutor = homeJSON.tutor;
     }
 
+    const notificationsRequest = await axiosInstance.get('/notifications', {
+      params: { rolId: req.user.rolId, userId: req.user.id }
+    });
+    const notificationsJSON = notificationsRequest.data;
+  
+    notifications = notificationsJSON.notifications;
+
     res.render('user-profile', {
       path: 'home',
       user: req.user,
@@ -55,13 +62,14 @@ router.get('/home', isLoggedIn, async (req, res) => {
       tutor,
       isProfessor,
       isDean,
+      notifications: notifications,
       success: req.flash('success'),
       error: req.flash('error')
     });
   } catch (error) {
     console.error(error.message);
   }
-});
+})
 
 router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
   try {
@@ -78,6 +86,13 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
 
     console.log('Tutor: ', tutor);
 
+    const notificationsRequest = await axiosInstance.get('/notifications', {
+      params: { rolId: req.user.rolId, userId: req.user.id }
+    });
+    const notificationsJSON = notificationsRequest.data;
+  
+    notifications = notificationsJSON.notifications;
+
     res.render('tutor', {
       path: 'tutor',
       user: req.user,
@@ -87,6 +102,7 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
       tutor,
       isProfessor: false,
       isDean: false,
+      notifications: notifications,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -106,11 +122,20 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
     console.log('Estudiantes: ', studentsJSON);
     students = studentsJSON;
 
+    const notificationsRequest = await axiosInstance.get('/notifications', {
+      params: { rolId: req.user.rolId, userId: req.user.id }
+    });
+    const notificationsJSON = notificationsRequest.data;
+  
+    notifications = notificationsJSON.notifications;
+    
+
     res.render('students', {
       path: 'students',
       user: req.user,
       isProfessor: true,
       students,
+      notifications: notifications,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -135,11 +160,19 @@ router.get(
       student = studentJSON.estudiante;
       console.log('Estudiante: ', student);
 
+      const notificationsRequest = await axiosInstance.get('/notifications', {
+        params: { rolId: req.user.rolId, userId: req.user.id }
+      });
+      const notificationsJSON = notificationsRequest.data;
+    
+      notifications = notificationsJSON.notifications;
+
       res.render('student', {
         path: 'students',
         user: req.user,
         isProfessor: true,
-        student,
+        student: student,
+        notifications: notifications,
         success: req.flash('success'),
         error: req.flash('error')
       });
@@ -270,11 +303,19 @@ router.get('/edit-profile', async (req, res) => {
 
   console.log("Role: ", isDean, isProfessor, isStudent);
 
+  const notificationsRequest = await axiosInstance.get('/notifications', {
+    params: { rolId: req.user.rolId, userId: req.user.id }
+  });
+  const notificationsJSON = notificationsRequest.data;
+
+  notifications = notificationsJSON.notifications;
+
   res.render('edit-profile', {
     user: req.user,
     isDean: isDean,
     isProfessor: isProfessor,
     isStudent: isStudent,
+    notifications: notifications,
     success: req.flash('success'),
     error: req.flash('error')
   })

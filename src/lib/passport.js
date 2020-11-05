@@ -34,12 +34,12 @@ passport.use(
               req.flash('success', `Bienvenido/a ${user.nombres}`)
             );
           }
-          return done(null, false, req.flash('error', 'Contraseña incorrecta'));
+          return done(null, false, req.flash('error', 'Las credenciales ingresadas son incorrectas.'));
         }
         return done(
           null,
           false,
-          req.flash('error', 'El usuario ingresado no está registrado')
+          req.flash('error', 'Las credenciales ingresadas son incorrectas.')
         );
       } catch (error) {
         return done(error);

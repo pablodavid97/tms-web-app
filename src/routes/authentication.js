@@ -28,9 +28,6 @@ router.get('/signin', isNotLoggedIn, (req, res, next) => {
 });
 
 router.post('/signin', async (req, res, next) => {
-  // console.log('Inside POST /login callback function');
-  console.log(req.body);
-
   await passport.authenticate('local.signin', {
     successRedirect: '/home',
     failureRedirect: '/signin',
@@ -118,12 +115,19 @@ router.post('/create-password', async (req, res) => {
 });
 
 // CHANGE PASSWORD
-router.get('/change-password/', isLoggedIn, (req, res) => {
+router.get('/change-password/', isLoggedIn, async (req, res) => {
   const isDean = req.user.rolId === 1
   const isProfessor = req.user.rolId === 2
   const isStudent = req.user.rolId === 3
 
   console.log("Roles: ", isDean, isProfessor, isStudent);
+
+  const notificationsRequest = await axiosInstance.get('/notifications', {
+    params: { rolId: req.user.rolId, userId: req.user.id }
+  });
+  const notificationsJSON = notificationsRequest.data;
+
+  notifications = notificationsJSON.notifications;
 
   res.render('auth/change-password', {
     headerTitle: '¿Quieres Cambiar tu Contraseña?',
@@ -133,6 +137,7 @@ router.get('/change-password/', isLoggedIn, (req, res) => {
     isDean: isDean,
     isProfessor: isProfessor,
     isStudent: isStudent,
+    notifications: notifications,
     success: req.flash('success'),
     error: req.flash('error')
   });

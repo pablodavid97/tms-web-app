@@ -16,6 +16,9 @@
                 </li>
                 <li class="navitem {{#if (is path "notifications")}} active {{/if}}">
                   <a href="/notifications" class="nav-link">Notificaciones</a>
+                  {{#if notifications}}
+                    <span class="notification-number-icon">{{notifications.length}}</span>
+                  {{/if}}
                 </li>
                 <li class="navitem {{#if (is path "tutor")}} active {{/if}}">
                   <a href="/tutor" class="nav-link">Mi Tutor</a>
@@ -27,6 +30,9 @@
                 </li>
                 <li class="navitem {{#if (is path "notifications")}} active {{/if}}">
                   <a href="/notifications" class="nav-link">Notificaciones</a>
+                  {{#if notifications}}
+                    <span class="notification-number-icon">{{notifications.length}}</span>
+                  {{/if}}
                 </li>
                 <li class="navitem {{#if (is path "students")}} active {{/if}}">
                   <a href="/students" class="nav-link">Estudiantes</a>

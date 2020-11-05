@@ -63,7 +63,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-global.appRoot = path.resolve(__dirname);
+global.showNotifications = "heelloww";
 
 // routes
 app.use(require('./routes/index'));

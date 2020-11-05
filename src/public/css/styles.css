@@ -164,7 +164,7 @@ body, html {
     background: #f8f9fa!important;
 }
 
-/* Styles for reset password and create password forms */
+/* Styles for reset password, change, and create password forms */
   
   .page-header {
     padding: 1rem 0;
@@ -178,7 +178,7 @@ body, html {
     margin: 1rem 0;
 }
 
-  .password-container {
+.password-container {
     max-width: 650px;
     background: #fff;
     border: 1px solid #c9c9c9;
@@ -419,6 +419,21 @@ body, html {
   .notification-link:active {
     text-decoration: none;
   }
+
+  .notification-number-icon {
+    position: absolute;
+    top: 0.3rem;
+    left: 21rem;
+    background: orange;
+    color: white;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    font-size: 15px;
+    text-align: center;
+    line-height: 1.2rem;
+}
 
   /* Styles for meeting details pane */
 
