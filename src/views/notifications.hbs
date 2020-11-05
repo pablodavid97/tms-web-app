@@ -110,7 +110,6 @@
                     </div>
                     <div class="col-md-6 pane meeting-details-pane">
                         <div class="meeting-details-content">
-                            <form action="/notifications" method="POST">
                                 <div class="meeting-section">
                                     <h2 class="border-bottom border-gray pb-2">Seguimiento Reunión</h2>
                                 </div>
@@ -137,28 +136,35 @@
                                 </div>
                                 
                                 <div id="studentResponseSection" class="meeting-section">
-                                    <input type="hidden" class="form-control form-input notification-id" id="detailsPaneNotificationId" name="notificationId">
-                                    <input type="hidden" class="form-control form-input meeting-id" id="detailsPaneMeetingIdInput" name="meetingId">
-                                    <input type="hidden" class="form-control form-input profesor-id" id="detailsPaneProfesorId" name="profesorId">
-                                    <label class="meetingLabel">¿Aceptas la reunión?</label>
-                                    </br>
-                                    <div class="form-check form-check-inline col-sm-1">
-                                        <input class="form-check-input" type="radio" name="meetingOption" id="yesRadioOptn" value="1">
-                                        <label class="form-check-label" for="yesRadioOptn">Si</label>
-                                    </div>
-                                    <div class="form-check form-check-inline col-sm-1">
-                                        <input class="form-check-input" type="radio" name="meetingOption" id="noRadioOptn" value="0">
-                                        <label class="form-check-label" for="noRadioOptn">No</label>
-                                    </div>
+                                    <form action="/notifications" method="POST">
+                                        <input type="hidden" class="form-control form-input notification-id" id="detailsPaneNotificationId" name="notificationId">
+                                        <input type="hidden" class="form-control form-input meeting-id" id="detailsPaneMeetingIdInput" name="meetingId">
+                                        <input type="hidden" class="form-control form-input profesor-id" id="detailsPaneProfesorId" name="profesorId">
+                                        <label class="meetingLabel">¿Aceptas la reunión?</label>
+                                        <div class="form-group student-form-response">
+                                            <div class="form-check form-check-inline col-sm-1">
+                                                <input class="form-check-input" type="radio" name="meetingOption" id="yesRadioOptn" value="1">
+                                                <label class="form-check-label" for="yesRadioOptn">Si</label>
+                                            </div>
+                                            <div class="form-check form-check-inline col-sm-1">
+                                                <input class="form-check-input" type="radio" name="meetingOption" id="noRadioOptn" value="0">
+                                                <label class="form-check-label" for="noRadioOptn">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group student-form-response">
+                                            <label class="meetingLabel" for="studentCommentTextArea">Comentarios</label>
+                                            <textarea name="comment" id="studentCommentTextArea" class="meeting-student-comment form-control" rows="5"></textarea>
+                                        </div>                                    
+                                        <div id="submitButtonContainer" class="form-container-btn">
+                                            <button type="submit" class="btn btn-primary">Envíar Respuesta</button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div id="studentCommentsSection" class="meeting-section">
-                                    <label class="meetingLabel" for="meetingFormStudentComment">Comentarios</label>
-                                    <textarea name="comment" id="meetingFormStudentComment" class="meeting-student-comment form-control" rows="5"></textarea>
+                            
+                                <div id="studentCommentSection" class="meeting-section">
+                                    <label class="meetingLabel" for="detailsPaneStudentComment">Comentarios</label>
+                                    <p id="detailsPaneStudentComment"></p>
                                 </div>
-                                <div id="submitButtonContainer" class="form-container-btn">
-                                    <button type="submit" class="btn btn-primary">Envíar Respuesta</button>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -173,12 +179,12 @@
                     var student = document.getElementById('detailsPaneStudent')
                     var description = document.getElementById('detailsPaneDescription')
                     var studentResponse = document.getElementById('studentResponseSection')
-                    var studentComments = document.getElementById('studentCommentsSection')
-                    var meetingDetailsButton = document.getElementById('submitButtonContainer')
                     var meetingDetailsContent = document.getElementsByClassName('meeting-details-content')
                     var notificationId = document.getElementById('detailsPaneNotificationId')
                     var meetingIdInput = document.getElementById('detailsPaneMeetingIdInput')
                     var profesorId = document.getElementById('detailsPaneProfesorId')
+                    var studentCommentSection = document.getElementById('studentCommentSection')
+                    var studentComment = document.getElementById('detailsPaneStudentComment')
 
                     console.log("Meeting id: ", meetingId)
                     console.log("date: ", date)
@@ -186,8 +192,6 @@
                     console.log("student: ", student)
                     console.log("Description: ", description)
                     console.log("student response: ", studentResponse)
-                    console.log("student comments: ", studentComments)
-                    console.log("meetingDetailsButton: ", meetingDetailsButton)
 
                     meetingDetailsContent[0].style.display = "block"
                     meetingId.innerHTML = notification.reunionId
@@ -198,16 +202,18 @@
 
                     if(notification.estadoId === 1) {
                         studentResponse.style.display = "block"
-                        meetingDetailsButton.style.display = "block"
-                        studentComments.style.display = "block"
-
                         notificationId.value = notification.id
                         meetingIdInput.value = notification.reunionId
                         profesorId.value = notification.profesorId
-                    } else {
+                        studentCommentSection.style.display = "none"
+                    } else if (notification.estadoId === 3 || notification.estadoId === 4) {
                         studentResponse.style.display = "none"
-                        meetingDetailsButton.style.display = "none"
-                        studentComments.style.display = "none"
+                        studentCommentSection.style.display = "block"
+                        studentComment.innerHTML = notification.comentariosEstudiante
+                    }
+                    else  {
+                        studentResponse.style.display = "none"
+                        studentCommentSection.style.display = "none"
                     }
                 } 
             </script>

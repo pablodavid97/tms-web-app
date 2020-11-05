@@ -422,6 +422,10 @@ body, html {
 
   /* Styles for meeting details pane */
 
+.student-form-response {
+    margin-bottom: 2rem;
+}
+
 .meeting-details-content{
     display: none;
 }
@@ -433,7 +437,3 @@ body, html {
   #studentCommentsSection {
     display: none;
 }
-
-  .meeting-details-pane #submitButtonContainer {
-      display: none;
-  }
