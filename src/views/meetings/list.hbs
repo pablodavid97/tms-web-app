@@ -139,8 +139,14 @@
                                     <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
                                     <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
                                     <td>{{this.estado}}</td>
-                                    <td><a href="/meetings/edit/{{this.id}}">Editar</a></td>
-                                    <td><a href="/meetings/delete/{{this.id}}/{{this.estudianteId}}">Eliminar</a></td>
+                                    {{#if (isNot this.estadoId 3)}}
+                                        <td><a href="/meetings/edit/{{this.id}}">Editar</a></td>
+                                        <td><a href="/meetings/delete/{{this.id}}/{{this.estudianteId}}">Eliminar</a></td>
+                                    {{else}}
+                                        <td></td>
+                                        <td></td>
+                                    {{/if}}
+
                                 </tr>
                             {{/each}}
 
