@@ -1,6 +1,8 @@
 const helpers = {};
 
-helpers.is = (path, text) => path == text;
+helpers.is = (object, value) => object === value;
+
+helpers.isNot = (object, value) => object !== value;
 
 helpers.json = (context) => {
     return JSON.stringify(context)
