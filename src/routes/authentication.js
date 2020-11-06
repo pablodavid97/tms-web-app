@@ -128,6 +128,7 @@ router.get('/change-password/', isLoggedIn, async (req, res) => {
     isProfessor: isProfessor,
     isStudent: isStudent,
     notifications: notifications,
+    showNotifications: global.showNotifications,
     success: req.flash('success'),
     error: req.flash('error')
   });

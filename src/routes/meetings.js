@@ -66,6 +66,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       minuteValues,
       lastId,
       notifications,
+      showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -172,6 +173,7 @@ router.get(
         hourValues,
         minuteValues,
         notifications,
+        showNotifications: global.showNotifications,
         success: req.flash('success'),
         error: req.flash('error')
       });
