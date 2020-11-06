@@ -11,7 +11,7 @@
        </div>
     </div>
 
-    <form class="form-edit-profile">
+    <form action="edit-profile" method="POST" class="form-edit-profile">
         <div class="edit-personal-brand">
             <div class="user-img-container">
                 {{#if isDean}}
@@ -32,7 +32,7 @@
                   <label for="oldPasswordInput">Nombres: </label>
                 </div>
               <div class="col-sm-5">
-                  <input type="text" id="userNames" name="userNames" class="form-control form-input input-name" placeholder="Nombres" required="" autofocus="" autocomplete="off">
+                  <input type="text" id="userNames" name="userNames" class="form-control form-input input-name" placeholder="Nombres" autofocus="" autocomplete="off">
                 </div>
             </div>
             <div class="row">
@@ -40,7 +40,7 @@
                   <label for="oldPasswordInput">Apellidos: </label>
                 </div>
               <div class="col-sm-5">
-                  <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" required="" autofocus="" autocomplete="off">
+                  <input type="text" id="userLastNames" name="userLastNames" class="form-control form-input input-lastname" placeholder="Apellidos" autofocus="" autocomplete="off">
                 </div>
             </div>
             <div class="row">
@@ -48,7 +48,7 @@
                   <label for="oldPasswordInput">Correo Personal: </label>
                 </div>
               <div class="col-sm-5">
-                  <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" required="" autofocus="" autocomplete="off">
+                  <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" autofocus="" autocomplete="off">
                 </div>
             </div>
             <div class="row">
@@ -56,7 +56,7 @@
                   <label for="oldPasswordInput">Teléfono: </label>
                 </div>
               <div class="col-sm-5">
-                  <input type="text" id="userPhone" name="userPhone" class="form-control form-input input-phone" placeholder="Teléfono" required="" autofocus="" autocomplete="off">
+                  <input type="text" id="userPhone" name="userPhone" class="form-control form-input input-phone" placeholder="Teléfono" autofocus="" autocomplete="off">
                 </div>
             </div>
         </div>
