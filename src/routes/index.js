@@ -268,7 +268,8 @@ router.post('/notifications', async (req, res) => {
   res.redirect('/notifications');
 });
 
-router.get('/edit-profile', async (req, res) => {
+// EDIT PROFILE
+router.get('/edit-profile', isLoggedIn, async (req, res) => {
   const isDean = req.user.rolId === 1
   const isProfessor = req.user.rolId === 2
   const isStudent = req.user.rolId === 3
@@ -289,6 +290,74 @@ router.get('/edit-profile', async (req, res) => {
     success: req.flash('success'),
     error: req.flash('error')
   })
+});
+
+router.post('/edit-profile', isLoggedIn, async (req, res) => {
+  try {
+    console.log("Datos Ingresados: ", req.body);
+
+    editProfileRequest = await axiosInstance.post('/edit-profile', {firstNames: req.body.userNames, lastNames: req.body.userLastNames, email: req.body.userEmail, phone: req.body.userPhone, userId: req.user.id})
+    
+    req.flash('success', 'Tus datos han sido actualizados exitosamente!');
+
+    res.redirect('/home')
+  } catch (error) {
+    console.error(error.message);
+  }
+})
+
+// CHANGE PASSWORD
+router.get('/change-password/', isLoggedIn, async (req, res) => {
+  const isDean = req.user.rolId === 1
+  const isProfessor = req.user.rolId === 2
+  const isStudent = req.user.rolId === 3
+
+  const notificationsRequest = await axiosInstance.get('/notifications', {
+    params: { rolId: req.user.rolId, userId: req.user.id }
+  });
+  const notificationsJSON = notificationsRequest.data;
+
+  notifications = notificationsJSON.notifications;
+
+  res.render('auth/change-password', {
+    headerTitle: '¿Quieres Cambiar tu Contraseña?',
+    userId: req.user.id,
+    createBtnText: 'Cambiar Contraseña',
+    user: req.user,
+    isDean: isDean,
+    isProfessor: isProfessor,
+    isStudent: isStudent,
+    notifications: notifications,
+    success: req.flash('success'),
+    error: req.flash('error')
+  });
+});
+
+router.post('/change-password', isLoggedIn, async (req, res) => {
+  userId = req.body.userId;
+  oldPassword = req.body.oldPassword
+  newPassword = req.body.newPassword;
+  confirmation = req.body.confirmation;
+
+  passwordsMatch = await utils.matchPassword(oldPassword, req.user.hash)
+
+  if(passwordsMatch){
+    if(newPassword === confirmation) {
+      newHash = await utils.encryptPassword(newPassword)
+
+      request = await axiosInstance.post('/change-password', {hash: newHash, userId: req.user.id})
+      changepwdJSON = request.data
+
+      req.flash('success', 'La contraseña fue cambiada con exito!');
+      res.redirect('/home')
+    } else {
+      req.flash('error', 'La nueva contraseña y confirmación no coinciden.');
+      res.redirect('/change-password')
+    }
+  } else {
+    req.flash('error', 'La contraseña ingresada no es la correcta.');
+    res.redirect('/change-password')
+  }
 })
 
 module.exports = router;
