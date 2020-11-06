@@ -24,16 +24,9 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
     students = meetingsJSON.students;
     meetings = meetingsJSON.meetings;
     lastRowId = meetingsJSON.lastRowId;
-
-    console.log('Reuniones: ', meetings);
-    console.log('Is Professor: ', isProfessor);
-    console.log('Is Student: ', isStudent);
-
     meetingsNum = meetings.length;
 
     for (let i = 0; i < meetingsNum; i++) {
-      console.log('Reunion: ', meetings[i]);
-      console.log('Fecha: ', meetings[i].fecha);
       const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
       meetings[i].fecha =
         dateTimeValues[0] +
@@ -44,19 +37,13 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
         dateTimeValues[3].text;
     }
 
-    console.log('Estudiantes: ', students);
-
     hourValues = utils.getHourValues();
     minuteValues = utils.getMinuteValues();
 
     lastId = 0;
 
     if (lastRowId > 0) {
-      console.log('Last Reunion: ', lastRowId);
-
       lastId = lastRowId + 1;
-
-      console.log('Last Id: ', lastId);
     }
 
     const notificationsRequest = await axiosInstance.get('/notifications', {
@@ -88,18 +75,12 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
 });
 
 router.post('/create', async (req, res) => {
-  console.log('usuario: ', req.user);
-
-  console.log('Datos Ingresados: ', req.body);
-
   dateTime = utils.getDateTimeFormat(
     req.body.date,
     req.body.hours,
     req.body.minutes,
     req.body.format
   );
-
-  console.log(`Date: ${dateTime}`);
 
   try {
     request = await axiosInstance.post('/meetings/create', {
@@ -111,8 +92,6 @@ router.post('/create', async (req, res) => {
       email: req.user.correoInstitucional
     });
     meetingJSON = request.data;
-
-    console.log('meeting created: ', meetingJSON);
 
     req.flash('success', 'La reunión fue creada con exito!');
     res.redirect('/meetings');
@@ -134,8 +113,6 @@ router.get(
         email: req.user.correoInstitucional
       });
       deleteJSON = request.data;
-
-      console.log('Delete Response: ', deleteJSON);
 
       req.flash('success', 'La reunión fue eliminada con exito');
 
@@ -160,26 +137,19 @@ router.get(
       meeting = editMeetingJSON;
 
       dateTime = utils.getDateTimeValues(meeting.fecha);
-      console.log('Date Time: ', dateTime);
       date = dateTime[0];
       hours = dateTime[1];
       minutes = dateTime[2];
       format = dateTime[3];
-
-      console.log('Reunion: ', meeting);
 
       request2 = await axiosInstance.get('/students', {
         params: { profesorId: req.user.id }
       });
       studentsJSON = request2.data;
 
-      console.log('Students: ', studentsJSON);
-
       students = studentsJSON;
       hourValues = utils.getHourValues();
       minuteValues = utils.getMinuteValues();
-
-      console.log('Request test');
 
       const notificationsRequest = await axiosInstance.get('/notifications', {
         params: { rolId: req.user.rolId, userId: req.user.id }
@@ -212,8 +182,6 @@ router.get(
 );
 
 router.post('/edit', async (req, res) => {
-  console.log('Datos Ingresados: ', req.body);
-
   dateTime = utils.getDateTimeFormat(
     req.body.date,
     req.body.hours,
@@ -231,8 +199,6 @@ router.post('/edit', async (req, res) => {
       meetingId: req.body.meetingId
     });
     editMeetingJSON = request.data;
-
-    console.log('Response: ', editMeetingJSON);
 
     req.flash('success', 'La reunión fue actualizada con exito!');
 

@@ -22,17 +22,11 @@ router.get('/', isNotLoggedIn, (req, res) => {
 });
 
 router.get('/home', isLoggedIn, async (req, res) => {
-  console.log('Inside the homepage callback function');
-  console.log(req.sessionID);
   try {
-    console.log('Req: ', user);
-
     const request = await axiosInstance.get('/home', {
       params: { userId: req.user.id, rolId: req.user.rolId }
     });
     const homeJSON = request.data;
-
-    console.log('Objects: ', homeJSON);
 
     role = homeJSON.rol;
     const isStudent = role.id === 3;
@@ -78,13 +72,9 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
     });
     const tutorJSON = request.data;
 
-    console.log('JSON: ', tutorJSON);
-
     role = tutorJSON.rol;
     studentInfo = tutorJSON.studentInfo;
     tutor = tutorJSON.tutor;
-
-    console.log('Tutor: ', tutor);
 
     const notificationsRequest = await axiosInstance.get('/notifications', {
       params: { rolId: req.user.rolId, userId: req.user.id }
@@ -112,14 +102,11 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
 });
 
 router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
-  console.log('Got in!');
   try {
     const request = await axiosInstance.get('/students', {
       params: { profesorId: req.user.id }
     });
     const studentsJSON = request.data;
-
-    console.log('Estudiantes: ', studentsJSON);
     students = studentsJSON;
 
     const notificationsRequest = await axiosInstance.get('/notifications', {
@@ -155,10 +142,7 @@ router.get(
       });
       const studentJSON = request.data;
 
-      console.log('Student JSON: ', studentJSON);
-
       student = studentJSON.estudiante;
-      console.log('Estudiante: ', student);
 
       const notificationsRequest = await axiosInstance.get('/notifications', {
         params: { rolId: req.user.rolId, userId: req.user.id }
@@ -183,23 +167,16 @@ router.get(
 );
 
 router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
-  console.log('Entro!');
   try {
     const request = await axiosInstance.get('/reports', {
       params: { decanoId: req.user.id }
     });
     const reportsJSON = request.data;
 
-    console.log('Reports JSON: ', reportsJSON);
-
     meetings = reportsJSON.reuniones;
-    console.log('Reuniones: ', meetings);
-
     meetingsNum = meetings.length;
 
     for (let i = 0; i < meetingsNum; i++) {
-      console.log('Reunion: ', meetings[i]);
-      console.log('Fecha: ', meetings[i].fecha);
       const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
       meetings[i].fecha =
         dateTimeValues[0] +
@@ -211,7 +188,6 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
     }
 
     gpa = reportsJSON.gpa;
-    console.log('GPA: ', gpa);
     userNum = reportsJSON.activeUsers.length;
     conditionedNum = reportsJSON.conditionedUsers.length;
 
@@ -258,8 +234,6 @@ router.get(
       dateTimeValues[3].text;
     }
 
-    console.log('Notificaciones: ', notifications);
-
     const isStudent = role.id === 3;
     const isProfessor = role.id === 2;
     const isDean = role.id === 1;
@@ -278,8 +252,6 @@ router.get(
 );
 
 router.post('/notifications', async (req, res) => {
-  console.log('datos ingresados: ', req.body);
-
   meetingOption = req.body.meetingOption
   notificationId = req.body.notificationId
   meetingId = req.body.meetingId
@@ -300,8 +272,6 @@ router.get('/edit-profile', async (req, res) => {
   const isDean = req.user.rolId === 1
   const isProfessor = req.user.rolId === 2
   const isStudent = req.user.rolId === 3
-
-  console.log("Role: ", isDean, isProfessor, isStudent);
 
   const notificationsRequest = await axiosInstance.get('/notifications', {
     params: { rolId: req.user.rolId, userId: req.user.id }

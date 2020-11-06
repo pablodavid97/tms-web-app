@@ -6,7 +6,6 @@ const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 const axiosInstance = require('../http-client');
 
 const sendPasswordReset = async (user) => {
-  console.log('Usuario: ', user.nombres);
 
   try {
     const res = await axiosInstance.post('/sendmail', user);
@@ -19,8 +18,6 @@ const sendPasswordReset = async (user) => {
 
 // SIGN IN
 router.get('/signin', isNotLoggedIn, (req, res, next) => {
-  // console.log('Inside GET /login callback function');
-  console.log(req.sessionID);
   res.render('auth/signin', {
     success: req.flash('success'),
     error: req.flash('error')
@@ -49,15 +46,11 @@ router.get('/first-time-login', isNotLoggedIn, (req, res) => {
 });
 
 router.post('/reset-password', async (req, res) => {
-  console.log('Reset PWD Body: ', req.body);
-
   try {
     const request = await axiosInstance.get('user-by-email', {
       params: { email: req.body.email }
     });
     const resetpwdJSON = request.data;
-
-    console.log('Request: ', resetpwdJSON);
 
     sendPasswordReset(resetpwdJSON);
 
@@ -71,7 +64,6 @@ router.post('/reset-password', async (req, res) => {
 
 // CREATE PASSWORD
 router.get('/create-password/:userId', isNotLoggedIn, (req, res) => {
-  // console.log('Params: ', req.params);
   res.render('auth/create-password', {
     headerTitle: 'Restablecer Contraseña',
     userId: req.params.userId,
@@ -120,8 +112,6 @@ router.get('/change-password/', isLoggedIn, async (req, res) => {
   const isProfessor = req.user.rolId === 2
   const isStudent = req.user.rolId === 3
 
-  console.log("Roles: ", isDean, isProfessor, isStudent);
-
   const notificationsRequest = await axiosInstance.get('/notifications', {
     params: { rolId: req.user.rolId, userId: req.user.id }
   });
@@ -144,8 +134,6 @@ router.get('/change-password/', isLoggedIn, async (req, res) => {
 });
 
 router.post('/change-password', isLoggedIn, async (req, res) => {
-  console.log("Datos Ingresados: ", req.body);
-
   userId = req.body.userId;
   oldPassword = req.body.oldPassword
   newPassword = req.body.newPassword;
@@ -159,8 +147,6 @@ router.post('/change-password', isLoggedIn, async (req, res) => {
 
       request = await axiosInstance.post('/change-password', {hash: newHash, userId: req.user.id})
       changepwdJSON = request.data
-
-      console.log("Cambio de contraseña: ", changepwdJSON);
 
       req.flash('success', 'La contraseña fue cambiada con exito!');
       res.redirect('/home')

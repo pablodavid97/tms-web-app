@@ -16,7 +16,6 @@ module.exports = {
   },
 
   isDeanUser(req, res, next) {
-    console.log('usuario: ', req.user);
     if (req.user.rolId == 1) {
       return next();
     }
@@ -24,7 +23,6 @@ module.exports = {
   },
 
   isProfessorUser(req, res, next) {
-    console.log('usuario: ', req.user);
     if (req.user.rolId == 2) {
       return next();
     }

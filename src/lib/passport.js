@@ -25,7 +25,6 @@ passport.use(
           user = signInJSON;
 
           const passwordMatch = await utils.matchPassword(password, user.hash);
-          // console.log("Passwords Match?: ", passwordMatch);
 
           if (passwordMatch) {
             return done(
@@ -57,8 +56,6 @@ passport.deserializeUser(async (id, done) => {
     params: { userId: id }
   });
   const userJSON = request.data;
-
-  // console.log('user: ', userJSON);
 
   done(null, userJSON);
 });

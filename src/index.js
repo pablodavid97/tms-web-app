@@ -49,8 +49,6 @@ app.use(bodyParser.json());
 app.use(
   session({
     genId: (req) => {
-      console.log('Inside the session middleware');
-      console.log(req.sessionID);
       return uuid();
     },
     secret: 'session_cookie_secret',

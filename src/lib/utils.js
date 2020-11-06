@@ -40,9 +40,6 @@ utils.getMinuteValues = () => {
 
 // function to save date into DB
 utils.getDateTimeFormat = (date, hours, minutes, format) => {
-  console.log('Date: ', date);
-  console.log('Hours: ', hours);
-  console.log('Minutes: ', minutes);
   const dateValues = date.split('/');
 
   let hoursValue = hours;
@@ -56,7 +53,6 @@ utils.getDateTimeFormat = (date, hours, minutes, format) => {
       hoursValue = '00';
     } else {
       hoursValue = `0${hoursValue}`.slice(-2);
-      console.log('Hours: ', hoursValue);
     }
   }
 
@@ -66,21 +62,16 @@ utils.getDateTimeFormat = (date, hours, minutes, format) => {
   const time = `${hoursValue}:${minutesValue}`;
   const dateTime = `${dateValues[2]}-${dateValues[1]}-${dateValues[0]} ${time}`;
 
-  console.log('Fecha final: ', dateTime);
-
   return dateTime;
 };
 
 utils.getDateTimeValues = (dateString) => {
   date = new Date(dateString);
-  console.log('Typeof: ', typeof date);
 
   var month = date.getMonth() + 1;
   var day = date.getDate();
   var year = date.getFullYear();
   var dateString = day + '/' + month + '/' + year;
-
-  console.log('Meeting Date: ', dateString);
 
   var hours = date.getHours();
 
@@ -100,9 +91,6 @@ utils.getDateTimeValues = (dateString) => {
   var hoursString = String(hours);
 
   var minutesString = ('0' + date.getMinutes()).slice(-2);
-
-  console.log('Meeting Hours: ', hoursString);
-  console.log('Meeting Minutes: ', minutesString);
 
   return [dateString, hoursString, minutesString, format];
 };
