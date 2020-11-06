@@ -111,7 +111,7 @@
                     <div class="col-md-6 pane meeting-details-pane">
                         <div class="meeting-details-content">
                                 <div class="meeting-section">
-                                    <h2 class="border-bottom border-gray pb-2">Seguimiento Reunión</h2>
+                                    <h2 id="detailsPaneMeetingSubject" class="border-bottom border-gray pb-2">Seguimiento Reunión</h2>
                                 </div>
                                 <div class="meeting-section">
                                     <label class="meetingLabel">Reunión No: </label> <span id="detailsPaneMeetingId"></span>
@@ -185,6 +185,7 @@
                     var profesorId = document.getElementById('detailsPaneProfesorId')
                     var studentCommentSection = document.getElementById('studentCommentSection')
                     var studentComment = document.getElementById('detailsPaneStudentComment')
+                    var meetingSubject = document.getElementById('detailsPaneMeetingSubject')
 
                     console.log("Meeting id: ", meetingId)
                     console.log("date: ", date)
@@ -194,6 +195,7 @@
                     console.log("student response: ", studentResponse)
 
                     meetingDetailsContent[0].style.display = "block"
+                    meetingSubject.innerHTML = notification.tema
                     meetingId.innerHTML = notification.reunionId
                     date.innerHTML = notification.fecha
                     professor.innerHTML = notification.nombresProfesor + " " + notification.apellidosProfesor
