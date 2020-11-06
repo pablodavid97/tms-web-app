@@ -27,6 +27,7 @@ passport.use(
           const passwordMatch = await utils.matchPassword(password, user.hash);
 
           if (passwordMatch) {
+            global.showNotifications = true
             return done(
               null,
               user,

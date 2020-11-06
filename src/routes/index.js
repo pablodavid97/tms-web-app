@@ -23,6 +23,8 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try {
+    console.log("Global Variable in home: ", global.showNotifications);
+
     const request = await axiosInstance.get('/home', {
       params: { userId: req.user.id, rolId: req.user.rolId }
     });
@@ -57,6 +59,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
       isProfessor,
       isDean,
       notifications: notifications,
+      showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -93,6 +96,7 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
       isProfessor: false,
       isDean: false,
       notifications: notifications,
+      showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -103,6 +107,8 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
 
 router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
   try {
+    console.log("Global Variable in students: ", global.showNotifications);
+
     const request = await axiosInstance.get('/students', {
       params: { profesorId: req.user.id }
     });
@@ -123,6 +129,7 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
       isProfessor: true,
       students,
       notifications: notifications,
+      showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -157,6 +164,7 @@ router.get(
         isProfessor: true,
         student: student,
         notifications: notifications,
+        showNotifications: global.showNotifications,
         success: req.flash('success'),
         error: req.flash('error')
       });
@@ -213,6 +221,11 @@ router.get(
   isLoggedIn,
   isUserStudentOrProfessor,
   async (req, res) => {
+    if(global.showNotifications) {
+      global.showNotifications = false
+      console.log("Global Variable in notifications: ", global.showNotifications);
+    }
+
     const request = await axiosInstance.get('/notifications', {
       params: { rolId: req.user.rolId, userId: req.user.id }
     });
@@ -245,6 +258,7 @@ router.get(
       isDean: isDean,
       isProfessor: isProfessor,
       isStudent: isStudent,
+      showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -287,6 +301,7 @@ router.get('/edit-profile', isLoggedIn, async (req, res) => {
     isProfessor: isProfessor,
     isStudent: isStudent,
     notifications: notifications,
+    showNotifications: global.showNotifications,
     success: req.flash('success'),
     error: req.flash('error')
   })

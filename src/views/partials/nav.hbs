@@ -16,7 +16,7 @@
                 </li>
                 <li class="navitem {{#if (is path "notifications")}} active {{/if}}">
                   <a href="/notifications" class="nav-link">Notificaciones</a>
-                  {{#if notifications}}
+                  {{#if showNotifications}}
                     <span class="notification-number-icon">{{notifications.length}}</span>
                   {{/if}}
                 </li>
@@ -30,7 +30,7 @@
                 </li>
                 <li class="navitem {{#if (is path "notifications")}} active {{/if}}">
                   <a href="/notifications" class="nav-link">Notificaciones</a>
-                  {{#if notifications}}
+                  {{#if showNotifications}}
                     <span class="notification-number-icon">{{notifications.length}}</span>
                   {{/if}}
                 </li>
