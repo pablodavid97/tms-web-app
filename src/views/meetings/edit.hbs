@@ -58,14 +58,8 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="studentMeetingInput">Estudiante</label>
-                            <select name="student" class="custom-select">
-                                <option value={{meeting.estudianteId}} selected>{{meeting.nombresEstudiante}} {{meeting.apellidosEstudiante}}</option>
-                                {{#each students}}
-                                    <option value={{this.id}}>
-                                        {{this.nombres}} {{this.apellidos}}
-                                    </option>
-                                {{/each}}
-                          </select>
+                        <input name="studentId" type="hidden" id="studentId" class="form-control" value="{{meeting.estudianteId}}">
+                        <input type="text" id="studentMeetingInput" class="form-control" value="{{meeting.nombresEstudiante}} {{meeting.apellidosEstudiante}}" readonly>
                     </div>
                 </div>
                 <div class="form-container-btn">
