@@ -27,14 +27,18 @@ passport.use(
           const passwordMatch = await utils.matchPassword(password, user.hash);
 
           if (passwordMatch) {
-            global.showNotifications = true
+            global.showNotifications = true;
             return done(
               null,
               user,
               req.flash('success', `Bienvenido/a ${user.nombres}`)
             );
           }
-          return done(null, false, req.flash('error', 'Las credenciales ingresadas son incorrectas.'));
+          return done(
+            null,
+            false,
+            req.flash('error', 'Las credenciales ingresadas son incorrectas.')
+          );
         }
         return done(
           null,

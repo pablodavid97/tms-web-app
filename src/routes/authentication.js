@@ -6,7 +6,6 @@ const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 const axiosInstance = require('../http-client');
 
 const sendPasswordReset = async (user) => {
-
   try {
     const res = await axiosInstance.post('/sendmail', user);
     console.log(`Status:  ${res.status}`);

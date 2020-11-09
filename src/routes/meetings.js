@@ -79,22 +79,35 @@ router.get('/meeting/:meetingId/:notificationId', async (req, res) => {
   try {
     isStudent = req.user.rolId === 3;
     isProfessor = req.user.rolId === 2;
-    student = undefined
+    student = undefined;
 
-    meetingRequest = await axiosInstance.get('/meetings/meeting-by-id', {params: {meetingId: req.params.meetingId}})
-    meeting = meetingRequest.data
+    meetingRequest = await axiosInstance.get('/meetings/meeting-by-id', {
+      params: { meetingId: req.params.meetingId }
+    });
+    meeting = meetingRequest.data;
 
-    if(isProfessor) {
-      studentRequest = await axiosInstance.get('/student', {params: {userId: meeting.estudianteId}})
-      student = studentRequest.data.estudiante
+    if (isProfessor) {
+      studentRequest = await axiosInstance.get('/student', {
+        params: { userId: meeting.estudianteId }
+      });
+      student = studentRequest.data.estudiante;
     }
 
-    res.render('meetings/meeting', {path: 'meetings', user: req.user, meeting: meeting, notificationId: req.params.notificationId, isStudent: isStudent, isProfessor: isProfessor, student: student, success: req.flash('success'),
-    error: req.flash('error')})
+    res.render('meetings/meeting', {
+      path: 'meetings',
+      user: req.user,
+      meeting: meeting,
+      notificationId: req.params.notificationId,
+      isStudent: isStudent,
+      isProfessor: isProfessor,
+      student: student,
+      success: req.flash('success'),
+      error: req.flash('error')
+    });
   } catch (error) {
     console.error(error.message);
   }
-})
+});
 
 router.post('/create', async (req, res) => {
   dateTime = utils.getDateTimeFormat(
@@ -171,7 +184,7 @@ router.get(
         params: { rolId: req.user.rolId, userId: req.user.id }
       });
       const notificationsJSON = notificationsRequest.data;
-  
+
       notifications = notificationsJSON.notifications;
 
       res.render('meetings/edit', {
@@ -225,18 +238,25 @@ router.post('/edit', async (req, res) => {
 });
 
 router.post('/done', async (req, res) => {
-  isStudent = req.user.rolId === 3
-  isProfessor = req.user.rolId === 2
+  isStudent = req.user.rolId === 3;
+  isProfessor = req.user.rolId === 2;
 
   try {
-     meetingRequest = await axiosInstance.post('/meetings/done', {meetingId: req.body.meetingId, notificationId: req.body.notificationId, meetingOption: req.body.meetingOption, comment: req.body.comment, isProfessor: isProfessor, isStudent: isStudent})
-     req.flash('success', 'La reunión fue actualizada con exito!');
+    meetingRequest = await axiosInstance.post('/meetings/done', {
+      meetingId: req.body.meetingId,
+      notificationId: req.body.notificationId,
+      meetingOption: req.body.meetingOption,
+      comment: req.body.comment,
+      isProfessor: isProfessor,
+      isStudent: isStudent
+    });
+    req.flash('success', 'La reunión fue actualizada con exito!');
 
-     res.redirect('/notifications')
+    res.redirect('/notifications');
   } catch (error) {
     console.error(error.message);
   }
-})
+});
 
 router.get(
   '/reschedule/:meetingId/:notificationId',
@@ -264,7 +284,7 @@ router.get(
         params: { rolId: req.user.rolId, userId: req.user.id }
       });
       const notificationsJSON = notificationsRequest.data;
-  
+
       notifications = notificationsJSON.notifications;
 
       res.render('meetings/reschedule', {
@@ -299,7 +319,7 @@ router.post('/reschedule', async (req, res) => {
       req.body.minutes,
       req.body.format
     );
-    
+
     request = await axiosInstance.post('/meetings/reschedule', {
       subject: req.body.subject,
       description: req.body.description,
@@ -319,6 +339,5 @@ router.post('/reschedule', async (req, res) => {
     console.error(error.message);
   }
 });
-
 
 module.exports = router;
