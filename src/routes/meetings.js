@@ -75,6 +75,27 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
   }
 });
 
+router.get('/meeting/:meetingId/:notificationId', async (req, res) => {
+  try {
+    isStudent = req.user.rolId === 3;
+    isProfessor = req.user.rolId === 2;
+    student = undefined
+
+    meetingRequest = await axiosInstance.get('/meetings/meeting-by-id', {params: {meetingId: req.params.meetingId}})
+    meeting = meetingRequest.data
+
+    if(isProfessor) {
+      studentRequest = await axiosInstance.get('/student', {params: {userId: meeting.estudianteId}})
+      student = studentRequest.data.estudiante
+    }
+
+    res.render('meetings/meeting', {path: 'meetings', user: req.user, meeting: meeting, notificationId: req.params.notificationId, isStudent: isStudent, isProfessor: isProfessor, student: student, success: req.flash('success'),
+    error: req.flash('error')})
+  } catch (error) {
+    console.error(error.message);
+  }
+})
+
 router.post('/create', async (req, res) => {
   dateTime = utils.getDateTimeFormat(
     req.body.date,
@@ -143,12 +164,6 @@ router.get(
       minutes = dateTime[2];
       format = dateTime[3];
 
-      request2 = await axiosInstance.get('/students', {
-        params: { profesorId: req.user.id }
-      });
-      studentsJSON = request2.data;
-
-      students = studentsJSON;
       hourValues = utils.getHourValues();
       minuteValues = utils.getMinuteValues();
 
@@ -169,7 +184,6 @@ router.get(
         format,
         isStudent: false,
         isProfessor: true,
-        students,
         hourValues,
         minuteValues,
         notifications,
@@ -196,7 +210,7 @@ router.post('/edit', async (req, res) => {
       subject: req.body.subject,
       description: req.body.description,
       date: dateTime,
-      studentId: req.body.student,
+      studentId: req.body.studentId,
       email: req.user.correoInstitucional,
       meetingId: req.body.meetingId
     });
@@ -206,8 +220,105 @@ router.post('/edit', async (req, res) => {
 
     res.redirect('/meetings');
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
 });
+
+router.post('/done', async (req, res) => {
+  isStudent = req.user.rolId === 3
+  isProfessor = req.user.rolId === 2
+
+  try {
+     meetingRequest = await axiosInstance.post('/meetings/done', {meetingId: req.body.meetingId, notificationId: req.body.notificationId, meetingOption: req.body.meetingOption, comment: req.body.comment, isProfessor: isProfessor, isStudent: isStudent})
+     req.flash('success', 'La reunión fue actualizada con exito!');
+
+     res.redirect('/notifications')
+  } catch (error) {
+    console.error(error.message);
+  }
+})
+
+router.get(
+  '/reschedule/:meetingId/:notificationId',
+  isLoggedIn,
+  isProfessorUser,
+  async (req, res) => {
+    try {
+      meetingRequest = await axiosInstance.get('/meetings/meeting-by-id', {
+        params: { meetingId: req.params.meetingId }
+      });
+      rescheduleMeetingJSON = meetingRequest.data;
+
+      meeting = rescheduleMeetingJSON;
+
+      dateTime = utils.getDateTimeValues(meeting.fecha);
+      date = dateTime[0];
+      hours = dateTime[1];
+      minutes = dateTime[2];
+      format = dateTime[3];
+
+      hourValues = utils.getHourValues();
+      minuteValues = utils.getMinuteValues();
+
+      const notificationsRequest = await axiosInstance.get('/notifications', {
+        params: { rolId: req.user.rolId, userId: req.user.id }
+      });
+      const notificationsJSON = notificationsRequest.data;
+  
+      notifications = notificationsJSON.notifications;
+
+      res.render('meetings/reschedule', {
+        path: 'meetings',
+        user: req.user,
+        meeting,
+        date,
+        hours,
+        minutes,
+        format,
+        isStudent: false,
+        isProfessor: true,
+        hourValues,
+        minuteValues,
+        notifications,
+        showNotifications: global.showNotifications,
+        notificationId: req.params.notificationId,
+        success: req.flash('success'),
+        error: req.flash('error')
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+);
+
+router.post('/reschedule', async (req, res) => {
+  try {
+    dateTime = utils.getDateTimeFormat(
+      req.body.date,
+      req.body.hours,
+      req.body.minutes,
+      req.body.format
+    );
+    
+    request = await axiosInstance.post('/meetings/reschedule', {
+      subject: req.body.subject,
+      description: req.body.description,
+      date: dateTime,
+      studentId: req.body.studentId,
+      email: req.user.correoInstitucional,
+      meetingId: req.body.meetingId,
+      notificationId: req.body.notificationId
+    });
+
+    rescheduleMeetingJSON = request.data;
+
+    req.flash('success', 'La reunión fue reagendada con exito!');
+
+    res.redirect('/notifications');
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 
 module.exports = router;

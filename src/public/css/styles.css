@@ -467,3 +467,17 @@ body, html {
 .edit-personal-brand {
     margin-bottom: 4rem;
 }
+
+/* Daily Meeting Styles */
+.daily-meeting-container {
+    padding: 3rem 10rem;
+    border: 1px solid #c9c9c9;
+}
+
+.meeting-student-info {
+    padding-top: 1rem;
+}
+
+.student-info-lbl {
+    font-weight: 600;
+}

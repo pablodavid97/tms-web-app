@@ -1,9 +1,10 @@
         <div class="container meeting-container">
-            <form action="/meetings/edit", method="POST">
-                <h1 class="form-header header-left">Editar Reunión</h1>
+            <form action="/meetings/reschedule", method="POST">
+                <h1 class="form-header header-left">Reagendar Reunión</h1>
                 <div class="form-group row">
                     <label for="meetingId" class="col-sm-3 col-form-label">Reunión No: </label>
                     <div class="col-sm-2">
+                        <input name="notificationId" type="hidden" id="notificationId" class="form-control" value="{{notificationId}}">
                         <input name="meetingId" type="text" id="meetingId" class="form-control" value="{{meeting.id}}" readonly>
                     </div>
                 </div>
@@ -64,7 +65,7 @@
                 </div>
                 <div class="form-container-btn">
                     <a class="btn btn-secondary" href="/meetings">Cancelar</a>
-                    <button type="submit" class="btn btn-primary">Editar Reunión</button>
+                    <button type="submit" class="btn btn-primary">Reagendar Reunión</button>
                   </div>
             </form>
         </div>
