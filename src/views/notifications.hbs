@@ -1,3 +1,4 @@
+            
             <div class="meeting-notifications-container">
                 <div class="row">
                     <div class="col-md-6 pane">
@@ -126,6 +127,56 @@
                                         </div>
                                     </div>
                                 {{/if}}
+
+                                {{#if (is this.estadoId 7)}}
+                                    <div class="card  meeting-notification border-gray">
+                                        <div class="card-body text-muted">
+                                            <div class="row">
+                                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#9e9e9e"></rect><text x="50%" y="50%" fill="#9e9e9e" dy=".3em">32x32</text></svg>
+                                                <p class="media-body pb-3 mb-0 small lh-125">
+                                                <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Realizada</a>
+                                                {{#if ../isProfessor}}
+                                                    Indicaste que la reunión se realizó, haz click aquí para ver más detalles. 
+                                                {{else}}
+                                                    {{this.nombresProfesor}} {{this.apellidosProfesor}} indicó que la reunión se realizó con exito, ponte en contacto con tu tutor para saber más detalles. 
+                                                {{/if}}
+                                            </div>
+                                            <div class="meeting-info-container row">
+                                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                                <div class="meeting-info">
+                                        
+                                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{/if}}
+
+                                {{#if (is this.estadoId 8)}}
+                                    <div class="card  meeting-notification border-gray">
+                                        <div class="card-body text-muted">
+                                            <div class="row">
+                                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#9e9e9e"></rect><text x="50%" y="50%" fill="#9e9e9e" dy=".3em">32x32</text></svg>
+                                                <p class="media-body pb-3 mb-0 small lh-125">
+                                                <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión No Realizada</a>
+                                                {{#if ../isProfessor}}
+                                                    Indicaste que la reunión no se realizó, haz click aquí para ver más detalles. 
+                                                {{else}}
+                                                    {{this.nombresProfesor}} {{this.apellidosProfesor}} indicó que la reunión no se realizó, ponte en contacto con tu tutor para saber más detalles. 
+                                                {{/if}}
+                                            </div>
+                                            <div class="meeting-info-container row">
+                                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                                <div class="meeting-info">
+                                        
+                                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{/if}}
                             {{/each}}
                         </div>
                     </div>
@@ -133,7 +184,7 @@
                         <div class="meeting-details-content">
                                 <div class="meeting-section">
                                     <div id="rejectedMeetingHeader" class="row border-bottom border-gray">
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-7">
                                             <h2 id="detailsPaneRejectedMeetingSubject"></h2>
                                         </div>
                                         <div class="col-sm-3">
@@ -142,7 +193,7 @@
                                     </div>
 
                                     <div id="dailyMeetingHeader" class="row border-bottom border-gray">
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-7">
                                             <h2 id="detailsPaneDailyMeetingSubject"></h2>
                                         </div>
                                         <div class="col-sm-3">
@@ -206,6 +257,16 @@
                                     <label class="meetingLabel" for="detailsPaneStudentComment">Comentarios</label>
                                     <p id="detailsPaneStudentComment"></p>
                                 </div>
+
+                                {{#if isProfessor}}
+                                    <div id="doneMeetingCommentsSection" class="meeting-section">
+                                        <label class="meetingLabel" for="doneMeetingStudentComment">Comentarios Estudiante: </label>
+                                        <p id="doneMeetingStudentComment"></p>
+
+                                        <label class="meetingLabel" for="doneMeetingProfessorComment">Comentarios Profesor: </label>
+                                        <p id="doneMeetingProfessorComment"></p>
+                                    </div>
+                                {{/if}}
                         </div>
                     </div>
                 </div>
@@ -234,6 +295,9 @@
                     var rejectedMeetingHeader = document.getElementById('rejectedMeetingHeader')
                     var rejectedMeetingSubject = document.getElementById('detailsPaneRejectedMeetingSubject')
                     var editMeetingButton = document.getElementById('editMeetingButton')
+                    var doneMeetingCommentsSection = document.getElementById('doneMeetingCommentsSection')
+                    var doneMeetingStudentComment = document.getElementById('doneMeetingStudentComment')
+                    var doneMeetingProfessorComment = document.getElementById('doneMeetingProfessorComment')
 
                     console.log("Meeting id: ", meetingId)
                     console.log("date: ", date)
@@ -253,6 +317,9 @@
                         meetingHeader.style.display = "block"
                         dailyMeetingHeader.style.display = "none"
                         rejectedMeetingHeader.style.display = "none"
+                        if(doneMeetingCommentsSection) {
+                            doneMeetingCommentsSection.style.display = "none"
+                        }
                     } else if (notification.estadoId === 3) {
                         studentResponse.style.display = "none"
                         studentCommentSection.style.display = "block"
@@ -260,6 +327,9 @@
                         meetingHeader.style.display = "block"
                         dailyMeetingHeader.style.display = "none"
                         rejectedMeetingHeader.style.display = "none"
+                        if(doneMeetingCommentsSection) {
+                            doneMeetingCommentsSection.style.display = "none"
+                        }
                     } else if (notification.estadoId === 4){
                         studentResponse.style.display = "none"
                         studentCommentSection.style.display = "block"
@@ -267,12 +337,31 @@
                         meetingHeader.style.display = "none"
                         dailyMeetingHeader.style.display = "none"
                         rejectedMeetingHeader.style.display = "flex"
-                        editMeetingButton.href = "/meetings/edit/" + notification.reunionId
+                        editMeetingButton.href = "/meetings/reschedule/" + notification.reunionId + "/" + notification.id
+                        if(doneMeetingCommentsSection) {
+                            doneMeetingCommentsSection.style.display = "none"
+                        }
                     }
                     else if (notification.estadoId === 6) {
+                        studentResponse.style.display = "none"
+                        studentCommentSection.style.display = "block"
                         meetingHeader.style.display = "none"
+                        rejectedMeetingHeader.style.display = "none"
                         dailyMeetingHeader.style.display = "flex"
                         goToMeetingButton.href = "/meetings/meeting/" + notification.reunionId + "/" + notification.id
+                        if(doneMeetingCommentsSection) {
+                            doneMeetingCommentsSection.style.display = "none"
+                        }
+                    }
+                    else if (notification.estadoId === 7 || notification.estadoId === 8) {
+                        rejectedMeetingHeader.style.display = "none"
+                        studentResponse.style.display = "none"
+                        studentCommentSection.style.display = "none"
+                        meetingHeader.style.display = "block"
+                        dailyMeetingHeader.style.display = "none"
+                        doneMeetingCommentsSection.style.display = "block"
+                        doneMeetingStudentComment.innerHTML = notification.comentariosEstudiante
+                        doneMeetingProfessorComment.innerHTML = notification.comentariosProfesor
                     }
                     else  {
                         rejectedMeetingHeader.style.display = "none"
@@ -280,6 +369,9 @@
                         studentCommentSection.style.display = "none"
                         meetingHeader.style.display = "block"
                         dailyMeetingHeader.style.display = "none"
+                        if(doneMeetingCommentsSection) {
+                            doneMeetingCommentsSection.style.display = "none"
+                        }
                     }
                 
                     meetingSubject.innerHTML = notification.tema

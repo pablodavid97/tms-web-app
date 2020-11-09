@@ -223,7 +223,6 @@ router.get(
   async (req, res) => {
     if(global.showNotifications) {
       global.showNotifications = false
-      console.log("Global Variable in notifications: ", global.showNotifications);
     }
 
     const request = await axiosInstance.get('/notifications', {
@@ -233,6 +232,8 @@ router.get(
 
     role = notificationsJSON.rol;
     notifications = notificationsJSON.notifications;
+
+    console.log("Notificaciones: ", notifications);
 
     const notificationsNum = notifications.length
 
@@ -250,6 +251,8 @@ router.get(
     const isStudent = role.id === 3;
     const isProfessor = role.id === 2;
     const isDean = role.id === 1;
+
+    console.log("Role Boolean: ", isStudent, isProfessor, isDean);
 
     res.render('notifications', {
       path: 'notifications',
