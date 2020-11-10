@@ -11,6 +11,8 @@ const {
 const router = express.Router();
 const axiosInstance = require('../http-client');
 const utils = require('../lib/utils');
+const upload = require('../middlewares/upload');
+const fs = require('fs');
 
 router.get('/', isNotLoggedIn, (req, res) => {
   res.render('auth/signin', {
@@ -365,6 +367,28 @@ router.post('/change-password', isLoggedIn, async (req, res) => {
   } else {
     req.flash('error', 'La contraseña ingresada no es la correcta.');
     res.redirect('/change-password')
+  }
+})
+
+router.get('/upload', (req, res) => {
+  res.render('file-upload')
+})
+
+router.post('/upload', upload.single("file"), async (req, res) => {
+  try {
+    file = {
+      formato: req.file.mimetype,
+      nombre: req.file.originalname,
+      datos: fs.readFileSync(global.appRoot + '/resources/static/assets/uploads/' + req.file.filename).toString("binary"),
+      createdOn: new Date()
+    }
+
+    uploadRequest = await axiosInstance.post('/upload', {file: file})
+
+    res.redirect('/upload')
+    
+  } catch (error) {
+    console.error(error.message);
   }
 })
 
