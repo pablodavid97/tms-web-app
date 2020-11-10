@@ -23,8 +23,6 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try {
-    console.log('Global Variable in home: ', global.showNotifications);
-
     const request = await axiosInstance.get('/home', {
       params: { userId: req.user.id, rolId: req.user.rolId }
     });
@@ -46,7 +44,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
       params: { rolId: req.user.rolId, userId: req.user.id }
     });
     const notificationsJSON = notificationsRequest.data;
-
+  
     notifications = notificationsJSON.notifications;
 
     res.render('user-profile', {
@@ -66,7 +64,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
   } catch (error) {
     console.error(error.message);
   }
-});
+})
 
 router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
   try {
@@ -83,7 +81,7 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
       params: { rolId: req.user.rolId, userId: req.user.id }
     });
     const notificationsJSON = notificationsRequest.data;
-
+  
     notifications = notificationsJSON.notifications;
 
     res.render('tutor', {
@@ -107,8 +105,6 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
 
 router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
   try {
-    console.log('Global Variable in students: ', global.showNotifications);
-
     const request = await axiosInstance.get('/students', {
       params: { profesorId: req.user.id }
     });
@@ -119,8 +115,9 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
       params: { rolId: req.user.rolId, userId: req.user.id }
     });
     const notificationsJSON = notificationsRequest.data;
-
+  
     notifications = notificationsJSON.notifications;
+    
 
     res.render('students', {
       path: 'students',
@@ -154,7 +151,7 @@ router.get(
         params: { rolId: req.user.rolId, userId: req.user.id }
       });
       const notificationsJSON = notificationsRequest.data;
-
+    
       notifications = notificationsJSON.notifications;
 
       res.render('student', {
@@ -220,8 +217,8 @@ router.get(
   isLoggedIn,
   isUserStudentOrProfessor,
   async (req, res) => {
-    if (global.showNotifications) {
-      global.showNotifications = false;
+    if(global.showNotifications) {
+      global.showNotifications = false
     }
 
     const request = await axiosInstance.get('/notifications', {
@@ -232,26 +229,22 @@ router.get(
     role = notificationsJSON.rol;
     notifications = notificationsJSON.notifications;
 
-    console.log('Notificaciones: ', notifications);
+    const notificationsNum = notifications.length
 
-    const notificationsNum = notifications.length;
-
-    for (i = 0; i < notificationsNum; i++) {
-      const dateTimeValues = utils.getDateTimeValues(notifications[i].fecha);
-      notifications[i].fecha =
-        dateTimeValues[0] +
-        ' ' +
-        dateTimeValues[1] +
-        ':' +
-        dateTimeValues[2] +
-        dateTimeValues[3].text;
+    for(i = 0; i < notificationsNum; i++) {
+      const dateTimeValues = utils.getDateTimeValues(notifications[i].fecha)
+      notifications[i].fecha = 
+      dateTimeValues[0] +
+      ' ' +
+      dateTimeValues[1] +
+      ':' +
+      dateTimeValues[2] +
+      dateTimeValues[3].text;
     }
 
     const isStudent = role.id === 3;
     const isProfessor = role.id === 2;
     const isDean = role.id === 1;
-
-    console.log('Role Boolean: ', isStudent, isProfessor, isDean);
 
     res.render('notifications', {
       path: 'notifications',
@@ -268,29 +261,17 @@ router.get(
 );
 
 router.post('/notifications', async (req, res) => {
-  meetingOption = req.body.meetingOption;
-  notificationId = req.body.notificationId;
-  meetingId = req.body.meetingId;
-  profesorId = req.body.profesorId;
-  comment = req.body.comment;
-  email = req.user.correoInstitucional;
+  meetingOption = req.body.meetingOption
+  notificationId = req.body.notificationId
+  meetingId = req.body.meetingId
+  profesorId = req.body.profesorId
+  comment = req.body.comment
+  email = req.user.correoInstitucional
 
-  if (meetingOption === '1') {
-    request = await axiosInstance.post('/meetings/accept', {
-      meetingId: meetingId,
-      notificationId: notificationId,
-      comment: comment,
-      profesorId: profesorId,
-      email: email
-    });
+  if (meetingOption === "1") {
+    request = await axiosInstance.post('/meetings/accept', {meetingId: meetingId, notificationId: notificationId, comment: comment, profesorId: profesorId, email: email})
   } else {
-    request = await axiosInstance.post('/meetings/reject', {
-      meetingId: meetingId,
-      notificationId: notificationId,
-      comment: comment,
-      profesorId: profesorId,
-      email: email
-    });
+    request = await axiosInstance.post('/meetings/reject', {meetingId: meetingId, notificationId: notificationId, comment: comment, profesorId: profesorId, email: email})
   }
 
   res.redirect('/notifications');
@@ -298,9 +279,9 @@ router.post('/notifications', async (req, res) => {
 
 // EDIT PROFILE
 router.get('/edit-profile', isLoggedIn, async (req, res) => {
-  const isDean = req.user.rolId === 1;
-  const isProfessor = req.user.rolId === 2;
-  const isStudent = req.user.rolId === 3;
+  const isDean = req.user.rolId === 1
+  const isProfessor = req.user.rolId === 2
+  const isStudent = req.user.rolId === 3
 
   const notificationsRequest = await axiosInstance.get('/notifications', {
     params: { rolId: req.user.rolId, userId: req.user.id }
@@ -318,34 +299,26 @@ router.get('/edit-profile', isLoggedIn, async (req, res) => {
     showNotifications: global.showNotifications,
     success: req.flash('success'),
     error: req.flash('error')
-  });
+  })
 });
 
 router.post('/edit-profile', isLoggedIn, async (req, res) => {
   try {
-    console.log('Datos Ingresados: ', req.body);
-
-    editProfileRequest = await axiosInstance.post('/edit-profile', {
-      firstNames: req.body.userNames,
-      lastNames: req.body.userLastNames,
-      email: req.body.userEmail,
-      phone: req.body.userPhone,
-      userId: req.user.id
-    });
-
+    editProfileRequest = await axiosInstance.post('/edit-profile', {firstNames: req.body.userNames, lastNames: req.body.userLastNames, email: req.body.userEmail, phone: req.body.userPhone, userId: req.user.id})
+    
     req.flash('success', 'Tus datos han sido actualizados exitosamente!');
 
-    res.redirect('/home');
+    res.redirect('/home')
   } catch (error) {
     console.error(error.message);
   }
-});
+})
 
 // CHANGE PASSWORD
 router.get('/change-password/', isLoggedIn, async (req, res) => {
-  const isDean = req.user.rolId === 1;
-  const isProfessor = req.user.rolId === 2;
-  const isStudent = req.user.rolId === 3;
+  const isDean = req.user.rolId === 1
+  const isProfessor = req.user.rolId === 2
+  const isStudent = req.user.rolId === 3
 
   const notificationsRequest = await axiosInstance.get('/notifications', {
     params: { rolId: req.user.rolId, userId: req.user.id }
@@ -370,32 +343,29 @@ router.get('/change-password/', isLoggedIn, async (req, res) => {
 
 router.post('/change-password', isLoggedIn, async (req, res) => {
   userId = req.body.userId;
-  oldPassword = req.body.oldPassword;
+  oldPassword = req.body.oldPassword
   newPassword = req.body.newPassword;
   confirmation = req.body.confirmation;
 
-  passwordsMatch = await utils.matchPassword(oldPassword, req.user.hash);
+  passwordsMatch = await utils.matchPassword(oldPassword, req.user.hash)
 
-  if (passwordsMatch) {
-    if (newPassword === confirmation) {
-      newHash = await utils.encryptPassword(newPassword);
+  if(passwordsMatch){
+    if(newPassword === confirmation) {
+      newHash = await utils.encryptPassword(newPassword)
 
-      request = await axiosInstance.post('/change-password', {
-        hash: newHash,
-        userId: req.user.id
-      });
-      changepwdJSON = request.data;
+      request = await axiosInstance.post('/change-password', {hash: newHash, userId: req.user.id})
+      changepwdJSON = request.data
 
       req.flash('success', 'La contraseña fue cambiada con exito!');
-      res.redirect('/home');
+      res.redirect('/home')
     } else {
       req.flash('error', 'La nueva contraseña y confirmación no coinciden.');
-      res.redirect('/change-password');
+      res.redirect('/change-password')
     }
   } else {
     req.flash('error', 'La contraseña ingresada no es la correcta.');
-    res.redirect('/change-password');
+    res.redirect('/change-password')
   }
-});
+})
 
 module.exports = router;

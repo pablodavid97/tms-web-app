@@ -62,7 +62,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 global.showNotifications = true;
-console.log('This is a global variable in index: ', global.showNotifications);
 
 // routes
 app.use(require('./routes/index'));
