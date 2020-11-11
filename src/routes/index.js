@@ -25,6 +25,14 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try {
+    console.log("Usuario: ", req.user);
+
+    console.log("Storing user image...");
+
+    fs.writeFileSync(global.appRoot + "/public/img/tmp/" + req.user.nombreImagen, new Buffer.from(req.user.imagen, "binary"))
+
+    console.log("User image has been stored!");
+
     const request = await axiosInstance.get('/home', {
       params: { userId: req.user.id, rolId: req.user.rolId }
     });
@@ -78,6 +86,8 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
     role = tutorJSON.rol;
     studentInfo = tutorJSON.studentInfo;
     tutor = tutorJSON.tutor;
+
+    fs.writeFileSync(global.appRoot + "/public/img/tmp/" + tutor.nombreImagen, new Buffer.from(tutor.imagen, "binary"))
 
     const notificationsRequest = await axiosInstance.get('/notifications', {
       params: { rolId: req.user.rolId, userId: req.user.id }
@@ -148,6 +158,10 @@ router.get(
       const studentJSON = request.data;
 
       student = studentJSON.estudiante;
+
+      console.log("Estudiante: ", student);
+
+      fs.writeFileSync(global.appRoot + "/public/img/tmp/" + student.nombreImagen, new Buffer.from(student.imagen, "binary"))
 
       const notificationsRequest = await axiosInstance.get('/notifications', {
         params: { rolId: req.user.rolId, userId: req.user.id }
@@ -375,11 +389,12 @@ router.get('/upload', (req, res) => {
 })
 
 router.post('/upload', upload.single("file"), async (req, res) => {
+  console.log("Entro!");
   try {
     file = {
       formato: req.file.mimetype,
-      nombre: req.file.originalname,
-      datos: fs.readFileSync(global.appRoot + '/resources/static/assets/uploads/' + req.file.filename).toString("binary"),
+      nombre: `${Date.now()}-${req.file.originalname}`,
+      datos: fs.readFileSync(global.appRoot + '/public/img/uploads/' + req.file.filename).toString("binary"),
       createdOn: new Date()
     }
 

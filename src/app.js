@@ -59,7 +59,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 global.showNotifications = true;
-global.appRoot = path.resolve(__dirname, "../");
+global.appRoot = path.resolve(__dirname);
 console.log("App root: ", global.appRoot);
 
 // routes
