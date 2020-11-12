@@ -3,7 +3,6 @@ const hbs = require('express-handlebars');
 const path = require('path');
 const passport = require('passport');
 const flash = require('connect-flash');
-const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const mysql = require('mysql');
 
@@ -42,10 +41,8 @@ app.set('view engine', '.hbs');
 
 // middlewares
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-// app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
+app.use(express.urlencoded({ extended: false, limit: '50mb' }));
+app.use(express.json({limit: '50mb'}));
 app.use(
   session({
     genId: (req) => {
@@ -62,6 +59,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 global.showNotifications = true;
+global.appRoot = path.resolve(__dirname);
+console.log("App root: ", global.appRoot);
 
 // routes
 app.use(require('./routes/index'));

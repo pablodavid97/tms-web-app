@@ -1,67 +1,101 @@
-<div class="container edit-profile-container">
-    <div class="flash-messages-container"></div>
-    <div class="page-header">
-       <div class="container">
-          <div class="row">
-             <div class="col-md-12">
-                <h1>Editar Perfil</h1>
-             </div>
-          </div>
-          <img class="mb-4" src="./img/bootstrap-solid.svg" alt="" width="72" height="72">
-       </div>
-    </div>
+      <div class="container edit-profile-container">
+        <div class="flash-messages-container"></div>
+        <div class="page-header">
+           <div class="container">
+              <div class="row">
+                 <div class="col-md-12">
+                    <h1>Editar Perfil</h1>
+                 </div>
+              </div>
+              <img class="mb-4" src="./img/bootstrap-solid.svg" alt="" width="72" height="72">
+           </div>
+        </div>
+    
+        <form action="/edit-profile" method="POST" class="form-edit-profile" enctype="multipart/form-data">
+            <div class="edit-personal-brand">
+                <div class="user-img-container">
+                    <!-- Uploaded image area-->
+                    {{#if user.imagen}}
+                        <div class="image-area mt-4"><img id="imgResult" src="/img/tmp/{{user.nombreImagen}}" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
+                    {{else}}
+                        <div class="image-area mt-4"><img id="imgResult" src="/img/unknown-user-avatar" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
+                    {{/if}}
 
-    <form action="edit-profile" method="POST" class="form-edit-profile">
-        <div class="edit-personal-brand">
-            <div class="user-img-container">
-                {{#if isDean}}
-                  <div class="img mb-4 dean-img"></div>
-                {{/if}}
-                {{#if isProfessor}}
-                  <div class="img mb-4 professor-img"></div>
-                {{/if}}
-                {{#if isStudent}}
-                  <div class="img mb-4 student-img"></div>
-                {{/if}}
-                <button type="button" class="btn btn-secondary">Cambiar Foto</button>
-            </div>
-        </div>
-        <div class="edit-user-info">
-            <div class="row">
-                <div class="col-sm-6">
-                  <label for="oldPasswordInput">Nombres: </label>
-                </div>
-              <div class="col-sm-5">
-                  <input type="text" id="userNames" name="userNames" class="form-control form-input input-name" placeholder="Nombres" autofocus="" autocomplete="off">
+                     <!-- Upload image input-->
+                    <div class="input-group rounded-pill bg-white shadow-sm">
+                        <input id="profileImgInput" class="profile-img-input" name="file" type="file" onchange="readURL(this);" class="form-control border-0">
+                        <label id="profileImgInputLbl" for="profileImgInput" class="font-weight-light text-muted">Elige un archivo</label>
+                        <div class="input-group-append">
+                            <label for="profileImgInput" class="btn btn-light m-0 rounded-pill px-4"><i class="fas fa-cloud-upload-alt"></i><small class="text-uppercase font-weight-bold text-muted">Elegir archivo</small></label>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                  <label for="oldPasswordInput">Apellidos: </label>
+            <div class="edit-user-info">
+                <div class="row">
+                    <div class="col-sm-6 form-lbl">
+                      <label for="oldPasswordInput">Nombres: </label>
+                    </div>
+                  <div class="col-sm-5">
+                      <input type="text" id="userNames" name="userNames" class="form-control form-input input-name" placeholder="Nombres" autofocus="" autocomplete="off">
+                    </div>
                 </div>
-              <div class="col-sm-5">
-                  <input type="text" id="userLastNames" name="userLastNames" class="form-control form-input input-lastname" placeholder="Apellidos" autofocus="" autocomplete="off">
+                <div class="row">
+                    <div class="col-sm-6 form-lbl">
+                      <label for="oldPasswordInput">Apellidos: </label>
+                    </div>
+                  <div class="col-sm-5">
+                      <input type="text" id="userLastNames" name="userLastNames" class="form-control form-input input-lastname" placeholder="Apellidos" autofocus="" autocomplete="off">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-lbl">
+                      <label for="oldPasswordInput">Correo Personal: </label>
+                    </div>
+                  <div class="col-sm-5">
+                      <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" autofocus="" autocomplete="off">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-lbl">
+                      <label for="oldPasswordInput">Teléfono: </label>
+                    </div>
+                  <div class="col-sm-5">
+                      <input type="text" id="userPhone" name="userPhone" class="form-control form-input input-phone" placeholder="Teléfono" autofocus="" autocomplete="off">
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                  <label for="oldPasswordInput">Correo Personal: </label>
-                </div>
-              <div class="col-sm-5">
-                  <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" autofocus="" autocomplete="off">
-                </div>
+            <div class="form-container-btn">
+                <button class="btn btn-primary" type="submit">Editar Perfil</button>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                  <label for="oldPasswordInput">Teléfono: </label>
-                </div>
-              <div class="col-sm-5">
-                  <input type="text" id="userPhone" name="userPhone" class="form-control form-input input-phone" placeholder="Teléfono" autofocus="" autocomplete="off">
-                </div>
-            </div>
-        </div>
-        <div class="form-container-btn">
-            <button class="btn btn-primary" type="submit">Editar Perfil</button>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+    <script>
+  function readURL(input) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+              $('#imgResult')
+                  .attr('src', e.target.result);
+          };
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
+
+  $(function () {
+      $('#profileImgInput').on('change', function () {
+          readURL(input);
+      });
+  });
+
+  var input = document.getElementById( 'profileImgInput' );
+  var infoArea = document.getElementById( 'profileImgInputLbl' );
+
+  input.addEventListener( 'change', showFileName );
+  function showFileName( event ) {
+    var input = event.srcElement;
+    var fileName = input.files[0].name;
+    infoArea.textContent = 'Nombre del archivo: ' + fileName;
+  }
+</script>

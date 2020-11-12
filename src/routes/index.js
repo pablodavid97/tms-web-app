@@ -11,6 +11,8 @@ const {
 const router = express.Router();
 const axiosInstance = require('../http-client');
 const utils = require('../lib/utils');
+const upload = require('../lib/upload');
+const fs = require('fs');
 
 router.get('/', isNotLoggedIn, (req, res) => {
   res.render('auth/signin', {
@@ -23,6 +25,14 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try {
+    console.log("Usuario: ", req.user);
+
+    console.log("Storing user image...");
+
+    fs.writeFileSync(global.appRoot + "/public/img/tmp/" + req.user.nombreImagen, new Buffer.from(req.user.imagen, "binary"))
+
+    console.log("User image has been stored!");
+
     const request = await axiosInstance.get('/home', {
       params: { userId: req.user.id, rolId: req.user.rolId }
     });
@@ -76,6 +86,8 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
     role = tutorJSON.rol;
     studentInfo = tutorJSON.studentInfo;
     tutor = tutorJSON.tutor;
+
+    fs.writeFileSync(global.appRoot + "/public/img/tmp/" + tutor.nombreImagen, new Buffer.from(tutor.imagen, "binary"))
 
     const notificationsRequest = await axiosInstance.get('/notifications', {
       params: { rolId: req.user.rolId, userId: req.user.id }
@@ -146,6 +158,10 @@ router.get(
       const studentJSON = request.data;
 
       student = studentJSON.estudiante;
+
+      console.log("Estudiante: ", student);
+
+      fs.writeFileSync(global.appRoot + "/public/img/tmp/" + student.nombreImagen, new Buffer.from(student.imagen, "binary"))
 
       const notificationsRequest = await axiosInstance.get('/notifications', {
         params: { rolId: req.user.rolId, userId: req.user.id }
@@ -302,9 +318,27 @@ router.get('/edit-profile', isLoggedIn, async (req, res) => {
   })
 });
 
-router.post('/edit-profile', isLoggedIn, async (req, res) => {
+router.post('/edit-profile', isLoggedIn, upload.single("file"), async (req, res) => {
   try {
-    editProfileRequest = await axiosInstance.post('/edit-profile', {firstNames: req.body.userNames, lastNames: req.body.userLastNames, email: req.body.userEmail, phone: req.body.userPhone, userId: req.user.id})
+    file = undefined
+    if(req.file){ 
+      filePath = global.appRoot + '/public/img/uploads/' + req.file.filename
+      file = {
+        formato: req.file.mimetype,
+        nombre: `${Date.now()}-${req.file.originalname}`,
+        datos: fs.readFileSync(filePath).toString("binary"),
+        uploadedOn: new Date()
+      }
+
+      console.log("Deleting created file from system...");
+          
+      // removes file after saved into DB 
+      fs.unlinkSync(filePath)
+
+      console.log("File has been deleted");
+    }
+
+    editProfileRequest = await axiosInstance.post('/edit-profile', {firstNames: req.body.userNames, lastNames: req.body.userLastNames, email: req.body.userEmail, phone: req.body.userPhone, userId: req.user.id, file: file})
     
     req.flash('success', 'Tus datos han sido actualizados exitosamente!');
 
@@ -365,6 +399,29 @@ router.post('/change-password', isLoggedIn, async (req, res) => {
   } else {
     req.flash('error', 'La contraseña ingresada no es la correcta.');
     res.redirect('/change-password')
+  }
+})
+
+router.get('/upload', (req, res) => {
+  res.render('file-upload')
+})
+
+router.post('/upload', upload.single("file"), async (req, res) => {
+  console.log("Entro!");
+  try {
+    file = {
+      formato: req.file.mimetype,
+      nombre: `${Date.now()}-${req.file.originalname}`,
+      datos: fs.readFileSync(global.appRoot + '/public/img/uploads/' + req.file.filename).toString("binary"),
+      createdOn: new Date()
+    }
+
+    uploadRequest = await axiosInstance.post('/upload', {file: file})
+
+    res.redirect('/upload')
+    
+  } catch (error) {
+    console.error(error.message);
   }
 })
 

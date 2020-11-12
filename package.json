@@ -2,10 +2,10 @@
   "name": "tms-web-app",
   "version": "1.0.0",
   "description": "Web App for a tutoring management system",
-  "main": "index.js",
+  "main": "app.js",
   "private": true,
   "scripts": {
-    "dev": "nodemon src/index.js -e js,css,hbs",
+    "dev": "nodemon src/app.js -e js,css,hbs",
     "lint": "eslint . --ext .js",
     "format": "prettier --config .prettierrc 'src/**/*.js' --write && echo 'Prettier format complete'"
   },
@@ -37,6 +37,7 @@
     "express-session": "^1.17.1",
     "express-validator": "^6.6.1",
     "morgan": "^1.10.0",
+    "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.13",
     "nodemailer-express-handlebars": "^4.0.0",

@@ -1,14 +1,10 @@
         <div class="container profile-container">
             <div class="row">
                 <div class="col-sm-6 personal-brand">
-                    {{#if isDean}}
-                        <div class="img mb-4 dean-img"></div>
-                    {{/if}}
-                    {{#if isProfessor}}
-                        <div class="img mb-4 professor-img"></div>
-                    {{/if}}
-                    {{#if isStudent}}
-                        <div class="img mb-4 student-img"></div>
+                    {{#if user.imagen}}
+                        <img id="userImg" class="img mb-4" src="/img/tmp/{{user.nombreImagen}}">
+                    {{else}}
+                        <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar">
                     {{/if}}
                     <h3>{{user.nombres}} {{user.apellidos}}</h3>
                     <h4>{{role.nombre}}</h4>

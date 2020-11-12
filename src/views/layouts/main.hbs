@@ -23,13 +23,6 @@
     <title>{{pageTitle}}</title>
 </head>
 <body>    
-    {{>  nav }}
-    <main role="main" class="main-container">
-        {{> message }} 
-        {{{ body }}}
-    </main>
-    {{> footer }}
-
     <!-- Bootstrap Dependencies JQuery and popper -->
     <script src="/reload/reload.js"></script> 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -42,6 +35,15 @@
 
     <!-- Bootstrap Date-Picker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+    {{>  nav }}
+        <main role="main" class="main-container">
+            {{> message }} 
+            {{{ body }}}
+        </main>
+    {{> footer }}
+
 
     <!-- Date-Picker Script -->
     <script>
@@ -57,6 +59,7 @@
           $(".meetings-length").addClass("bs-select");
         });
     </script>
+
 
 </body>
 
