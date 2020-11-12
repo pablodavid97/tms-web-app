@@ -1,483 +1,567 @@
 * {
-    margin: 0px; 
-    padding: 0px; 
-    box-sizing: border-box;
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
 	height: 100%;
 	font-family: Poppins-Regular, sans-serif;
 }
 
 .main-container {
-    padding: 5rem;
+	padding: 5rem;
 }
 
 .form-container {
-    text-align: center;
+	text-align: center;
 }
 
 .signin-container {
-    box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
-    /* margin-top: 3rem!important; 
+	box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
+	/* margin-top: 3rem!important; 
     margin-bottom: 3rem!important; */
 }
 
 .form-container .form-side-image {
-    background-image: url('../img/bg-01.jpg'); width: calc(100% - 560px);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    z-index: 1;
+	background-image: url('../img/bg-01.jpg');
+	width: calc(100% - 560px);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	z-index: 1;
 }
 
 .form-signin {
-    display: block; padding: 100px 15px 30px 15px; min-height: 80vh;
+	display: block;
+	padding: 100px 15px 30px 15px;
+	min-height: 80vh;
 }
 
 .form-header-logo {
-    margin-bottom: 1.5rem!important;
-    width:72px; 
-    height:72px
+	margin-bottom: 1.5rem!important;
+	width: 72px;
+	height: 72px
 }
 
 .form-header {
-    margin-bottom: 1.5rem!important;
-    text-align: center;
+	margin-bottom: 1.5rem!important;
+	text-align: center;
 }
 
 .form-input {
-    margin-bottom: 1.5rem!important;
+	margin-bottom: 1.5rem!important;
 }
 
 .form-label-group {
-    position: relative;
+	position: relative;
 }
 
 .form-label-group input {
-    display: block;
-    margin: 0;
+	display: block;
+	margin: 0;
 }
 
-.form-label-group input, .form-label-group label {
-    height: 3.125rem;
-    padding: .75rem;
+.form-label-group input,
+.form-label-group label {
+	height: 3.125rem;
+	padding: .75rem;
 }
 
 .form-label-group label {
-    position: absolute;
-    text-align: left;
-    top: 0;
-    left: 0;
-    display: block;
-    width: 100%;
-    margin-bottom: 0;
-    line-height: 1.5;
-    color: #495057;
-    pointer-events: none;
-    cursor: text;
-    border: 1px solid transparent;
-    border-radius: .25rem;
-    transition: all .1s ease-in-out;
+	position: absolute;
+	text-align: left;
+	top: 0;
+	left: 0;
+	display: block;
+	width: 100%;
+	margin-bottom: 0;
+	line-height: 1.5;
+	color: #495057;
+	pointer-events: none;
+	cursor: text;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+	transition: all .1s ease-in-out;
 }
 
-.form-label-group input:placeholder-shown ~ label {
-    visibility: hidden;
-    z-index: -1;
+.form-label-group input:placeholder-shown~label {
+	visibility: hidden;
+	z-index: -1;
 }
 
 .form-label-group input:not(:placeholder-shown) {
-    padding-top: 1.25rem;
-    padding-bottom: .25rem;
+	padding-top: 1.25rem;
+	padding-bottom: .25rem;
 }
 
-.form-label-group input:not(:placeholder-shown) ~ label {
-    padding-top: .25rem;
-    padding-bottom: .25rem;
-    font-size: 12px;
-    color: #777;
-  }
+.form-label-group input:not(:placeholder-shown)~label {
+	padding-top: .25rem;
+	padding-bottom: .25rem;
+	font-size: 12px;
+	color: #777;
+}
 
 .form-signin .row {
-    justify-content: space-between; padding: 0px 20px;
+	justify-content: space-between;
+	padding: 0px 20px;
 }
 
 .form-signin .row .form-check-input {
-    margin-left: -1rem;
-    cursor: pointer;
+	margin-left: -1rem;
+	cursor: pointer;
 }
 
 .form-signin .row .form-check-label {
-    font-family: Poppins-Regular; font-size: 13px;
-    color: #999999;
-    cursor: pointer;
+	font-family: Poppins-Regular;
+	font-size: 13px;
+	color: #999999;
+	cursor: pointer;
 }
 
 .txt1 {
-    font-family: Montserrat-Regular;
-    font-size: 13px;
-    color: #555555;
+	font-family: Montserrat-Regular;
+	font-size: 13px;
+	color: #555555;
 }
 
 .txt2 {
-    font-family: Montserrat-Regular;
-    font-size: 13px;
-    color: #999999;
+	font-family: Montserrat-Regular;
+	font-size: 13px;
+	color: #999999;
 }
 
 .txt3 {
-    font-family: Montserrat-Regular;
-    font-size: 16px;
-    color: #555555;
+	font-family: Montserrat-Regular;
+	font-size: 16px;
+	color: #555555;
 }
 
 .form-container-btn {
-    text-align: center;
-    padding: 1rem;
+	text-align: center;
+	padding: 1rem;
 }
 
 .btn.btn-primary {
-    font-size: 16px; min-width: 250px; height: 40px; border-radius: 20px; text-transform: uppercase;
+	font-size: 16px;
+	min-width: 250px;
+	height: 40px;
+	border-radius: 20px;
+	text-transform: uppercase;
 }
 
 .btn.btn-secondary {
-    color: #fff;
-    background-color: #6c757d!important;
-    border-color: #6c757d!important;
+	color: #fff;
+	background-color: #6c757d!important;
+	border-color: #6c757d!important;
 }
 
-.btn.btn-secondary:hover, .btn.btn-secondary:focus, .btn.btn-secondary:active {
-    color: #fff;
-    background-color: #6c757d!important;
-    border-color: #6c757d!important;
+.btn.btn-secondary:hover,
+.btn.btn-secondary:focus,
+.btn.btn-secondary:active {
+	color: #fff;
+	background-color: #6c757d!important;
+	border-color: #6c757d!important;
 }
 
 .sign-in-question-container {
-    padding-top: 1.5rem!important;
-    padding-bottom: 1rem!important;
+	padding-top: 1.5rem!important;
+	padding-bottom: 1rem!important;
 }
 
 .usfq-footer {
-    padding-top: 3rem;
-    padding-bottom: 3rem; 
-    background: #f8f9fa!important;
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+	background: #f8f9fa!important;
 }
 
+
 /* Styles for reset password, change, and create password forms */
-  
-  .page-header {
-    padding: 1rem 0;
-    text-align: center;
-    margin: 1rem 0;
+
+.page-header {
+	padding: 1rem 0;
+	text-align: center;
+	margin: 1rem 0;
 }
 
 .section-header {
-    padding: 1rem 0;
-    text-align: center;
-    margin: 1rem 0;
+	padding: 1rem 0;
+	text-align: center;
+	margin: 1rem 0;
 }
 
 .password-container {
-    max-width: 650px;
-    background: #fff;
-    border: 1px solid #c9c9c9;
-    padding: 4rem;
-  }
+	max-width: 650px;
+	background: #fff;
+	border: 1px solid #c9c9c9;
+	padding: 4rem;
+}
 
-  .form-container .lead {
-      font-weight: 400;
-      margin-bottom: 3rem;
-  }
+.form-container .lead {
+	font-weight: 400;
+	margin-bottom: 3rem;
+}
 
-  .redirect-container {
-      text-align: center;
-  }
+.redirect-container {
+	text-align: center;
+}
 
-    /* Profile Styles */
 
-    .profile-container {
-        min-height: 650px;
-        padding: 5rem;
-        box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
-    }
-    
-    .personal-brand {
-        text-align: center;
-        padding-top: 5rem;
-    }
-    
-    .img {
-        width: 200px;
-        height: 200px;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        -ms-border-radius: 50%;
-        border-radius: 50%;
-    
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-    
-        margin: 0 auto;
-    }
+/* Profile Styles */
 
-    .dean-img {
-        background-image: url(../img/decano-img.jpg);
-    }
+.profile-container {
+	min-height: 650px;
+	padding: 5rem;
+	box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
+}
 
-    .professor-img {
-        background-image: url(../img/profesor-img.jpg);
-    }
-    
-    .student-img {
-        background-image: url(../img/estudiante-img.png);
-    }
-    
-    .user-info {
-        padding-top: 3rem;
-    }
-    
-    .user-info .user-info-lbl {
-        font-weight: 600;
-    }
+.personal-brand {
+	text-align: center;
+	padding-top: 5rem;
+}
 
-    /* Meeting styles */
+.img {
+	width: 200px;
+	height: 200px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	margin: 0 auto;
+}
+
+.dean-img {
+	background-image: url(../img/decano-img.jpg);
+}
+
+.professor-img {
+	background-image: url(../img/profesor-img.jpg);
+}
+
+.student-img {
+	background-image: url(../img/estudiante-img.png);
+}
+
+.user-info {
+	padding-top: 3rem;
+}
+
+.user-info .user-info-lbl {
+	font-weight: 600;
+}
+
+
+/* Meeting styles */
+
 .meeting-container {
-    padding: 3rem 15rem;
-    border: 1px solid #c9c9c9;
-
+	padding: 3rem 15rem;
+	border: 1px solid #c9c9c9;
 }
 
 .header-left {
-    text-align: left;
+	text-align: left;
 }
 
 .page-header .btn-container {
-    padding-top: 0.5rem;
+	padding-top: 0.5rem;
 }
 
 .input-group-addon {
-    padding: 6px 12px;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1;
-    color: #555;
-    text-align: center;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+	padding: 6px 12px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1;
+	color: #555;
+	text-align: center;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	border-radius: 4px;
 }
 
 .far {
-    font-size: 20px;
-    font-weight: 400;
+	font-size: 20px;
+	font-weight: 400;
 }
 
 .meeting-container .form-container-btn {
-    text-align: center;
-    padding: 1rem;
+	text-align: center;
+	padding: 1rem;
 }
 
 .meeting-container .form-container-btn .btn.btn-primary {
-    border-radius: 5px;
+	border-radius: 5px;
 }
+
 
 /* Meeting modal styles */
 
 .meeting-id {
-    padding: 1rem;
-    line-height: 0.5;
+	padding: 1rem;
+	line-height: 0.5;
 }
 
 #createMeetingModal .modal-body {
-    padding: 2rem 6rem;
+	padding: 2rem 6rem;
 }
 
 @media (min-width: 576px) {
-    .modal-dialog {
-        max-width: 900px;
-    }
+	.modal-dialog {
+		max-width: 900px;
+	}
 }
 
 
 /* Reports Styles */
 
-.kpi-section{
-    margin: 3rem 0;
-    padding: 0 3rem;
+.kpi-section {
+	margin: 3rem 0;
+	padding: 0 3rem;
 }
 
 .kpi-container {
-    padding: 0 2rem;
+	padding: 0 2rem;
 }
 
 .kpi {
-    border: 10px solid black;
-    height: 180px;
-    padding: 1.5rem;
-    text-align: center;
+	border: 10px solid black;
+	height: 180px;
+	padding: 1.5rem;
+	text-align: center;
 }
 
 .kpi-header {
-    height: 50px;
+	height: 50px;
 }
 
 .kpi-header h4 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
 }
 
 .kpi-value {
-    font-size: 40px;
+	font-size: 40px;
 }
 
+
 /* Notification Styles */
+
 .notification-container {
-    max-height: 700px;
-    overflow-y: scroll;
+	max-height: 700px;
+	overflow-y: scroll;
 }
 
 .notification-container h1 {
-    font-size: 2rem;
+	font-size: 2rem;
 }
+
 
 /* Scrollbar styles */
+
 .notification-container::-webkit-scrollbar {
-    width: 3px
+	width: 3px
 }
+
 
 /* Scrollbar track  */
+
 .notification-container::-webkit-scrollbar-track {
-    background: #eee
+	background: #eee
 }
+
 
 /*  Scrollbar handle */
+
 .notification-container::-webkit-scrollbar-thumb {
-    border-radius: 1rem;
-    background-color: #00d2ff;
-    background-image: linear-gradient(to top, #00d2ff 0%, #3a7bd5 100%);
+	border-radius: 1rem;
+	background-color: #00d2ff;
+	background-image: linear-gradient(to top, #00d2ff 0%, #3a7bd5 100%);
 }
 
-
-
 .meeting-notification {
-    padding: 1rem 4rem;
-    margin: 1rem 0;
+	padding: 1rem 4rem;
+	margin: 1rem 0;
 }
 
 .meeting-info-container {
-    padding: 0 2.5rem;
-    width: 100%
+	padding: 0 2.5rem;
+	width: 100%
 }
 
 .notification-icon {
-    font-size: 40px;
+	font-size: 40px;
 }
 
-
 .meeting-info {
-    font-size: 14px;
-    padding: 0 1rem;
+	font-size: 14px;
+	padding: 0 1rem;
 }
 
 .meeting-info .btn-container {
-    padding-top: 1rem;
+	padding-top: 1rem;
 }
 
 .meeting-details {
-    padding-top: 2rem;
+	padding-top: 2rem;
 }
 
 .meeting-section {
-    margin-bottom: 1.5rem;
+	margin-bottom: 1.5rem;
 }
 
 .meetingLabel {
-    font-weight: 700;
-    font-size: 16px;
+	font-weight: 700;
+	font-size: 16px;
 }
 
-.notification-link{
-    font-weight: 600;
-    color: #6c757d!important;
+.notification-link {
+	font-weight: 600;
+	color: #6c757d!important;
 }
 
 .notification-link:link {
-    text-decoration: none;
-  }
-  
-  .notification-link:visited {
-    text-decoration: none;
-  }
-  
-  .notification-link:hover {
-    text-decoration: none;
-  }
-  
-  .notification-link:active {
-    text-decoration: none;
-  }
-
-  .notification-number-icon {
-    position: absolute;
-    top: 0.3rem;
-    left: 21rem;
-    background: orange;
-    color: white;
-    border-radius: 50%;
-    height: 20px;
-    width: 20px;
-    display: inline-block;
-    font-size: 15px;
-    text-align: center;
-    line-height: 1.2rem;
+	text-decoration: none;
 }
 
-  /* Styles for meeting details pane */
+.notification-link:visited {
+	text-decoration: none;
+}
+
+.notification-link:hover {
+	text-decoration: none;
+}
+
+.notification-link:active {
+	text-decoration: none;
+}
+
+.notification-number-icon {
+	position: absolute;
+	top: 0.3rem;
+	left: 21rem;
+	background: orange;
+	color: white;
+	border-radius: 50%;
+	height: 20px;
+	width: 20px;
+	display: inline-block;
+	font-size: 15px;
+	text-align: center;
+	line-height: 1.2rem;
+}
+
+
+/* Styles for meeting details pane */
 
 .student-form-response {
-    margin-bottom: 2rem;
+	margin-bottom: 2rem;
 }
 
-.meeting-details-content{
-    display: none;
+.meeting-details-content {
+	display: none;
 }
 
-  #studentResponseSection{
-      display: none;
-  }
-
-  #studentCommentsSection {
-    display: none;
+#studentResponseSection {
+	display: none;
 }
 
-/* Edit Profile Styles */
-.edit-profile-container {
-    padding: 0rem 5rem;
-    text-align: center
+#studentCommentsSection {
+	display: none;
 }
 
-.form-edit-profile {
-    border: 1px solid black;
-    padding: 7rem;
-}
-
-.edit-personal-brand {
-    margin-bottom: 4rem;
-}
 
 /* Daily Meeting Styles */
+
 .daily-meeting-container {
-    padding: 3rem 10rem;
-    border: 1px solid #c9c9c9;
+	padding: 3rem 10rem;
+	border: 1px solid #c9c9c9;
 }
 
 .meeting-student-info {
-    padding-top: 1rem;
+	padding-top: 1rem;
 }
 
 .student-info-lbl {
-    font-weight: 600;
+	font-weight: 600;
+}
+
+
+/* Edit Profile Styles */
+
+.edit-profile-container {
+	padding: 0rem 5rem;
+	text-align: left
+}
+
+.form-edit-profile {
+	border: 1px solid black;
+	padding: 3rem 7rem;
+}
+
+.edit-personal-brand {
+	margin-bottom: 4rem;
+}
+
+.edit-user-info .form-lbl {
+	padding-left: 6rem;
+}
+
+
+/* Image upload styles */
+
+#profileImgInput {
+	opacity: 0;
+}
+
+#profileImgInputLbl {
+	position: absolute;
+	top: 50%;
+	left: 1rem;
+	transform: translateY(-50%);
+}
+
+.image-area {
+	border: 2px dashed rgba(255, 255, 255, 0.7);
+	padding: 1rem;
+	position: relative;
+}
+
+.image-area::before {
+	content: 'Uploaded image result';
+	color: #fff;
+	font-weight: bold;
+	text-transform: uppercase;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 0.8rem;
+	z-index: 1;
+}
+
+.image-area img {
+	z-index: 2;
+	position: relative;
+}
+
+.user-img-container .input-group {
+	margin: 0 8rem;
+	height: 40px;
+	width: auto;
+}
+
+.user-img-container .input-group .input-group-append {
+	position: absolute;
+	right: 0;
+	height: 100%;
+}
+
+.user-img-container .input-group .input-group-append i.fas {
+	color: #7e858c;
+    margin-right: 0.5rem;
 }

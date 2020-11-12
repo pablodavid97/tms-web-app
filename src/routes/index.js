@@ -11,7 +11,7 @@ const {
 const router = express.Router();
 const axiosInstance = require('../http-client');
 const utils = require('../lib/utils');
-const upload = require('../middlewares/upload');
+const upload = require('../lib/upload');
 const fs = require('fs');
 
 router.get('/', isNotLoggedIn, (req, res) => {
@@ -318,9 +318,27 @@ router.get('/edit-profile', isLoggedIn, async (req, res) => {
   })
 });
 
-router.post('/edit-profile', isLoggedIn, async (req, res) => {
+router.post('/edit-profile', isLoggedIn, upload.single("file"), async (req, res) => {
   try {
-    editProfileRequest = await axiosInstance.post('/edit-profile', {firstNames: req.body.userNames, lastNames: req.body.userLastNames, email: req.body.userEmail, phone: req.body.userPhone, userId: req.user.id})
+    file = undefined
+    if(req.file){ 
+      filePath = global.appRoot + '/public/img/uploads/' + req.file.filename
+      file = {
+        formato: req.file.mimetype,
+        nombre: `${Date.now()}-${req.file.originalname}`,
+        datos: fs.readFileSync(filePath).toString("binary"),
+        uploadedOn: new Date()
+      }
+
+      console.log("Deleting created file from system...");
+          
+      // removes file after saved into DB 
+      fs.unlinkSync(filePath)
+
+      console.log("File has been deleted");
+    }
+
+    editProfileRequest = await axiosInstance.post('/edit-profile', {firstNames: req.body.userNames, lastNames: req.body.userLastNames, email: req.body.userEmail, phone: req.body.userPhone, userId: req.user.id, file: file})
     
     req.flash('success', 'Tus datos han sido actualizados exitosamente!');
 

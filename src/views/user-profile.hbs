@@ -1,7 +1,11 @@
         <div class="container profile-container">
             <div class="row">
                 <div class="col-sm-6 personal-brand">
-                    <img id="userImg" class="img mb-4" src="/img/tmp/{{user.nombreImagen}}">
+                    {{#if user.imagen}}
+                        <img id="userImg" class="img mb-4" src="/img/tmp/{{user.nombreImagen}}">
+                    {{else}}
+                        <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar">
+                    {{/if}}
                     <h3>{{user.nombres}} {{user.apellidos}}</h3>
                     <h4>{{role.nombre}}</h4>
                 </div>
