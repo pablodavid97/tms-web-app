@@ -75,7 +75,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
   }
 });
 
-router.get('/meeting/:meetingId/:notificationId', async (req, res) => {
+router.get('/go-to-meeting/:meetingId/:notificationId', async (req, res) => {
   try {
     isStudent = req.user.rolId === 3;
     isProfessor = req.user.rolId === 2;
@@ -93,7 +93,7 @@ router.get('/meeting/:meetingId/:notificationId', async (req, res) => {
       student = studentRequest.data.estudiante;
     }
 
-    res.render('meetings/meeting', {
+    res.render('meetings/meeting-in-progress', {
       path: 'meetings',
       user: req.user,
       meeting: meeting,
@@ -339,5 +339,36 @@ router.post('/reschedule', async (req, res) => {
     console.error(error.message);
   }
 });
+
+router.get('/meeting-details/:meetingId', async (req, res) => {
+  try {
+    isStudent = req.user.rolId === 3
+    isProfessor = req.user.rolId === 2
+    isDean = req.user.rolId === 1
+
+    meetingRequest = await axiosInstance.get('/meetings/meeting-by-id', {
+      params: { meetingId: req.params.meetingId }
+    });
+    meeting = meetingRequest.data;
+
+    console.log("meeting: ", meeting);
+
+    const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
+    meeting.fecha = dateTimeValues[0] + ' ' + dateTimeValues[1] + ':' + dateTimeValues[2] + dateTimeValues[3].text;
+
+    res.render('meetings/meeting-details', {
+      path: 'meetings',
+      user: req.user,
+      meeting: meeting,
+      isStudent: isStudent,
+      isProfessor: isProfessor,
+      isDean: isDean,
+      success: req.flash('success'),
+      error: req.flash('error')
+    }); 
+  } catch (error) {
+    console.error(error.message);
+  }
+})
 
 module.exports = router;

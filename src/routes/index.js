@@ -25,8 +25,6 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try {
-    console.log("Usuario: ", req.user);
-
     console.log("Storing user image...");
 
     fs.writeFileSync(global.appRoot + "/public/img/tmp/" + req.user.nombreImagen, new Buffer.from(req.user.imagen, "binary"))
@@ -158,8 +156,6 @@ router.get(
       const studentJSON = request.data;
 
       student = studentJSON.estudiante;
-
-      console.log("Estudiante: ", student);
 
       fs.writeFileSync(global.appRoot + "/public/img/tmp/" + student.nombreImagen, new Buffer.from(student.imagen, "binary"))
 
@@ -407,7 +403,6 @@ router.get('/upload', (req, res) => {
 })
 
 router.post('/upload', upload.single("file"), async (req, res) => {
-  console.log("Entro!");
   try {
     file = {
       formato: req.file.mimetype,

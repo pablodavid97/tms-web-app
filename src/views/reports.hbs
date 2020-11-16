@@ -66,6 +66,7 @@
                                 <th scope="col">Profesor</th>
                                 <th scope="col">Estudiante</th>
                                 <th scope="col">Estado</th>
+                                <th></th>
                             {{/if}}
                         </tr>
                     </thead>
@@ -80,8 +81,18 @@
                                     <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
                                     <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
                                     <td>{{this.estado}}</td>
-                                    <td><a href="/meetings/edit/{{this.id}}">Editar</a></td>
-                                    <td><a href="/meetings/delete/{{this.id}}">Eliminar</a></td>
+                                   {{#if (or this.estadoId 1 this.estadoId 2)}}
+                                        <td><a href="/meetings/edit/{{this.id}}">Editar</a></td>
+                                        <td><a href="/meetings/delete/{{this.id}}/{{this.estudianteId}}">Eliminar</a></td>
+                                    {{else}}
+                                        {{#if (or this.estadoId 7 this.estadoId 8)}}
+                                            <td><a href="/meetings/meeting-details/{{this.id}}">Ver detalles</a></td>
+                                            <td></td>
+                                        {{else}}
+                                            <td></td>
+                                            <td></td>
+                                        {{/if}}
+                                    {{/if}}
                                 </tr>
                             {{/each}}
 
@@ -95,6 +106,12 @@
                                     <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
                                     <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
                                     <td>{{this.estado}}</td>
+                                    
+                                    {{#if (or this.estadoId 7 this.estadoId 8)}}
+                                        <td><a href="/meetings/meeting-details/{{this.id}}">Ver detalles</a></td>
+                                    {{else}}
+                                        <td></td>
+                                    {{/if}}
                                 </tr>
                             {{/each}}
 

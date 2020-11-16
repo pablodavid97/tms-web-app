@@ -258,23 +258,23 @@
                                     <p id="detailsPaneStudentComment"></p>
                                 </div>
 
-                                {{#if isProfessor}}
-                                    <div id="doneMeetingCommentsSection" class="meeting-section">
+                                <div id="doneMeetingCommentsSection" class="meeting-section">
+                                    {{#if isStudent}}
                                         <label class="meetingLabel" for="doneMeetingStudentComment">Comentarios Estudiante: </label>
                                         <p id="doneMeetingStudentComment"></p>
+                                    {{/if}}
 
+                                    {{#if isProfessor}}
                                         <label class="meetingLabel" for="doneMeetingProfessorComment">Comentarios Profesor: </label>
                                         <p id="doneMeetingProfessorComment"></p>
-                                    </div>
-                                {{/if}}
+                                    {{/if}}
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
             <script>
                 function populateDetailsPane (notification) {
-                    console.log("Object: ", notification)
-
                     var meetingId = document.getElementById('detailsPaneMeetingId')
                     var date = document.getElementById('detailsPaneDate')
                     var professor = document.getElementById('detailsPaneProfessor')
@@ -298,13 +298,6 @@
                     var doneMeetingCommentsSection = document.getElementById('doneMeetingCommentsSection')
                     var doneMeetingStudentComment = document.getElementById('doneMeetingStudentComment')
                     var doneMeetingProfessorComment = document.getElementById('doneMeetingProfessorComment')
-
-                    console.log("Meeting id: ", meetingId)
-                    console.log("date: ", date)
-                    console.log("Professor: ", professor)
-                    console.log("student: ", student)
-                    console.log("Description: ", description)
-                    console.log("student response: ", studentResponse)
 
                     meetingDetailsContent[0].style.display = "block"
 
@@ -348,7 +341,7 @@
                         meetingHeader.style.display = "none"
                         rejectedMeetingHeader.style.display = "none"
                         dailyMeetingHeader.style.display = "flex"
-                        goToMeetingButton.href = "/meetings/meeting/" + notification.reunionId + "/" + notification.id
+                        goToMeetingButton.href = "/meetings/go-to-meeting/" + notification.reunionId + "/" + notification.id
                         if(doneMeetingCommentsSection) {
                             doneMeetingCommentsSection.style.display = "none"
                         }
@@ -360,8 +353,14 @@
                         meetingHeader.style.display = "block"
                         dailyMeetingHeader.style.display = "none"
                         doneMeetingCommentsSection.style.display = "block"
-                        doneMeetingStudentComment.innerHTML = notification.comentariosEstudiante
-                        doneMeetingProfessorComment.innerHTML = notification.comentariosProfesor
+
+                        if(doneMeetingProfessorComment){
+                            doneMeetingProfessorComment.innerHTML = notification.comentariosProfesor
+                        }
+
+                        if(doneMeetingStudentComment) {
+                            doneMeetingStudentComment.innerHTML = notification.comentariosEstudiante
+                        }
                     }
                     else  {
                         rejectedMeetingHeader.style.display = "none"
@@ -369,9 +368,6 @@
                         studentCommentSection.style.display = "none"
                         meetingHeader.style.display = "block"
                         dailyMeetingHeader.style.display = "none"
-                        if(doneMeetingCommentsSection) {
-                            doneMeetingCommentsSection.style.display = "none"
-                        }
                     }
                 
                     meetingSubject.innerHTML = notification.tema
