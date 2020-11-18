@@ -6,9 +6,6 @@
                          <h1>Reportes</h1>
                       </div>
                    </div>
-                    <div class="file-export">
-                        <button class="btn btn-secondary" onclick="generateCSV({{json meetings}})">Generar Reporte</button>
-                    </div>
                 </div>
              </div>
 
@@ -38,6 +35,11 @@
                     </div>
                 </div>
             </div>
+
+            <div class="generate-report-section">
+                <button class="btn btn-secondary" onclick="generateCSV({{json meetings}})">Generar Reporte</button>
+            </div>
+
             <div class="section-header header-left">
                 <div class="container">
                    <div class="row">
