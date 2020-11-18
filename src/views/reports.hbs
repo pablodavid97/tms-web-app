@@ -6,6 +6,9 @@
                          <h1>Reportes</h1>
                       </div>
                    </div>
+                    <div class="file-export">
+                        <button class="btn btn-secondary" onclick="generateCSV({{json meetings}})">Generar Reporte</button>
+                    </div>
                 </div>
              </div>
 
@@ -121,3 +124,35 @@
             </div>
         
         </div>
+        <script>
+            function generateCSV(meetings) {
+
+                var data = [];
+
+                meetings.forEach(function(meeting) {
+                    data.push([meeting.id, meeting.tema, meeting.descripcion, meeting.fecha, meeting.nombresProfesor + " " + meeting.apellidosProfesor, meeting.nombresEstudiante + " " + meeting.apellidosEstudiante, meeting.estado, meeting.comentariosProfesor, meeting.comentariosEstudiante])
+                });
+
+                // sorts meetings by id
+                sortByKey(data, '0')
+
+                var csv = 'Numero, Tema, Descripción, Fecha, Profesor, Estudiante, Estado, Comentarios Profesor, Comentarios Estudiante\n';
+                data.forEach(function(row) {
+                    csv += row.join(',');
+                    csv += "\n";
+                });
+
+                var hiddenElement = document.createElement('a');
+                hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                hiddenElement.target = '_blank';
+                hiddenElement.download = 'data.csv';
+                hiddenElement.click();
+            }
+
+            function sortByKey(array, key) {
+                return array.sort(function(a, b) {
+                    var x = a[key]; var y = b[key];
+                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                });
+            }
+        </script>
