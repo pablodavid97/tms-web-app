@@ -46,12 +46,12 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       lastId = lastRowId + 1;
     }
 
-    const notificationsRequest = await axiosInstance.get('/notifications', {
-      params: { rolId: req.user.rolId, userId: req.user.id }
+    const notificationsRequest = await axiosInstance.get('/active-notifications', {
+      params: { userId: req.user.id }
     });
     const notificationsJSON = notificationsRequest.data;
-
-    notifications = notificationsJSON.notifications;
+  
+    notificationsNum = notificationsJSON.notifications.length;
 
     res.render('meetings/list', {
       path: 'meetings',
@@ -65,7 +65,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       hourValues,
       minuteValues,
       lastId,
-      notifications,
+      notificationsNum,
       showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
@@ -180,12 +180,12 @@ router.get(
       hourValues = utils.getHourValues();
       minuteValues = utils.getMinuteValues();
 
-      const notificationsRequest = await axiosInstance.get('/notifications', {
-        params: { rolId: req.user.rolId, userId: req.user.id }
+      const notificationsRequest = await axiosInstance.get('/active-notifications', {
+        params: { userId: req.user.id }
       });
       const notificationsJSON = notificationsRequest.data;
-
-      notifications = notificationsJSON.notifications;
+    
+      notificationsNum = notificationsJSON.notifications.length;
 
       res.render('meetings/edit', {
         path: 'meetings',
@@ -199,7 +199,7 @@ router.get(
         isProfessor: true,
         hourValues,
         minuteValues,
-        notifications,
+        notificationsNum,
         showNotifications: global.showNotifications,
         success: req.flash('success'),
         error: req.flash('error')
@@ -280,12 +280,12 @@ router.get(
       hourValues = utils.getHourValues();
       minuteValues = utils.getMinuteValues();
 
-      const notificationsRequest = await axiosInstance.get('/notifications', {
-        params: { rolId: req.user.rolId, userId: req.user.id }
+      const notificationsRequest = await axiosInstance.get('/active-notifications', {
+        params: { userId: req.user.id }
       });
       const notificationsJSON = notificationsRequest.data;
-
-      notifications = notificationsJSON.notifications;
+    
+      notificationsNum = notificationsJSON.notifications.length;
 
       res.render('meetings/reschedule', {
         path: 'meetings',
@@ -299,7 +299,7 @@ router.get(
         isProfessor: true,
         hourValues,
         minuteValues,
-        notifications,
+        notificationsNum,
         showNotifications: global.showNotifications,
         notificationId: req.params.notificationId,
         success: req.flash('success'),
@@ -351,10 +351,15 @@ router.get('/meeting-details/:meetingId', async (req, res) => {
     });
     meeting = meetingRequest.data;
 
-    console.log("meeting: ", meeting);
-
     const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
     meeting.fecha = dateTimeValues[0] + ' ' + dateTimeValues[1] + ':' + dateTimeValues[2] + dateTimeValues[3].text;
+
+    const notificationsRequest = await axiosInstance.get('/active-notifications', {
+      params: { userId: req.user.id }
+    });
+    const notificationsJSON = notificationsRequest.data;
+  
+    notificationsNum = notificationsJSON.notifications.length;
 
     res.render('meetings/meeting-details', {
       path: 'meetings',
@@ -363,6 +368,8 @@ router.get('/meeting-details/:meetingId', async (req, res) => {
       isStudent: isStudent,
       isProfessor: isProfessor,
       isDean: isDean,
+      notificationsNum,
+      showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
     }); 

@@ -48,12 +48,16 @@ router.get('/home', isLoggedIn, async (req, res) => {
       tutor = homeJSON.tutor;
     }
 
-    const notificationsRequest = await axiosInstance.get('/notifications', {
-      params: { rolId: req.user.rolId, userId: req.user.id }
+    const notificationsRequest = await axiosInstance.get('/active-notifications', {
+      params: { userId: req.user.id }
     });
     const notificationsJSON = notificationsRequest.data;
   
-    notifications = notificationsJSON.notifications;
+    notificationsNum = notificationsJSON.notifications.length;
+
+    if(notificationsNum === 0) {
+      global.showNotifications = false
+    }
 
     res.render('user-profile', {
       path: 'home',
@@ -64,7 +68,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
       tutor,
       isProfessor,
       isDean,
-      notifications: notifications,
+      notificationsNum: notificationsNum,
       showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
@@ -87,12 +91,12 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
 
     fs.writeFileSync(global.appRoot + "/public/img/tmp/" + tutor.nombreImagen, new Buffer.from(tutor.imagen, "binary"))
 
-    const notificationsRequest = await axiosInstance.get('/notifications', {
-      params: { rolId: req.user.rolId, userId: req.user.id }
+    const notificationsRequest = await axiosInstance.get('/active-notifications', {
+      params: { userId: req.user.id }
     });
     const notificationsJSON = notificationsRequest.data;
   
-    notifications = notificationsJSON.notifications;
+    notificationsNum = notificationsJSON.notifications.length;
 
     res.render('tutor', {
       path: 'tutor',
@@ -103,7 +107,7 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
       tutor,
       isProfessor: false,
       isDean: false,
-      notifications: notifications,
+      notificationsNum: notificationsNum,
       showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
@@ -121,12 +125,12 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
     const studentsJSON = request.data;
     students = studentsJSON;
 
-    const notificationsRequest = await axiosInstance.get('/notifications', {
-      params: { rolId: req.user.rolId, userId: req.user.id }
+    const notificationsRequest = await axiosInstance.get('/active-notifications', {
+      params: { userId: req.user.id }
     });
     const notificationsJSON = notificationsRequest.data;
   
-    notifications = notificationsJSON.notifications;
+    notificationsNum = notificationsJSON.notifications.length;
     
 
     res.render('students', {
@@ -134,7 +138,7 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
       user: req.user,
       isProfessor: true,
       students,
-      notifications: notifications,
+      notificationsNum: notificationsNum,
       showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
@@ -159,19 +163,19 @@ router.get(
 
       fs.writeFileSync(global.appRoot + "/public/img/tmp/" + student.nombreImagen, new Buffer.from(student.imagen, "binary"))
 
-      const notificationsRequest = await axiosInstance.get('/notifications', {
-        params: { rolId: req.user.rolId, userId: req.user.id }
+      const notificationsRequest = await axiosInstance.get('/active-notifications', {
+        params: { userId: req.user.id }
       });
       const notificationsJSON = notificationsRequest.data;
     
-      notifications = notificationsJSON.notifications;
+      notificationsNum = notificationsJSON.notifications.length;
 
       res.render('student', {
         path: 'students',
         user: req.user,
         isProfessor: true,
         student: student,
-        notifications: notifications,
+        notificationsNum: notificationsNum,
         showNotifications: global.showNotifications,
         success: req.flash('success'),
         error: req.flash('error')
@@ -289,25 +293,54 @@ router.post('/notifications', async (req, res) => {
   res.redirect('/notifications');
 });
 
+router.get('/delete-notification/:notificationId', async (req, res) => {
+  try {
+    request = await axiosInstance.post('/delete-notification', {notificationId: req.params.notificationId})
+
+    res.redirect('/notifications')
+  } catch (error) {
+    console.error(error.message);
+  }
+
+})
+
+router.get('/archive-notification/:notificationId', async (req, res) => {
+  try {
+    request = await axiosInstance.post('/archive-notification', {notificationId: req.params.notificationId})
+
+    res.redirect('/notifications')
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+router.post('/viewed-notification', async (req, res) => {
+  console.log("Data: ", req.body);
+
+  await axiosInstance.post('/viewed-notification', {notificationId: req.body.notificationId})
+
+  res.send({status: "ok"})
+});
+
 // EDIT PROFILE
 router.get('/edit-profile', isLoggedIn, async (req, res) => {
   const isDean = req.user.rolId === 1
   const isProfessor = req.user.rolId === 2
   const isStudent = req.user.rolId === 3
 
-  const notificationsRequest = await axiosInstance.get('/notifications', {
-    params: { rolId: req.user.rolId, userId: req.user.id }
+  const notificationsRequest = await axiosInstance.get('/active-notifications', {
+    params: { userId: req.user.id }
   });
   const notificationsJSON = notificationsRequest.data;
 
-  notifications = notificationsJSON.notifications;
+  notificationsNum = notificationsJSON.notifications.length;
 
   res.render('edit-profile', {
     user: req.user,
     isDean: isDean,
     isProfessor: isProfessor,
     isStudent: isStudent,
-    notifications: notifications,
+    notificationsNum: notificationsNum,
     showNotifications: global.showNotifications,
     success: req.flash('success'),
     error: req.flash('error')
@@ -350,12 +383,12 @@ router.get('/change-password/', isLoggedIn, async (req, res) => {
   const isProfessor = req.user.rolId === 2
   const isStudent = req.user.rolId === 3
 
-  const notificationsRequest = await axiosInstance.get('/notifications', {
-    params: { rolId: req.user.rolId, userId: req.user.id }
+  const notificationsRequest = await axiosInstance.get('/active-notifications', {
+    params: { userId: req.user.id }
   });
   const notificationsJSON = notificationsRequest.data;
 
-  notifications = notificationsJSON.notifications;
+  notificationsNum = notificationsJSON.notifications.length;
 
   res.render('auth/change-password', {
     headerTitle: '¿Quieres Cambiar tu Contraseña?',
@@ -365,7 +398,7 @@ router.get('/change-password/', isLoggedIn, async (req, res) => {
     isDean: isDean,
     isProfessor: isProfessor,
     isStudent: isStudent,
-    notifications: notifications,
+    notificationsNum: notificationsNum,
     success: req.flash('success'),
     error: req.flash('error')
   });

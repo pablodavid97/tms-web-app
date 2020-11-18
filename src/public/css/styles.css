@@ -351,41 +351,36 @@ html {
 
 /* Notification Styles */
 
-.notification-container {
+.notifications-container {
 	max-height: 700px;
 	overflow-y: scroll;
 }
 
-.notification-container h1 {
+.notifications-container h1 {
 	font-size: 2rem;
 }
 
 
 /* Scrollbar styles */
 
-.notification-container::-webkit-scrollbar {
+.notifications-container::-webkit-scrollbar {
 	width: 3px
 }
 
 
 /* Scrollbar track  */
 
-.notification-container::-webkit-scrollbar-track {
+.notifications-container::-webkit-scrollbar-track {
 	background: #eee
 }
 
 
 /*  Scrollbar handle */
 
-.notification-container::-webkit-scrollbar-thumb {
+.notifications-container::-webkit-scrollbar-thumb {
 	border-radius: 1rem;
 	background-color: #00d2ff;
 	background-image: linear-gradient(to top, #00d2ff 0%, #3a7bd5 100%);
-}
-
-.meeting-notification {
-	padding: 1rem 4rem;
-	margin: 1rem 0;
 }
 
 .meeting-info-container {
@@ -455,6 +450,31 @@ html {
 	line-height: 1.2rem;
 }
 
+.notification-container {
+    padding-right: 7rem;
+    border: 1px solid rgba(0,0,0,.125);
+    margin: 1rem 2rem;
+}
+
+.notification-container .card.meeting-notification{
+    border: none;
+    padding: 1rem 4rem;
+}
+
+
+/* Styles for notification options */
+.notification-container .notification-options {
+    position: relative;
+    z-index: 1;
+    left: 100%;
+    padding: 7px;
+}
+
+.notification-container .notification-options a {
+    color: #6c757d;
+    font-size: 12px;
+    font-weight: 600;
+}
 
 /* Styles for meeting details pane */
 
