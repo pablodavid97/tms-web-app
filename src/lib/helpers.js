@@ -14,4 +14,17 @@ helpers.json = (context) => {
   return JSON.stringify(context);
 };
 
+helpers.getActiveNotifications = (notifications) => {
+  var length = notifications.length
+  var counter = 0
+
+  for(var i = 0; i < length; i++) {
+    if(notifications[i].estadoNotificacionId === 1) {
+      counter++
+    }
+  }
+
+  return counter
+}
+
 module.exports = helpers;
