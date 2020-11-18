@@ -1,5 +1,9 @@
 # Ignore Secret Keys
 .env
 
+# Ignor images
+src/public/img/tmp
+src/public/img/uploads
+
 # Ignore node_modules folder
 node_modules
