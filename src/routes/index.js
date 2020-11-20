@@ -40,12 +40,14 @@ router.get('/home', isLoggedIn, async (req, res) => {
     const isStudent = role.id === 3;
     const isProfessor = role.id === 2;
     const isDean = role.id === 1;
+    gpa = 0
     tutor = {};
     studentInfo = {};
 
     if (isStudent) {
       studentInfo = homeJSON.studentInfo;
       tutor = homeJSON.tutor;
+      gpa = homeJSON.gpa;
     }
 
     const notificationsRequest = await axiosInstance.get('/active-notifications', {
@@ -66,6 +68,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
       isStudent,
       studentInfo,
       tutor,
+      gpa,
       isProfessor,
       isDean,
       notificationsNum: notificationsNum,
@@ -160,6 +163,7 @@ router.get(
       const studentJSON = request.data;
 
       student = studentJSON.estudiante;
+      gpa = studentJSON.gpa
 
       fs.writeFileSync(global.appRoot + "/public/img/tmp/" + student.nombreImagen, new Buffer.from(student.imagen, "binary"))
 
@@ -175,6 +179,7 @@ router.get(
         user: req.user,
         isProfessor: true,
         student: student,
+        gpa,
         notificationsNum: notificationsNum,
         showNotifications: global.showNotifications,
         success: req.flash('success'),
@@ -208,8 +213,14 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
     }
 
     gpa = reportsJSON.gpa;
-    userNum = reportsJSON.activeUsers.length;
-    conditionedNum = reportsJSON.conditionedUsers.length;
+    userNum = reportsJSON.activeUsersNum;
+    conditionedNum = reportsJSON.conditionedUsersNum;
+
+    // retrieves semesters
+    const semesterRequest = await axiosInstance.get('/semesters')
+    const semesterJSON = semesterRequest.data
+
+    semesters = semesterJSON.semestres  
 
     res.render('reports', {
       path: 'reports',
@@ -220,6 +231,7 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
       gpa,
       userNum,
       conditionedNum,
+      semesters,
       success: req.flash('success'),
       error: req.flash('error')
     });

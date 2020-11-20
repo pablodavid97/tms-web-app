@@ -12,7 +12,7 @@
             <div class="kpi-section row">
                 <div class="kpi-container col-sm-3">
                     <div class="kpi">
-                        <div class="kpi-header"><h4>Reuniones Activas</h4></div>
+                        <div class="kpi-header"><h4>Reuniones Creadas</h4></div>
                         <span class="kpi-value">{{meetingsNum}}</span>
                     </div>
                 </div>
@@ -37,17 +37,34 @@
             </div>
 
             <div class="generate-report-section">
-                <button class="btn btn-secondary" onclick="generateCSV({{json meetings}})">Generar Reporte</button>
+                <button class="btn btn-secondary" onclick="generateCSV({{json meetings}})">Generar Reporte</button>     
             </div>
 
             <div class="section-header header-left">
-                <div class="container">
+                   <div class="row">
+                      <div class="col-md-12">
+                         <h2>Filtros</h2>
+                      </div>
+                   </div>
+             </div>
+
+            <div class="report-filters row">
+                <div class="filter col-sm-3">
+                    <label for="semesterFilter">Semestre </label>
+                    <select id="semesterFilter" name="semester" class="custom-select" onchange="filterBySemester(this)">
+                        {{#each semesters}}
+                            <option value="{{this.id}}">{{this.semestre}}</option>
+                        {{/each}}
+                    </select>
+                </div> 
+            </div>
+
+            <div class="section-header header-left">
                    <div class="row">
                       <div class="col-md-12">
                          <h2>Historial de Reuniones</h2>
                       </div>
                    </div>
-                </div>
              </div>
             <div class="meetings-table-container">
                 <table id="meetingsTable"class="table table-hover meetings-table">
@@ -60,6 +77,7 @@
                                 <th scope="col">Fecha</th>
                                 <th scope="col">Profesor</th>
                                 <th scope="col">Estudiante</th>
+                                <th scope="col">Semestre</th>
                                 <th scope="col">Estado</th>
                                 <th></th>
                                 <th></th>
@@ -70,7 +88,9 @@
                                 <th scope="col">Fecha</th>
                                 <th scope="col">Profesor</th>
                                 <th scope="col">Estudiante</th>
+                                <th scope="col">Semestre</th>
                                 <th scope="col">Estado</th>
+
                                 <th></th>
                             {{/if}}
                         </tr>
@@ -85,6 +105,7 @@
                                     <td>{{this.fecha}}</td>
                                     <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
                                     <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
+                                    <td>{{this.semestre}}</td>
                                     <td>{{this.estado}}</td>
                                    {{#if (or this.estadoId 1 this.estadoId 2)}}
                                         <td><a href="/meetings/edit/{{this.id}}">Editar</a></td>
@@ -110,6 +131,7 @@
                                     <td>{{this.fecha}}</td>
                                     <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
                                     <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
+                                    <td>{{this.semestre}}</td>
                                     <td>{{this.estado}}</td>
                                     
                                     {{#if (or this.estadoId 7 this.estadoId 8)}}
@@ -156,5 +178,21 @@
                     var x = a[key]; var y = b[key];
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                 });
+            }
+
+            function filterBySemester(semester) {
+                console.log("Selected Semester: ", semester.value)
+
+                $.ajax({
+                    url: 'http://localhost:4000/viewed-notification',
+                    data: {"notificationId": notification.id},
+                    type: 'POST',
+                    success: function (data) {
+                        console.log("Success: ", data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error: ' + error.message);
+                    }
+                })
             }
         </script>

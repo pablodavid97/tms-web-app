@@ -58,9 +58,11 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-global.showNotifications = true;
+// Global variables
 global.appRoot = path.resolve(__dirname);
 console.log("App root: ", global.appRoot);
+global.showNotifications = true;
+global.currentSemester = 1;
 
 // routes
 app.use(require('./routes/index'));
