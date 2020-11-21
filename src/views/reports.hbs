@@ -11,25 +11,25 @@
 
             <div class="kpi-section row">
                 <div class="kpi-container col-sm-3">
-                    <div class="kpi">
+                    <div id="createdMeetingsKPI" class="kpi">
                         <div class="kpi-header"><h4>Reuniones Creadas</h4></div>
                         <span class="kpi-value">{{meetingsNum}}</span>
                     </div>
                 </div>
                 <div class="kpi-container col-sm-3">
-                    <div class="kpi">
+                    <div id="deletedMeetingsKPI" class="kpi">
+                        <div class="kpi-header"><h4 class="kpi-header">Reuniones Eliminadas</h4></div>
+                        <span class="kpi-value">{{reunionesEliminadasNum}}</span>
+                    </div>
+                </div>
+                <div class="kpi-container col-sm-3">
+                    <div id="averageGPAKPI" class="kpi">
                         <div class="kpi-header"><h4 class="kpi-header">GPA Promedio</h4></div>
                         <span class="kpi-value">{{gpa}}</span>
                     </div>
                 </div>
                 <div class="kpi-container col-sm-3">
-                    <div class="kpi">
-                        <div class="kpi-header"><h4 class="kpi-header">Usuarios Activos</h4></div>
-                        <span class="kpi-value">{{userNum}}</span>
-                    </div>
-                </div>
-                <div class="kpi-container col-sm-3">
-                    <div class="kpi">
+                    <div id="conditionedStudentsKPI" class="kpi">
                         <div class="kpi-header"><h4 class="kpi-header">Estudiantes Condicionados</h4></div>
                         <span class="kpi-value">{{conditionedNum}}</span>
                     </div>
@@ -37,7 +37,7 @@
             </div>
 
             <div class="generate-report-section">
-                <button class="btn btn-secondary" onclick="generateCSV({{json meetings}})">Generar Reporte</button>     
+                <button id="generateReportButton" class="btn btn-secondary" onclick="generateCSV({{json meetings}})">Generar Reporte</button>     
             </div>
 
             <div class="section-header header-left">
@@ -52,6 +52,7 @@
                 <div class="filter col-sm-3">
                     <label for="semesterFilter">Semestre </label>
                     <select id="semesterFilter" name="semester" class="custom-select" onchange="filterBySemester(this)">
+                        <option value="0" selected>Todos</option>
                         {{#each semesters}}
                             <option value="{{this.id}}">{{this.semestre}}</option>
                         {{/each}}
@@ -184,11 +185,58 @@
                 console.log("Selected Semester: ", semester.value)
 
                 $.ajax({
-                    url: 'http://localhost:4000/viewed-notification',
-                    data: {"notificationId": notification.id},
-                    type: 'POST',
+                    url: 'http://localhost:4000/reports-by-semester/' + semester.value,
+                    type: 'GET',
                     success: function (data) {
                         console.log("Success: ", data)
+                        const createdMeetings = document.getElementById("createdMeetingsKPI").childNodes
+                        const deletedMeetings = document.getElementById('deletedMeetingsKPI').childNodes
+                        const averageGPA = document.getElementById('averageGPAKPI').childNodes
+                        const conditionedStudents = document.getElementById('conditionedStudentsKPI').childNodes
+                        const meetingsTableBody = document.getElementById('meetingsTable').getElementsByTagName("tbody")[0]
+
+                        console.log("MeetingsTable ", meetingsTable)
+
+                        // modify kpi values
+                        var meetingsNum = data.reuniones.length
+                        createdMeetings[3].innerHTML = meetingsNum
+                        deletedMeetings[3].innerHTML = data.reunionesEliminadas.length
+                        averageGPA[3].innerHTML = data.gpa
+                        conditionedStudents[3].innerHTML = data.conditionedUsersNum
+
+                        // replace button onclick
+                        const reportButton = document.getElementById("generateReportButton")
+                        reportButton.setAttribute("onClick", "generateCSV(" + JSON.stringify(data.reuniones) + ")")
+
+                        // generate new data table
+                        var newTbody = document.createElement('tbody');
+                        var meetingsTable = meetingsTableBody.parentNode
+                        meetingsTable.appendChild(newTbody) 
+                        meetingsTable.removeChild(meetingsTableBody)
+
+                        addedTableBody = document.getElementById('meetingsTable').getElementsByTagName("tbody")[0]
+
+                        // insert new rows in table 
+                        for(var i = 0; i < meetingsNum; i++) {
+                            var newRowContent = '<td scope="row">' + data.reuniones[i].id + "</td>" + 
+                                    "<td>" + data.reuniones[i].tema + "</td>" + 
+                                    "<td>" + data.reuniones[i].descripcion + "</td>" +
+                                    "<td>" + data.reuniones[i].fecha + "</td>" + 
+                                    "<td>" + data.reuniones[i].nombresProfesor + " " + data.reuniones[i].apellidosProfesor + "</td>" +
+                                    "<td>" + data.reuniones[i].nombresEstudiante + " " + data.reuniones[i].apellidosEstudiante + "</td>" +
+                                    "<td>" + data.reuniones[i].semestre + "</td>" +
+                                    "<td>" + data.reuniones[i].estado + "</td>"
+                                    
+                            if (data.reuniones[i].estadoId === 7 || data.reuniones[i].estadoId === 8) {
+                                newRowContent += "<td><a href=" + `/meetings/meeting-details/${data.reuniones[i].id}` + ">Ver detalles</a></td>"
+                            } else {
+                                newRowContent += "<td></td>"
+                            }
+
+                            var newRow = addedTableBody.insertRow()
+                            newRow.innerHTML = newRowContent
+                            
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.log('Error: ' + error.message);
