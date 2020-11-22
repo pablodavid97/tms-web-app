@@ -23,4 +23,24 @@
                         <p><span class="user-info-lbl">Status: </span>{{student.status}}</p>
                 </div>
             </div>
+
+            <div class="gpa-by-semester-container container">
+                <h2>GPA Por Semestre</h2>
+                <div class="gpa-table-container scrollable-container">
+                    <table id="gpaTable" class="table table-striped">
+                        <thead>
+                            <th>Semestre</th>
+                            <th>gpa</th>
+                        </thead>
+                        <tbody>
+                            {{#each gpaList}}
+                                <tr>
+                                    <td>{{this.semestre}}</td>
+                                    <td>{{this.gpa}}</td>
+                                </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>

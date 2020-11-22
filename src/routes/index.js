@@ -43,11 +43,13 @@ router.get('/home', isLoggedIn, async (req, res) => {
     gpa = 0
     tutor = {};
     studentInfo = {};
+    gpaList = {};
 
     if (isStudent) {
       studentInfo = homeJSON.studentInfo;
       tutor = homeJSON.tutor;
       gpa = homeJSON.gpa;
+      gpaList = homeJSON.gpaList
     }
 
     const notificationsRequest = await axiosInstance.get('/active-notifications', {
@@ -69,6 +71,7 @@ router.get('/home', isLoggedIn, async (req, res) => {
       studentInfo,
       tutor,
       gpa,
+      gpaList,
       isProfessor,
       isDean,
       notificationsNum: notificationsNum,
@@ -164,6 +167,7 @@ router.get(
 
       student = studentJSON.estudiante;
       gpa = studentJSON.gpa
+      gpaList = studentJSON.gpaList
 
       fs.writeFileSync(global.appRoot + "/public/img/tmp/" + student.nombreImagen, new Buffer.from(student.imagen, "binary"))
 
@@ -180,6 +184,7 @@ router.get(
         isProfessor: true,
         student: student,
         gpa,
+        gpaList,
         notificationsNum: notificationsNum,
         showNotifications: global.showNotifications,
         success: req.flash('success'),
@@ -228,8 +233,6 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
     const carreraJSON = carreraRequest.data
     carreras = carreraJSON.carreras
 
-    console.log("Carreras: ", carreraJSON);
-
     res.render('reports', {
       path: 'reports',
       user: req.user,
@@ -251,8 +254,6 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
 
 // report filters
 router.get('/reports-by-semester/:semesterId', async (req, res) => {
-  console.log("Semestre Id: ", req.params.semesterId);
-
   semesterReportsRequest = await axiosInstance.get('/reports-by-semester', {params: {semesterId: req.params.semesterId}})
   semesterReportJSON = semesterReportsRequest.data
 
@@ -275,8 +276,6 @@ router.get('/reports-by-semester/:semesterId', async (req, res) => {
 })
 
 router.get('/reports-by-carrera/:carreraId', async (req, res) => {
-  console.log("Carrera Id: ", req.params.carreraId);
-
   carreraReportsRequest = await axiosInstance.get('/reports-by-carrera', {params: {carreraId: req.params.carreraId}})
   carreraReportJSON = carreraReportsRequest.data
 
@@ -414,8 +413,6 @@ router.get('/archive-notification/:notificationId', async (req, res) => {
 });
 
 router.post('/viewed-notification', async (req, res) => {
-  console.log("Data: ", req.body);
-
   await axiosInstance.post('/viewed-notification', {notificationId: req.body.notificationId})
 
   res.send({status: "ok"})
