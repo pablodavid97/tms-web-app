@@ -357,6 +357,10 @@ html {
 	margin-top: 3rem;
 }
 
+#clearFiltersContainer {
+	padding: 2rem 0; 
+}
+
 /* Notification Styles */
 
 .notifications-container {

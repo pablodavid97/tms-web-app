@@ -193,9 +193,7 @@ router.get(
 
 router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
   try {
-    const request = await axiosInstance.get('/reports', {
-      params: { decanoId: req.user.id }
-    });
+    const request = await axiosInstance.get('/reports');
     const reportsJSON = request.data;
 
     meetings = reportsJSON.reuniones;
@@ -299,6 +297,34 @@ router.get('/reports-by-carrera/:carreraId', async (req, res) => {
 
   res.send(carreraReportJSON)
 })
+
+// reports without filters
+router.get('/reports-without-filters', async (req, res) => {
+  try{
+    reportsRequest = await axiosInstance.get('/reports')
+    reportsJSON = reportsRequest.data
+
+    meetings = reportsJSON.reuniones
+    meetingsNum = meetings.length
+  
+    // Fixes meeting date format 
+    for (let i = 0; i < meetingsNum; i++) {
+      const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
+      meetings[i].fecha =
+        dateTimeValues[0] +
+        ' ' +
+        dateTimeValues[1] +
+        ':' +
+        dateTimeValues[2] +
+        dateTimeValues[3].text;
+    }
+  
+    res.send(reportsJSON)
+
+  } catch (error) {
+    console.error(error.message)
+  }
+});
 
 // notification routes
 router.get(
