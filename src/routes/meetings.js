@@ -80,6 +80,7 @@ router.get('/go-to-meeting/:meetingId/:notificationId', async (req, res) => {
     isStudent = req.user.rolId === 3;
     isProfessor = req.user.rolId === 2;
     student = undefined;
+    gpa = 0;
 
     meetingRequest = await axiosInstance.get('/meetings/meeting-by-id', {
       params: { meetingId: req.params.meetingId }
@@ -91,6 +92,7 @@ router.get('/go-to-meeting/:meetingId/:notificationId', async (req, res) => {
         params: { userId: meeting.estudianteId }
       });
       student = studentRequest.data.estudiante;
+      gpa = studentRequest.data.gpa;
     }
 
     res.render('meetings/meeting-in-progress', {
@@ -101,6 +103,7 @@ router.get('/go-to-meeting/:meetingId/:notificationId', async (req, res) => {
       isStudent: isStudent,
       isProfessor: isProfessor,
       student: student,
+      gpa,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -124,6 +127,7 @@ router.post('/create', async (req, res) => {
       date: dateTime,
       professorId: req.user.id,
       studentId: req.body.student,
+      semesterId: global.currentSemester,
       email: req.user.correoInstitucional
     });
     meetingJSON = request.data;
