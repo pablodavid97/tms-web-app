@@ -201,8 +201,7 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
     meetings = reportsJSON.reuniones;
     meetingsNum = meetings.length;
 
-    console.log("Reuniones: ", meetings);
-
+    // Fixes meeting date format 
     for (let i = 0; i < meetingsNum; i++) {
       const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
       meetings[i].fecha =
@@ -217,17 +216,21 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
     gpa = reportsJSON.gpa;
     conditionedNum = reportsJSON.conditionedUsersNum;
 
-    // retrieves semesters
-    const semesterRequest = await axiosInstance.get('/semesters')
-    const semesterJSON = semesterRequest.data
-
-    semesters = semesterJSON.semestres  
-
-    console.log("Reuniones Eliminadas: ", reportsJSON.reunionesEliminadas)
+    // deleted meetings
     reunionesEliminadas = reportsJSON.reunionesEliminadas
     reunionesEliminadasNum = reunionesEliminadas.length
 
-    console.log("Numero de reuniones eliminadas: ", reunionesEliminadasNum);
+    // retrieves semesters
+    const semesterRequest = await axiosInstance.get('/semesters')
+    const semesterJSON = semesterRequest.data
+    semesters = semesterJSON.semestres  
+
+    // retrieves carreras
+    const carreraRequest = await axiosInstance.get('/carreras')
+    const carreraJSON = carreraRequest.data
+    carreras = carreraJSON.carreras
+
+    console.log("Carreras: ", carreraJSON);
 
     res.render('reports', {
       path: 'reports',
@@ -239,6 +242,7 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
       gpa,
       conditionedNum,
       semesters,
+      carreras,
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -247,6 +251,56 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
   }
 });
 
+// report filters
+router.get('/reports-by-semester/:semesterId', async (req, res) => {
+  console.log("Semestre Id: ", req.params.semesterId);
+
+  semesterReportsRequest = await axiosInstance.get('/reports-by-semester', {params: {semesterId: req.params.semesterId}})
+  semesterReportJSON = semesterReportsRequest.data
+
+  meetings = semesterReportJSON.reuniones
+  meetingsNum = meetings.length
+
+  // Fixes meeting date format 
+  for (let i = 0; i < meetingsNum; i++) {
+    const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
+    meetings[i].fecha =
+      dateTimeValues[0] +
+      ' ' +
+      dateTimeValues[1] +
+      ':' +
+      dateTimeValues[2] +
+      dateTimeValues[3].text;
+  }
+
+  res.send(semesterReportJSON)
+})
+
+router.get('/reports-by-carrera/:carreraId', async (req, res) => {
+  console.log("Carrera Id: ", req.params.carreraId);
+
+  carreraReportsRequest = await axiosInstance.get('/reports-by-carrera', {params: {carreraId: req.params.carreraId}})
+  carreraReportJSON = carreraReportsRequest.data
+
+  meetings = carreraReportJSON.reuniones
+  meetingsNum = meetings.length
+
+  // Fixes meeting date format 
+  for (let i = 0; i < meetingsNum; i++) {
+    const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
+    meetings[i].fecha =
+      dateTimeValues[0] +
+      ' ' +
+      dateTimeValues[1] +
+      ':' +
+      dateTimeValues[2] +
+      dateTimeValues[3].text;
+  }
+
+  res.send(carreraReportJSON)
+})
+
+// notification routes
 router.get(
   '/notifications',
   isLoggedIn,
@@ -340,15 +394,6 @@ router.post('/viewed-notification', async (req, res) => {
 
   res.send({status: "ok"})
 });
-
-router.get('/reports-by-semester/:semesterId', async (req, res) => {
-  console.log("Semestre Id: ", req.params.semesterId);
-
-  semesterReportsRequest = await axiosInstance.get('/reports-by-semester', {params: {semesterId: req.params.semesterId}})
-  semesterReportJSON = semesterReportsRequest.data
-
-  res.send(semesterReportJSON)
-})
 
 // EDIT PROFILE
 router.get('/edit-profile', isLoggedIn, async (req, res) => {

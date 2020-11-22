@@ -37,24 +37,25 @@
             </div>
 
             <div class="generate-report-section">
-                <button id="generateReportButton" class="btn btn-secondary" onclick="generateCSV({{json meetings}})">Generar Reporte</button>     
+                <button id="generateReportButton" class="btn btn-secondary" onclick="generateCSV({meetings: {{json meetings}}, filter:0})">Generar Reporte</button>     
             </div>
 
-            <div class="section-header header-left">
-                   <div class="row">
-                      <div class="col-md-12">
-                         <h2>Filtros</h2>
-                      </div>
-                   </div>
-             </div>
-
             <div class="report-filters row">
-                <div class="filter col-sm-3">
+                <div class="filter col-sm-6">
                     <label for="semesterFilter">Semestre </label>
                     <select id="semesterFilter" name="semester" class="custom-select" onchange="filterBySemester(this)">
-                        <option value="0" selected>Todos</option>
+                        <option value="0" selected>Todos los semestres</option>
                         {{#each semesters}}
                             <option value="{{this.id}}">{{this.semestre}}</option>
+                        {{/each}}
+                    </select>
+                </div> 
+                <div class="filter col-sm-6">
+                    <label for="carreraFilter">Carrera </label>
+                    <select id="carreraFilter" name="carrera" class="custom-select" onchange="filterByCarrera(this)">
+                        <option value="0" selected>Todas las carreras</option>
+                        {{#each carreras}}
+                            <option value="{{this.id}}">{{this.carrera}}</option>
                         {{/each}}
                     </select>
                 </div> 
@@ -150,8 +151,31 @@
         
         </div>
         <script>
-            function generateCSV(meetings) {
+            function generateCSV(jsonData) {
+                meetings = jsonData.meetings
+                filter = jsonData.filter
 
+                fileName = ""
+                if(filter === 0) {
+                    fileName = 'ReporteCompleto-' + Date.now() + '.csv';
+                } else if (filter === 1) {
+                    fileName = 'ReportePorSemestre-' + Date.now() + '.csv';
+                } else if (filter === 2) {
+                    fileName = 'ReportePorCarrera-' + Date.now() + '.csv';
+                }
+
+                // KPI data
+                const createdMeetings = document.getElementById("createdMeetingsKPI").childNodes
+                const deletedMeetings = document.getElementById('deletedMeetingsKPI').childNodes
+                const averageGPA = document.getElementById('averageGPAKPI').childNodes
+                const conditionedStudents = document.getElementById('conditionedStudentsKPI').childNodes
+                const meetingsTableBody = document.getElementById('meetingsTable').getElementsByTagName("tbody")[0]
+
+                var csv = 'Reuniones Creadas, Reuniones Eliminadas, GPA Promedio, Estudiantes Condicionados\n';
+
+                csv += createdMeetings[3].innerHTML + ", " + deletedMeetings[3].innerHTML + ', ' + averageGPA[3].innerHTML + ', ' + conditionedStudents[3].innerHTML + '\n\n'
+
+                // Meetings data                
                 var data = [];
 
                 meetings.forEach(function(meeting) {
@@ -161,7 +185,7 @@
                 // sorts meetings by id
                 sortByKey(data, '0')
 
-                var csv = 'Numero, Tema, Descripción, Fecha, Profesor, Estudiante, Estado, Comentarios Profesor, Comentarios Estudiante\n';
+                csv += 'Numero, Tema, Descripción, Fecha, Profesor, Estudiante, Estado, Comentarios Profesor, Comentarios Estudiante\n';
                 data.forEach(function(row) {
                     csv += row.join(',');
                     csv += "\n";
@@ -170,7 +194,7 @@
                 var hiddenElement = document.createElement('a');
                 hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
                 hiddenElement.target = '_blank';
-                hiddenElement.download = 'data.csv';
+                hiddenElement.download = fileName;
                 hiddenElement.click();
             }
 
@@ -183,6 +207,10 @@
 
             function filterBySemester(semester) {
                 console.log("Selected Semester: ", semester.value)
+
+                // resets career filter to avoid conflict
+                const carreraFilter = document.getElementById("carreraFilter")
+                carreraFilter.value = 0
 
                 $.ajax({
                     url: 'http://localhost:4000/reports-by-semester/' + semester.value,
@@ -206,7 +234,74 @@
 
                         // replace button onclick
                         const reportButton = document.getElementById("generateReportButton")
-                        reportButton.setAttribute("onClick", "generateCSV(" + JSON.stringify(data.reuniones) + ")")
+                        reportButton.setAttribute("onClick", "generateCSV(" + "{meetings: " + JSON.stringify(data.reuniones) + ", filter: 1})")
+
+                        // generate new data table
+                        var newTbody = document.createElement('tbody');
+                        var meetingsTable = meetingsTableBody.parentNode
+                        meetingsTable.appendChild(newTbody) 
+                        meetingsTable.removeChild(meetingsTableBody)
+
+                        addedTableBody = document.getElementById('meetingsTable').getElementsByTagName("tbody")[0]
+
+                        // insert new rows in table 
+                        for(var i = 0; i < meetingsNum; i++) {
+                            var newRowContent = '<td scope="row">' + data.reuniones[i].id + "</td>" + 
+                                    "<td>" + data.reuniones[i].tema + "</td>" + 
+                                    "<td>" + data.reuniones[i].descripcion + "</td>" +
+                                    "<td>" + data.reuniones[i].fecha + "</td>" + 
+                                    "<td>" + data.reuniones[i].nombresProfesor + " " + data.reuniones[i].apellidosProfesor + "</td>" +
+                                    "<td>" + data.reuniones[i].nombresEstudiante + " " + data.reuniones[i].apellidosEstudiante + "</td>" +
+                                    "<td>" + data.reuniones[i].semestre + "</td>" +
+                                    "<td>" + data.reuniones[i].estado + "</td>"
+                                    
+                            if (data.reuniones[i].estadoId === 7 || data.reuniones[i].estadoId === 8) {
+                                newRowContent += "<td><a href=" + `/meetings/meeting-details/${data.reuniones[i].id}` + ">Ver detalles</a></td>"
+                            } else {
+                                newRowContent += "<td></td>"
+                            }
+
+                            var newRow = addedTableBody.insertRow()
+                            newRow.innerHTML = newRowContent
+                            
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error: ' + error.message);
+                    }
+                })
+            }
+
+            function filterByCarrera(carrera) {
+                console.log("Carrera escogida: ", carrera.value)
+
+                // resets career filter to avoid conflict
+                const semestreFilter = document.getElementById("semesterFilter")
+                semestreFilter.value = 0
+
+                $.ajax({
+                    url: 'http://localhost:4000/reports-by-carrera/' + carrera.value,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log("Success: ", data)
+                        const createdMeetings = document.getElementById("createdMeetingsKPI").childNodes
+                        const deletedMeetings = document.getElementById('deletedMeetingsKPI').childNodes
+                        const averageGPA = document.getElementById('averageGPAKPI').childNodes
+                        const conditionedStudents = document.getElementById('conditionedStudentsKPI').childNodes
+                        const meetingsTableBody = document.getElementById('meetingsTable').getElementsByTagName("tbody")[0]
+
+                        console.log("MeetingsTable ", meetingsTable)
+
+                        // modify kpi values
+                        var meetingsNum = data.reuniones.length
+                        createdMeetings[3].innerHTML = meetingsNum
+                        deletedMeetings[3].innerHTML = data.reunionesEliminadas.length
+                        averageGPA[3].innerHTML = data.gpa
+                        conditionedStudents[3].innerHTML = data.conditionedUsersNum
+
+                        // replace button onclick
+                        const reportButton = document.getElementById("generateReportButton")
+                        reportButton.setAttribute("onClick", "generateCSV(" + "{meetings: " + JSON.stringify(data.reuniones) + ", filter: 2})")
 
                         // generate new data table
                         var newTbody = document.createElement('tbody');

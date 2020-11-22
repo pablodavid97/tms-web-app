@@ -352,6 +352,10 @@ html {
     text-align: center;
 }
 
+.report-filters {
+	padding: 0 15rem;
+	margin-top: 3rem;
+}
 
 /* Notification Styles */
 
