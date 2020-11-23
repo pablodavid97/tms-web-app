@@ -366,6 +366,7 @@
 
                     meetingDetailsContent[0].style.display = "block"
 
+                    // reuniones creadas
                     if(notification.estadoId === 1) {
                         studentResponse.style.display = "block"
                         notificationId.value = notification.id
@@ -378,7 +379,23 @@
                         if(doneMeetingCommentsSection) {
                             doneMeetingCommentsSection.style.display = "none"
                         }
-                    } else if (notification.estadoId === 3) {
+                    } 
+                    // reuniones editadas
+                    else if (notification.estadoId === 2) {
+                        studentResponse.style.display = "block"
+                        notificationId.value = notification.id
+                        meetingIdInput.value = notification.reunionId
+                        profesorId.value = notification.profesorId
+                        studentCommentSection.style.display = "none"
+                        meetingHeader.style.display = "block"
+                        dailyMeetingHeader.style.display = "none"
+                        rejectedMeetingHeader.style.display = "none"
+                        if(doneMeetingCommentsSection) {
+                            doneMeetingCommentsSection.style.display = "none"
+                        }
+                    } 
+                    // reuniones aceptadas
+                    else if (notification.estadoId === 3) {
                         studentResponse.style.display = "none"
                         studentCommentSection.style.display = "block"
                         studentComment.innerHTML = notification.comentariosEstudiante
@@ -388,7 +405,9 @@
                         if(doneMeetingCommentsSection) {
                             doneMeetingCommentsSection.style.display = "none"
                         }
-                    } else if (notification.estadoId === 4){
+                    } 
+                    // reuniones rechazadas
+                    else if (notification.estadoId === 4){
                         studentResponse.style.display = "none"
                         studentCommentSection.style.display = "block"
                         studentComment.innerHTML = notification.comentariosEstudiante
@@ -400,9 +419,19 @@
                             doneMeetingCommentsSection.style.display = "none"
                         }
                     }
+                    // reuniones eliminadas
+                    else if (notification.estadoId === 5) {
+                        rejectedMeetingHeader.style.display = "none"
+                        studentResponse.style.display = "none"
+                        studentCommentSection.style.display = "none"
+                        meetingHeader.style.display = "block"
+                        dailyMeetingHeader.style.display = "none"
+                    }
+                    // reuniones en progreso
                     else if (notification.estadoId === 6) {
                         studentResponse.style.display = "none"
                         studentCommentSection.style.display = "block"
+                        studentComment.innerHTML = notification.comentariosEstudiante
                         meetingHeader.style.display = "none"
                         rejectedMeetingHeader.style.display = "none"
                         dailyMeetingHeader.style.display = "flex"
@@ -411,6 +440,7 @@
                             doneMeetingCommentsSection.style.display = "none"
                         }
                     }
+                    // reuniones realizadas y no realizadas
                     else if (notification.estadoId === 7 || notification.estadoId === 8) {
                         rejectedMeetingHeader.style.display = "none"
                         studentResponse.style.display = "none"
@@ -426,13 +456,6 @@
                         if(doneMeetingStudentComment) {
                             doneMeetingStudentComment.innerHTML = notification.comentariosEstudiante
                         }
-                    }
-                    else  {
-                        rejectedMeetingHeader.style.display = "none"
-                        studentResponse.style.display = "none"
-                        studentCommentSection.style.display = "none"
-                        meetingHeader.style.display = "block"
-                        dailyMeetingHeader.style.display = "none"
                     }
                 
                     meetingSubject.innerHTML = notification.tema
