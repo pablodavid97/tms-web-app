@@ -15,31 +15,64 @@ module.exports = {
     return res.redirect('/home');
   },
 
+  // Proteccion de rutas por rol de usuario
   isDeanUser(req, res, next) {
-    if (req.user.rolId == 1) {
-      return next();
+    let isDean = false
+    for(rol of req.user.roles) {
+      if (rol.rolId == 1) {
+        isDean = true
+      }
     }
-    return res.redirect('/home');
+
+    if(isDean) {
+      return next();
+    } else {
+      return res.redirect('/home');
+    }
   },
 
   isProfessorUser(req, res, next) {
-    if (req.user.rolId == 2) {
-      return next();
+    let isProfessor = false
+    for(rol of req.user.roles) {
+      if (rol.rolId == 2) {
+        isProfessor = true
+      }
     }
-    return res.redirect('/home');
+
+    if(isProfessor) {
+      return next();
+    } else {
+      return res.redirect('/home');
+    }
   },
 
   isStudentUser(req, res, next) {
-    if (req.user.rolId == 3) {
-      return next();
+    let isStudent = false
+    for(rol of req.user.roles) {
+      if (rol.rolId == 3) {
+        isStudent = true
+      }
     }
-    return res.redirect('/home');
+
+    if(isStudent) {
+      return next();
+    } else {
+      return res.redirect('/home');
+    }
   },
 
   isUserStudentOrProfessor(req, res, next) {
-    if (req.user.rolId == 2 || req.user.rolId == 3) {
-      return next();
+    let isStudentOrProfessor = false
+    for(rol of req.user.roles) {
+      if (rol.rolId == 2 || rol.rolId == 3) {
+        isStudentOrProfessor = true
+      }
     }
-    return res.redirect('/home');
+
+    if(isStudentOrProfessor) {
+      return next();
+    } else {
+      return res.redirect('/home');
+    }
   }
 };

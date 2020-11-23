@@ -183,3 +183,11 @@
                 </table>
             </div>
         </div>
+        <script>
+            $(document).ready(function() {
+                $("#meetingsTable").DataTable({
+                    "lengthMenu":  [5, 10, 20, 30]
+                });
+                $(".meetings-length").addClass("bs-select");
+            })
+        </script>

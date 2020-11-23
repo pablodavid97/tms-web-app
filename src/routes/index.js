@@ -25,6 +25,7 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try {
+    console.log("User: ", req.user);
     console.log("Storing user image...");
 
     fs.writeFileSync(global.appRoot + "/public/img/tmp/" + req.user.nombreImagen, new Buffer.from(req.user.imagen, "binary"))
@@ -32,14 +33,35 @@ router.get('/home', isLoggedIn, async (req, res) => {
     console.log("User image has been stored!");
 
     const request = await axiosInstance.get('/home', {
-      params: { userId: req.user.id, rolId: req.user.rolId }
+      params: { userId: req.user.id, userRoles: req.user.roles}
     });
     const homeJSON = request.data;
 
-    role = homeJSON.rol;
-    const isStudent = role.id === 3;
-    const isProfessor = role.id === 2;
-    const isDean = role.id === 1;
+    let isStudent = false
+    let isProfessor = false
+    let isDean = false
+    let isAdmin = false
+
+    for (rol of req.user.roles) {
+      if(rol.rolId === 1) {
+        isDean = true
+      }
+
+      if(rol.rolId === 2) {
+        isProfessor = true
+      }
+
+      if(rol.rolId === 3) {
+        isStudent = true
+      }
+
+      if(rol.rolId === 4) {
+        isAdmin = true
+      }
+    }
+
+    console.log("Roles (dean, prof, estud, admin): ", isDean, isProfessor, isStudent, isAdmin);
+
     gpa = 0
     tutor = {};
     studentInfo = {};
@@ -66,14 +88,14 @@ router.get('/home', isLoggedIn, async (req, res) => {
     res.render('user-profile', {
       path: 'home',
       user: req.user,
-      role,
-      isStudent,
       studentInfo,
       tutor,
       gpa,
       gpaList,
+      isStudent,
       isProfessor,
       isDean,
+      isAdmin,
       notificationsNum: notificationsNum,
       showNotifications: global.showNotifications,
       success: req.flash('success'),
@@ -86,12 +108,34 @@ router.get('/home', isLoggedIn, async (req, res) => {
 
 router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
   try {
+    let isStudent = false
+    let isProfessor = false
+    let isDean = false
+    let isAdmin = false
+
+    for (rol of req.user.roles) {
+      if(rol.rolId === 1) {
+        isDean = true
+      }
+
+      if(rol.rolId === 2) {
+        isProfessor = true
+      }
+
+      if(rol.rolId === 3) {
+        isStudent = true
+      }
+
+      if(rol.rolId === 4) {
+        isAdmin = true
+      }
+    }
+
     const request = await axiosInstance.get('/tutor', {
-      params: { rolId: req.user.rolId, estudianteId: req.user.id }
+      params: { estudianteId: req.user.id }
     });
     const tutorJSON = request.data;
 
-    role = tutorJSON.rol;
     studentInfo = tutorJSON.studentInfo;
     tutor = tutorJSON.tutor;
 
@@ -104,15 +148,16 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
   
     notificationsNum = notificationsJSON.notifications.length;
 
+    
     res.render('tutor', {
       path: 'tutor',
       user: req.user,
-      role,
-      isStudent: true,
+      isStudent,
       studentInfo,
       tutor,
-      isProfessor: false,
-      isDean: false,
+      isProfessor,
+      isDean,
+      isAdmin,
       notificationsNum: notificationsNum,
       showNotifications: global.showNotifications,
       success: req.flash('success'),
@@ -125,11 +170,37 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
 
 router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
   try {
+    let isStudent = false
+    let isProfessor = false
+    let isDean = false
+    let isAdmin = false
+
+    for (rol of req.user.roles) {
+      if(rol.rolId === 1) {
+        isDean = true
+      }
+
+      if(rol.rolId === 2) {
+        isProfessor = true
+      }
+
+      if(rol.rolId === 3) {
+        isStudent = true
+      }
+
+      if(rol.rolId === 4) {
+        isAdmin = true
+      }
+    }
+
     const request = await axiosInstance.get('/students', {
       params: { profesorId: req.user.id }
     });
     const studentsJSON = request.data;
-    students = studentsJSON;
+
+    students = studentsJSON.estudiantes;
+
+    console.log("Estudiantes: ", students);
 
     const notificationsRequest = await axiosInstance.get('/active-notifications', {
       params: { userId: req.user.id }
@@ -142,7 +213,10 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
     res.render('students', {
       path: 'students',
       user: req.user,
-      isProfessor: true,
+      isProfessor,
+      isDean,
+      isStudent,
+      isAdmin,
       students,
       notificationsNum: notificationsNum,
       showNotifications: global.showNotifications,
@@ -160,6 +234,29 @@ router.get(
   isProfessorUser,
   async (req, res) => {
     try {
+      let isStudent = false
+      let isProfessor = false
+      let isDean = false
+      let isAdmin = false
+  
+      for (rol of req.user.roles) {
+        if(rol.rolId === 1) {
+          isDean = true
+        }
+  
+        if(rol.rolId === 2) {
+          isProfessor = true
+        }
+  
+        if(rol.rolId === 3) {
+          isStudent = true
+        }
+  
+        if(rol.rolId === 4) {
+          isAdmin = true
+        }
+      }
+
       const request = await axiosInstance.get('/student', {
         params: { userId: req.params.userId }
       });
@@ -181,7 +278,10 @@ router.get(
       res.render('student', {
         path: 'students',
         user: req.user,
-        isProfessor: true,
+        isDean,
+        isProfessor,
+        isStudent,
+        isAdmin,
         student: student,
         gpa,
         gpaList,
@@ -198,6 +298,29 @@ router.get(
 
 router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
   try {
+    let isStudent = false
+    let isProfessor = false
+    let isDean = false
+    let isAdmin = false
+
+    for (rol of req.user.roles) {
+      if(rol.rolId === 1) {
+        isDean = true
+      }
+
+      if(rol.rolId === 2) {
+        isProfessor = true
+      }
+
+      if(rol.rolId === 3) {
+        isStudent = true
+      }
+
+      if(rol.rolId === 4) {
+        isAdmin = true
+      }
+    }
+
     const request = await axiosInstance.get('/reports');
     const reportsJSON = request.data;
 
@@ -236,7 +359,10 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
     res.render('reports', {
       path: 'reports',
       user: req.user,
-      isDean: true,
+      isDean,
+      isProfessor,
+      isStudent,
+      isAdmin,
       meetings,
       meetingsNum,
       reunionesEliminadasNum,
@@ -331,6 +457,29 @@ router.get(
   isLoggedIn,
   isUserStudentOrProfessor,
   async (req, res) => {
+    let isStudent = false
+    let isProfessor = false
+    let isDean = false
+    let isAdmin = false
+
+    for (rol of req.user.roles) {
+      if(rol.rolId === 1) {
+        isDean = true
+      }
+
+      if(rol.rolId === 2) {
+        isProfessor = true
+      }
+
+      if(rol.rolId === 3) {
+        isStudent = true
+      }
+
+      if(rol.rolId === 4) {
+        isAdmin = true
+      }
+    }
+
     if(global.showNotifications) {
       global.showNotifications = false
     }
@@ -356,17 +505,14 @@ router.get(
       dateTimeValues[3].text;
     }
 
-    const isStudent = role.id === 3;
-    const isProfessor = role.id === 2;
-    const isDean = role.id === 1;
-
     res.render('notifications', {
       path: 'notifications',
       user: req.user,
       notifications: notifications,
-      isDean: isDean,
-      isProfessor: isProfessor,
-      isStudent: isStudent,
+      isDean,
+      isProfessor,
+      isStudent,
+      isAdmin,
       showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
@@ -420,9 +566,28 @@ router.post('/viewed-notification', async (req, res) => {
 
 // EDIT PROFILE
 router.get('/edit-profile', isLoggedIn, async (req, res) => {
-  const isDean = req.user.rolId === 1
-  const isProfessor = req.user.rolId === 2
-  const isStudent = req.user.rolId === 3
+  let isStudent = false
+  let isProfessor = false
+  let isDean = false
+  let isAdmin = false
+
+  for (rol of req.user.roles) {
+    if(rol.rolId === 1) {
+      isDean = true
+    }
+
+    if(rol.rolId === 2) {
+      isProfessor = true
+    }
+
+    if(rol.rolId === 3) {
+      isStudent = true
+    }
+
+    if(rol.rolId === 4) {
+      isAdmin = true
+    }
+  }
 
   const notificationsRequest = await axiosInstance.get('/active-notifications', {
     params: { userId: req.user.id }
@@ -433,9 +598,10 @@ router.get('/edit-profile', isLoggedIn, async (req, res) => {
 
   res.render('edit-profile', {
     user: req.user,
-    isDean: isDean,
-    isProfessor: isProfessor,
-    isStudent: isStudent,
+    isDean,
+    isProfessor,
+    isStudent,
+    isAdmin,
     notificationsNum: notificationsNum,
     showNotifications: global.showNotifications,
     success: req.flash('success'),
@@ -475,9 +641,28 @@ router.post('/edit-profile', isLoggedIn, upload.single("file"), async (req, res)
 
 // CHANGE PASSWORD
 router.get('/change-password/', isLoggedIn, async (req, res) => {
-  const isDean = req.user.rolId === 1
-  const isProfessor = req.user.rolId === 2
-  const isStudent = req.user.rolId === 3
+  let isStudent = false
+  let isProfessor = false
+  let isDean = false
+  let isAdmin = false
+
+  for (rol of req.user.roles) {
+    if(rol.rolId === 1) {
+      isDean = true
+    }
+
+    if(rol.rolId === 2) {
+      isProfessor = true
+    }
+
+    if(rol.rolId === 3) {
+      isStudent = true
+    }
+
+    if(rol.rolId === 4) {
+      isAdmin = true
+    }
+  }
 
   const notificationsRequest = await axiosInstance.get('/active-notifications', {
     params: { userId: req.user.id }
@@ -491,9 +676,10 @@ router.get('/change-password/', isLoggedIn, async (req, res) => {
     userId: req.user.id,
     createBtnText: 'Cambiar Contraseña',
     user: req.user,
-    isDean: isDean,
-    isProfessor: isProfessor,
-    isStudent: isStudent,
+    isDean,
+    isProfessor,
+    isStudent,
+    isAdmin,
     notificationsNum: notificationsNum,
     success: req.flash('success'),
     error: req.flash('error')
@@ -537,7 +723,7 @@ router.post('/upload', upload.single("file"), async (req, res) => {
       formato: req.file.mimetype,
       nombre: `${Date.now()}-${req.file.originalname}`,
       datos: fs.readFileSync(global.appRoot + '/public/img/uploads/' + req.file.filename).toString("binary"),
-      createdOn: new Date()
+      uploadedOn: new Date()
     }
 
     uploadRequest = await axiosInstance.post('/upload', {file: file})

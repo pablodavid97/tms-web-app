@@ -60,7 +60,6 @@ app.use(passport.session());
 
 // Global variables
 global.appRoot = path.resolve(__dirname);
-console.log("App root: ", global.appRoot);
 global.showNotifications = true;
 global.currentSemester = 1;
 

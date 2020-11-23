@@ -13,12 +13,35 @@ const axiosInstance = require('../http-client');
 router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
   try {
     const request = await axiosInstance.get('/meetings', {
-      params: { rolId: req.user.rolId, userId: req.user.id }
+      params: { userRoles: req.user.roles, userId: req.user.id }
     });
     const meetingsJSON = request.data;
 
-    isStudent = req.user.rolId === 3;
-    isProfessor = req.user.rolId === 2;
+    console.log("Meetings JsOn: ", meetingsJSON);
+
+    let isStudent = false
+    let isProfessor = false
+    let isDean = false
+    let isAdmin = false
+    
+    for (rol of req.user.roles) {
+      if(rol.rolId === 1) {
+        isDean = true
+      }
+
+      if(rol.rolId === 2) {
+        isProfessor = true
+      }
+
+      if(rol.rolId === 3) {
+        isStudent = true
+      }
+
+      if(rol.rolId === 4) {
+        isAdmin = true
+      }
+    }
+
     studentInfo = meetingsJSON.studentInfo;
     tutor = meetingsJSON.tutor;
     students = meetingsJSON.students;
@@ -40,11 +63,7 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
     hourValues = utils.getHourValues();
     minuteValues = utils.getMinuteValues();
 
-    lastId = 0;
-
-    if (lastRowId > 0) {
-      lastId = lastRowId + 1;
-    }
+    lastId = lastRowId + 1;
 
     const notificationsRequest = await axiosInstance.get('/active-notifications', {
       params: { userId: req.user.id }
@@ -60,7 +79,10 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
       isStudent,
       tutor,
       studentInfo,
+      isDean,
       isProfessor,
+      isStudent,
+      isAdmin,
       students,
       hourValues,
       minuteValues,
@@ -77,8 +99,29 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
 
 router.get('/go-to-meeting/:meetingId/:notificationId', async (req, res) => {
   try {
-    isStudent = req.user.rolId === 3;
-    isProfessor = req.user.rolId === 2;
+    let isStudent = false
+    let isProfessor = false
+    let isDean = false
+    let isAdmin = false
+
+    for (rol of req.user.roles) {
+      if(rol.rolId === 1) {
+        isDean = true
+      }
+
+      if(rol.rolId === 2) {
+        isProfessor = true
+      }
+
+      if(rol.rolId === 3) {
+        isStudent = true
+      }
+
+      if(rol.rolId === 4) {
+        isAdmin = true
+      }
+    }
+
     student = undefined;
     gpa = 0;
 
@@ -100,8 +143,10 @@ router.get('/go-to-meeting/:meetingId/:notificationId', async (req, res) => {
       user: req.user,
       meeting: meeting,
       notificationId: req.params.notificationId,
-      isStudent: isStudent,
-      isProfessor: isProfessor,
+      isStudent,
+      isProfessor,
+      isDean,
+      isAdmin,
       student: student,
       gpa,
       success: req.flash('success'),
@@ -168,6 +213,29 @@ router.get(
   isProfessorUser,
   async (req, res) => {
     try {
+      let isStudent = false
+      let isProfessor = false
+      let isDean = false
+      let isAdmin = false
+  
+      for (rol of req.user.roles) {
+        if(rol.rolId === 1) {
+          isDean = true
+        }
+  
+        if(rol.rolId === 2) {
+          isProfessor = true
+        }
+  
+        if(rol.rolId === 3) {
+          isStudent = true
+        }
+  
+        if(rol.rolId === 4) {
+          isAdmin = true
+        }
+      }
+
       request = await axiosInstance.get('/meetings/meeting-by-id', {
         params: { meetingId: req.params.meetingId }
       });
@@ -199,8 +267,10 @@ router.get(
         hours,
         minutes,
         format,
-        isStudent: false,
-        isProfessor: true,
+        isStudent,
+        isProfessor,
+        isDean,
+        isAdmin,
         hourValues,
         minuteValues,
         notificationsNum,
@@ -242,8 +312,28 @@ router.post('/edit', async (req, res) => {
 });
 
 router.post('/done', async (req, res) => {
-  isStudent = req.user.rolId === 3;
-  isProfessor = req.user.rolId === 2;
+  let isStudent = false
+  let isProfessor = false
+  let isDean = false
+  let isAdmin = false
+
+  for (rol of req.user.roles) {
+    if(rol.rolId === 1) {
+      isDean = true
+    }
+
+    if(rol.rolId === 2) {
+      isProfessor = true
+    }
+
+    if(rol.rolId === 3) {
+      isStudent = true
+    }
+
+    if(rol.rolId === 4) {
+      isAdmin = true
+    }
+  }
 
   try {
     meetingRequest = await axiosInstance.post('/meetings/done', {
@@ -268,6 +358,29 @@ router.get(
   isProfessorUser,
   async (req, res) => {
     try {
+      let isStudent = false
+      let isProfessor = false
+      let isDean = false
+      let isAdmin = false
+  
+      for (rol of req.user.roles) {
+        if(rol.rolId === 1) {
+          isDean = true
+        }
+  
+        if(rol.rolId === 2) {
+          isProfessor = true
+        }
+  
+        if(rol.rolId === 3) {
+          isStudent = true
+        }
+  
+        if(rol.rolId === 4) {
+          isAdmin = true
+        }
+      }
+
       meetingRequest = await axiosInstance.get('/meetings/meeting-by-id', {
         params: { meetingId: req.params.meetingId }
       });
@@ -299,8 +412,10 @@ router.get(
         hours,
         minutes,
         format,
-        isStudent: false,
-        isProfessor: true,
+        isStudent,
+        isProfessor,
+        isDean,
+        isAdmin,
         hourValues,
         minuteValues,
         notificationsNum,
@@ -346,9 +461,28 @@ router.post('/reschedule', async (req, res) => {
 
 router.get('/meeting-details/:meetingId', async (req, res) => {
   try {
-    isStudent = req.user.rolId === 3
-    isProfessor = req.user.rolId === 2
-    isDean = req.user.rolId === 1
+    let isStudent = false
+    let isProfessor = false
+    let isDean = false
+    let isAdmin = false
+
+    for (rol of req.user.roles) {
+      if(rol.rolId === 1) {
+        isDean = true
+      }
+
+      if(rol.rolId === 2) {
+        isProfessor = true
+      }
+
+      if(rol.rolId === 3) {
+        isStudent = true
+      }
+
+      if(rol.rolId === 4) {
+        isAdmin = true
+      }
+    }
 
     meetingRequest = await axiosInstance.get('/meetings/meeting-by-id', {
       params: { meetingId: req.params.meetingId }
@@ -369,9 +503,10 @@ router.get('/meeting-details/:meetingId', async (req, res) => {
       path: 'meetings',
       user: req.user,
       meeting: meeting,
-      isStudent: isStudent,
-      isProfessor: isProfessor,
-      isDean: isDean,
+      isStudent,
+      isProfessor,
+      isDean,
+      isAdmin,
       notificationsNum,
       showNotifications: global.showNotifications,
       success: req.flash('success'),

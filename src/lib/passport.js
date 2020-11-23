@@ -23,6 +23,12 @@ passport.use(
 
         if (signInJSON) {
           user = signInJSON;
+          
+          rolesRequest = await axiosInstance.get('/user-roles', {
+            params: {userId: user.id}
+          });
+          rolesJSON = rolesRequest.data
+          user.roles = rolesJSON.userRoles
 
           const passwordMatch = await utils.matchPassword(password, user.hash);
 
@@ -60,7 +66,13 @@ passport.deserializeUser(async (id, done) => {
   const request = await axiosInstance.get('/user-by-id', {
     params: { userId: id }
   });
-  const userJSON = request.data;
+  let user = request.data;
 
-  done(null, userJSON);
+  rolesRequest = await axiosInstance.get('/user-roles', {
+    params: {userId: user.id}
+  });
+  rolesJSON = rolesRequest.data
+  user.roles = rolesJSON.userRoles
+
+  done(null, user);
 });

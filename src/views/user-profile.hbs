@@ -7,13 +7,32 @@
                         <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar">
                     {{/if}}
                     <h3>{{user.nombres}} {{user.apellidos}}</h3>
-                    <h4>{{role.nombre}}</h4>
+                    
+                    {{#if (and isProfessor true isDean true)}}
+                        <h4>Decano</h4>
+                    {{else}}
+                        {{#if isDean}}
+                            <h4>Decano</h4>
+                        {{/if}}
+
+                        {{#if isProfessor}}
+                            <h4>Profesor</h4>
+                        {{/if}}
+                    {{/if}}
+
+                    {{#if isStudent}}
+                        <h4>Estudiante</h4>
+                    {{/if}}
+
+                    {{#if isAdmin}}
+                        <h4>Administrador</h4>
+                    {{/if}}
                 </div>
                 <div class="col-sm-6 user-info">
                     <p><span class="user-info-lbl">Código: </span> {{user.codigo}}</p>
                     {{#if isStudent }}
                         <p><span class="user-info-lbl">Carrera: </span> {{studentInfo.carrera}}</p>
-                        <p><span class="user-info-lbl">GPA: </span> {{gpa}}</p>
+                        <p><span class="user-info-lbl">GPA Global: </span> {{gpa}}</p>
                         <p><span class="user-info-lbl">Tutor: </span>{{tutor.nombres}} {{tutor.apellidos}}</p>
                     {{/if}}
                     <p><span class="user-info-lbl">Correo Institucional: </span>{{user.correoInstitucional}}</p>

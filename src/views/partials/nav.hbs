@@ -10,41 +10,43 @@
               <li class="nav-item {{#if (is path "home")}} active {{/if}}">
                 <a class="nav-link" href="/home">Inicio <span class="sr-only">(current)</span></a>
               </li>
-               {{#if isStudent }}
-                 <li class="navitem {{#if (is path "meetings")}} active {{/if}}">
-                  <a href="/meetings" class="nav-link">Reuniones</a>
-                </li>
-                <li class="navitem {{#if (is path "notifications")}} active {{/if}}">
-                  <a href="/notifications" class="nav-link">Notificaciones</a>
-                  {{#if showNotifications}}
-                    <span class="notification-number-icon">{{notificationsNum}}</span>
-                  {{/if}}
-                </li>
-                <li class="navitem {{#if (is path "tutor")}} active {{/if}}">
-                  <a href="/tutor" class="nav-link">Mi Tutor</a>
-                </li>
-              {{/if}}
-              {{#if isProfessor}}
-                <li class="navitem {{#if (is path "meetings")}} active {{/if}}">
-                  <a href="/meetings" class="nav-link">Reuniones</a>
-                </li>
-                <li class="navitem {{#if (is path "notifications")}} active {{/if}}">
-                  <a href="/notifications" class="nav-link">Notificaciones</a>
-                  {{#if showNotifications}}
-                    <span class="notification-number-icon">{{notificationsNum}}</span>
-                  {{/if}}
-                </li>
-                <li class="navitem {{#if (is path "students")}} active {{/if}}">
-                  <a href="/students" class="nav-link">Estudiantes</a>
-                </li>
 
-              {{/if}}
+                {{#if isDean}}
+                  <li class="navitem {{#if (is path "reports")}} active {{/if}}">
+                    <a href="/reports" class="nav-link">Reportes</a>
+                  </li>
+                {{/if}}
+            
+                {{#if isProfessor}}
+                  <li class="navitem {{#if (is path "meetings")}} active {{/if}}">
+                    <a href="/meetings" class="nav-link">Reuniones</a>
+                  </li>
+                  <li class="navitem {{#if (is path "notifications")}} active {{/if}}">
+                    <a href="/notifications" class="nav-link">Notificaciones</a>
+                    {{#if showNotifications}}
+                      <span class="notification-number-icon">{{notificationsNum}}</span>
+                    {{/if}}
+                  </li>
+                  <li class="navitem {{#if (is path "students")}} active {{/if}}">
+                    <a href="/students" class="nav-link">Estudiantes</a>
+                  </li>
 
-              {{#if isDean}}
-              <li class="navitem {{#if (is path "reports")}} active {{/if}}">
-                <a href="/reports" class="nav-link">Reportes</a>
-              </li>
-              {{/if}}
+                {{/if}}
+                
+                {{#if isStudent }}
+                  <li class="navitem {{#if (is path "meetings")}} active {{/if}}">
+                    <a href="/meetings" class="nav-link">Reuniones</a>
+                  </li>
+                  <li class="navitem {{#if (is path "notifications")}} active {{/if}}">
+                    <a href="/notifications" class="nav-link">Notificaciones</a>
+                    {{#if showNotifications}}
+                      <span class="notification-number-icon">{{notificationsNum}}</span>
+                    {{/if}}
+                  </li>
+                  <li class="navitem {{#if (is path "tutor")}} active {{/if}}">
+                    <a href="/tutor" class="nav-link">Mi Tutor</a>
+                  </li>
+                {{/if}}
           </ul>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
