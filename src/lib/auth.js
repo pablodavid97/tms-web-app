@@ -17,14 +17,14 @@ module.exports = {
 
   // Proteccion de rutas por rol de usuario
   isDeanUser(req, res, next) {
-    let isDean = false
-    for(rol of req.user.roles) {
+    let isDean = false;
+    for (rol of req.user.roles) {
       if (rol.rolId == 1) {
-        isDean = true
+        isDean = true;
       }
     }
 
-    if(isDean) {
+    if (isDean) {
       return next();
     } else {
       return res.redirect('/home');
@@ -32,14 +32,14 @@ module.exports = {
   },
 
   isProfessorUser(req, res, next) {
-    let isProfessor = false
-    for(rol of req.user.roles) {
+    let isProfessor = false;
+    for (rol of req.user.roles) {
       if (rol.rolId == 2) {
-        isProfessor = true
+        isProfessor = true;
       }
     }
 
-    if(isProfessor) {
+    if (isProfessor) {
       return next();
     } else {
       return res.redirect('/home');
@@ -47,14 +47,14 @@ module.exports = {
   },
 
   isStudentUser(req, res, next) {
-    let isStudent = false
-    for(rol of req.user.roles) {
+    let isStudent = false;
+    for (rol of req.user.roles) {
       if (rol.rolId == 3) {
-        isStudent = true
+        isStudent = true;
       }
     }
 
-    if(isStudent) {
+    if (isStudent) {
       return next();
     } else {
       return res.redirect('/home');
@@ -62,14 +62,14 @@ module.exports = {
   },
 
   isUserStudentOrProfessor(req, res, next) {
-    let isStudentOrProfessor = false
-    for(rol of req.user.roles) {
+    let isStudentOrProfessor = false;
+    for (rol of req.user.roles) {
       if (rol.rolId == 2 || rol.rolId == 3) {
-        isStudentOrProfessor = true
+        isStudentOrProfessor = true;
       }
     }
 
-    if(isStudentOrProfessor) {
+    if (isStudentOrProfessor) {
       return next();
     } else {
       return res.redirect('/home');

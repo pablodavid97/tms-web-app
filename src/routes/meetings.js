@@ -17,28 +17,28 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
     });
     const meetingsJSON = request.data;
 
-    console.log("Meetings JsOn: ", meetingsJSON);
+    console.log('Meetings JsOn: ', meetingsJSON);
 
-    let isStudent = false
-    let isProfessor = false
-    let isDean = false
-    let isAdmin = false
-    
+    let isStudent = false;
+    let isProfessor = false;
+    let isDean = false;
+    let isAdmin = false;
+
     for (rol of req.user.roles) {
-      if(rol.rolId === 1) {
-        isDean = true
+      if (rol.rolId === 1) {
+        isDean = true;
       }
 
-      if(rol.rolId === 2) {
-        isProfessor = true
+      if (rol.rolId === 2) {
+        isProfessor = true;
       }
 
-      if(rol.rolId === 3) {
-        isStudent = true
+      if (rol.rolId === 3) {
+        isStudent = true;
       }
 
-      if(rol.rolId === 4) {
-        isAdmin = true
+      if (rol.rolId === 4) {
+        isAdmin = true;
       }
     }
 
@@ -65,11 +65,14 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
 
     lastId = lastRowId + 1;
 
-    const notificationsRequest = await axiosInstance.get('/active-notifications', {
-      params: { userId: req.user.id }
-    });
+    const notificationsRequest = await axiosInstance.get(
+      '/active-notifications',
+      {
+        params: { userId: req.user.id }
+      }
+    );
     const notificationsJSON = notificationsRequest.data;
-  
+
     notificationsNum = notificationsJSON.notifications.length;
 
     res.render('meetings/list', {
@@ -99,26 +102,26 @@ router.get('/', isLoggedIn, isUserStudentOrProfessor, async (req, res) => {
 
 router.get('/go-to-meeting/:meetingId/:notificationId', async (req, res) => {
   try {
-    let isStudent = false
-    let isProfessor = false
-    let isDean = false
-    let isAdmin = false
+    let isStudent = false;
+    let isProfessor = false;
+    let isDean = false;
+    let isAdmin = false;
 
     for (rol of req.user.roles) {
-      if(rol.rolId === 1) {
-        isDean = true
+      if (rol.rolId === 1) {
+        isDean = true;
       }
 
-      if(rol.rolId === 2) {
-        isProfessor = true
+      if (rol.rolId === 2) {
+        isProfessor = true;
       }
 
-      if(rol.rolId === 3) {
-        isStudent = true
+      if (rol.rolId === 3) {
+        isStudent = true;
       }
 
-      if(rol.rolId === 4) {
-        isAdmin = true
+      if (rol.rolId === 4) {
+        isAdmin = true;
       }
     }
 
@@ -213,26 +216,26 @@ router.get(
   isProfessorUser,
   async (req, res) => {
     try {
-      let isStudent = false
-      let isProfessor = false
-      let isDean = false
-      let isAdmin = false
-  
+      let isStudent = false;
+      let isProfessor = false;
+      let isDean = false;
+      let isAdmin = false;
+
       for (rol of req.user.roles) {
-        if(rol.rolId === 1) {
-          isDean = true
+        if (rol.rolId === 1) {
+          isDean = true;
         }
-  
-        if(rol.rolId === 2) {
-          isProfessor = true
+
+        if (rol.rolId === 2) {
+          isProfessor = true;
         }
-  
-        if(rol.rolId === 3) {
-          isStudent = true
+
+        if (rol.rolId === 3) {
+          isStudent = true;
         }
-  
-        if(rol.rolId === 4) {
-          isAdmin = true
+
+        if (rol.rolId === 4) {
+          isAdmin = true;
         }
       }
 
@@ -252,11 +255,14 @@ router.get(
       hourValues = utils.getHourValues();
       minuteValues = utils.getMinuteValues();
 
-      const notificationsRequest = await axiosInstance.get('/active-notifications', {
-        params: { userId: req.user.id }
-      });
+      const notificationsRequest = await axiosInstance.get(
+        '/active-notifications',
+        {
+          params: { userId: req.user.id }
+        }
+      );
       const notificationsJSON = notificationsRequest.data;
-    
+
       notificationsNum = notificationsJSON.notifications.length;
 
       res.render('meetings/edit', {
@@ -312,26 +318,26 @@ router.post('/edit', async (req, res) => {
 });
 
 router.post('/done', async (req, res) => {
-  let isStudent = false
-  let isProfessor = false
-  let isDean = false
-  let isAdmin = false
+  let isStudent = false;
+  let isProfessor = false;
+  let isDean = false;
+  let isAdmin = false;
 
   for (rol of req.user.roles) {
-    if(rol.rolId === 1) {
-      isDean = true
+    if (rol.rolId === 1) {
+      isDean = true;
     }
 
-    if(rol.rolId === 2) {
-      isProfessor = true
+    if (rol.rolId === 2) {
+      isProfessor = true;
     }
 
-    if(rol.rolId === 3) {
-      isStudent = true
+    if (rol.rolId === 3) {
+      isStudent = true;
     }
 
-    if(rol.rolId === 4) {
-      isAdmin = true
+    if (rol.rolId === 4) {
+      isAdmin = true;
     }
   }
 
@@ -358,26 +364,26 @@ router.get(
   isProfessorUser,
   async (req, res) => {
     try {
-      let isStudent = false
-      let isProfessor = false
-      let isDean = false
-      let isAdmin = false
-  
+      let isStudent = false;
+      let isProfessor = false;
+      let isDean = false;
+      let isAdmin = false;
+
       for (rol of req.user.roles) {
-        if(rol.rolId === 1) {
-          isDean = true
+        if (rol.rolId === 1) {
+          isDean = true;
         }
-  
-        if(rol.rolId === 2) {
-          isProfessor = true
+
+        if (rol.rolId === 2) {
+          isProfessor = true;
         }
-  
-        if(rol.rolId === 3) {
-          isStudent = true
+
+        if (rol.rolId === 3) {
+          isStudent = true;
         }
-  
-        if(rol.rolId === 4) {
-          isAdmin = true
+
+        if (rol.rolId === 4) {
+          isAdmin = true;
         }
       }
 
@@ -397,11 +403,14 @@ router.get(
       hourValues = utils.getHourValues();
       minuteValues = utils.getMinuteValues();
 
-      const notificationsRequest = await axiosInstance.get('/active-notifications', {
-        params: { userId: req.user.id }
-      });
+      const notificationsRequest = await axiosInstance.get(
+        '/active-notifications',
+        {
+          params: { userId: req.user.id }
+        }
+      );
       const notificationsJSON = notificationsRequest.data;
-    
+
       notificationsNum = notificationsJSON.notifications.length;
 
       res.render('meetings/reschedule', {
@@ -461,26 +470,26 @@ router.post('/reschedule', async (req, res) => {
 
 router.get('/meeting-details/:meetingId', async (req, res) => {
   try {
-    let isStudent = false
-    let isProfessor = false
-    let isDean = false
-    let isAdmin = false
+    let isStudent = false;
+    let isProfessor = false;
+    let isDean = false;
+    let isAdmin = false;
 
     for (rol of req.user.roles) {
-      if(rol.rolId === 1) {
-        isDean = true
+      if (rol.rolId === 1) {
+        isDean = true;
       }
 
-      if(rol.rolId === 2) {
-        isProfessor = true
+      if (rol.rolId === 2) {
+        isProfessor = true;
       }
 
-      if(rol.rolId === 3) {
-        isStudent = true
+      if (rol.rolId === 3) {
+        isStudent = true;
       }
 
-      if(rol.rolId === 4) {
-        isAdmin = true
+      if (rol.rolId === 4) {
+        isAdmin = true;
       }
     }
 
@@ -490,13 +499,22 @@ router.get('/meeting-details/:meetingId', async (req, res) => {
     meeting = meetingRequest.data;
 
     const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
-    meeting.fecha = dateTimeValues[0] + ' ' + dateTimeValues[1] + ':' + dateTimeValues[2] + dateTimeValues[3].text;
+    meeting.fecha =
+      dateTimeValues[0] +
+      ' ' +
+      dateTimeValues[1] +
+      ':' +
+      dateTimeValues[2] +
+      dateTimeValues[3].text;
 
-    const notificationsRequest = await axiosInstance.get('/active-notifications', {
-      params: { userId: req.user.id }
-    });
+    const notificationsRequest = await axiosInstance.get(
+      '/active-notifications',
+      {
+        params: { userId: req.user.id }
+      }
+    );
     const notificationsJSON = notificationsRequest.data;
-  
+
     notificationsNum = notificationsJSON.notifications.length;
 
     res.render('meetings/meeting-details', {
@@ -511,10 +529,10 @@ router.get('/meeting-details/:meetingId', async (req, res) => {
       showNotifications: global.showNotifications,
       success: req.flash('success'),
       error: req.flash('error')
-    }); 
+    });
   } catch (error) {
     console.error(error.message);
   }
-})
+});
 
 module.exports = router;

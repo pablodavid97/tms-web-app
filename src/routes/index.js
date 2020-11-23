@@ -25,44 +25,53 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try {
-    console.log("User: ", req.user);
-    console.log("Storing user image...");
+    console.log('User: ', req.user);
+    console.log('Storing user image...');
 
-    fs.writeFileSync(global.appRoot + "/public/img/tmp/" + req.user.nombreImagen, new Buffer.from(req.user.imagen, "binary"))
+    fs.writeFileSync(
+      global.appRoot + '/public/img/tmp/' + req.user.nombreImagen,
+      new Buffer.from(req.user.imagen, 'binary')
+    );
 
-    console.log("User image has been stored!");
+    console.log('User image has been stored!');
 
     const request = await axiosInstance.get('/home', {
-      params: { userId: req.user.id, userRoles: req.user.roles}
+      params: { userId: req.user.id, userRoles: req.user.roles }
     });
     const homeJSON = request.data;
 
-    let isStudent = false
-    let isProfessor = false
-    let isDean = false
-    let isAdmin = false
+    let isStudent = false;
+    let isProfessor = false;
+    let isDean = false;
+    let isAdmin = false;
 
     for (rol of req.user.roles) {
-      if(rol.rolId === 1) {
-        isDean = true
+      if (rol.rolId === 1) {
+        isDean = true;
       }
 
-      if(rol.rolId === 2) {
-        isProfessor = true
+      if (rol.rolId === 2) {
+        isProfessor = true;
       }
 
-      if(rol.rolId === 3) {
-        isStudent = true
+      if (rol.rolId === 3) {
+        isStudent = true;
       }
 
-      if(rol.rolId === 4) {
-        isAdmin = true
+      if (rol.rolId === 4) {
+        isAdmin = true;
       }
     }
 
-    console.log("Roles (dean, prof, estud, admin): ", isDean, isProfessor, isStudent, isAdmin);
+    console.log(
+      'Roles (dean, prof, estud, admin): ',
+      isDean,
+      isProfessor,
+      isStudent,
+      isAdmin
+    );
 
-    gpa = 0
+    gpa = 0;
     tutor = {};
     studentInfo = {};
     gpaList = {};
@@ -71,63 +80,72 @@ router.get('/home', isLoggedIn, async (req, res) => {
       studentInfo = homeJSON.studentInfo;
       tutor = homeJSON.tutor;
       gpa = homeJSON.gpa;
-      gpaList = homeJSON.gpaList
+      gpaList = homeJSON.gpaList;
     }
 
-    const notificationsRequest = await axiosInstance.get('/active-notifications', {
-      params: { userId: req.user.id }
-    });
+    const notificationsRequest = await axiosInstance.get(
+      '/active-notifications',
+      {
+        params: { userId: req.user.id }
+      }
+    );
     const notificationsJSON = notificationsRequest.data;
-  
+
     notificationsNum = notificationsJSON.notifications.length;
 
-    if(notificationsNum === 0) {
-      global.showNotifications = false
+    if (notificationsNum === 0) {
+      global.showNotifications = false;
     }
 
-    res.render('user-profile', {
-      path: 'home',
-      user: req.user,
-      studentInfo,
-      tutor,
-      gpa,
-      gpaList,
-      isStudent,
-      isProfessor,
-      isDean,
-      isAdmin,
-      notificationsNum: notificationsNum,
-      showNotifications: global.showNotifications,
-      success: req.flash('success'),
-      error: req.flash('error')
-    });
+    console.log('Is admin: ', isAdmin);
+
+    if (isAdmin) {
+      res.redirect('/admin');
+    } else {
+      res.render('user-profile', {
+        path: 'home',
+        user: req.user,
+        studentInfo,
+        tutor,
+        gpa,
+        gpaList,
+        isStudent,
+        isProfessor,
+        isDean,
+        isAdmin,
+        notificationsNum: notificationsNum,
+        showNotifications: global.showNotifications,
+        success: req.flash('success'),
+        error: req.flash('error')
+      });
+    }
   } catch (error) {
     console.error(error.message);
   }
-})
+});
 
 router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
   try {
-    let isStudent = false
-    let isProfessor = false
-    let isDean = false
-    let isAdmin = false
+    let isStudent = false;
+    let isProfessor = false;
+    let isDean = false;
+    let isAdmin = false;
 
     for (rol of req.user.roles) {
-      if(rol.rolId === 1) {
-        isDean = true
+      if (rol.rolId === 1) {
+        isDean = true;
       }
 
-      if(rol.rolId === 2) {
-        isProfessor = true
+      if (rol.rolId === 2) {
+        isProfessor = true;
       }
 
-      if(rol.rolId === 3) {
-        isStudent = true
+      if (rol.rolId === 3) {
+        isStudent = true;
       }
 
-      if(rol.rolId === 4) {
-        isAdmin = true
+      if (rol.rolId === 4) {
+        isAdmin = true;
       }
     }
 
@@ -139,16 +157,21 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
     studentInfo = tutorJSON.studentInfo;
     tutor = tutorJSON.tutor;
 
-    fs.writeFileSync(global.appRoot + "/public/img/tmp/" + tutor.nombreImagen, new Buffer.from(tutor.imagen, "binary"))
+    fs.writeFileSync(
+      global.appRoot + '/public/img/tmp/' + tutor.nombreImagen,
+      new Buffer.from(tutor.imagen, 'binary')
+    );
 
-    const notificationsRequest = await axiosInstance.get('/active-notifications', {
-      params: { userId: req.user.id }
-    });
+    const notificationsRequest = await axiosInstance.get(
+      '/active-notifications',
+      {
+        params: { userId: req.user.id }
+      }
+    );
     const notificationsJSON = notificationsRequest.data;
-  
+
     notificationsNum = notificationsJSON.notifications.length;
 
-    
     res.render('tutor', {
       path: 'tutor',
       user: req.user,
@@ -170,26 +193,26 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
 
 router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
   try {
-    let isStudent = false
-    let isProfessor = false
-    let isDean = false
-    let isAdmin = false
+    let isStudent = false;
+    let isProfessor = false;
+    let isDean = false;
+    let isAdmin = false;
 
     for (rol of req.user.roles) {
-      if(rol.rolId === 1) {
-        isDean = true
+      if (rol.rolId === 1) {
+        isDean = true;
       }
 
-      if(rol.rolId === 2) {
-        isProfessor = true
+      if (rol.rolId === 2) {
+        isProfessor = true;
       }
 
-      if(rol.rolId === 3) {
-        isStudent = true
+      if (rol.rolId === 3) {
+        isStudent = true;
       }
 
-      if(rol.rolId === 4) {
-        isAdmin = true
+      if (rol.rolId === 4) {
+        isAdmin = true;
       }
     }
 
@@ -200,15 +223,17 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
 
     students = studentsJSON.estudiantes;
 
-    console.log("Estudiantes: ", students);
+    console.log('Estudiantes: ', students);
 
-    const notificationsRequest = await axiosInstance.get('/active-notifications', {
-      params: { userId: req.user.id }
-    });
+    const notificationsRequest = await axiosInstance.get(
+      '/active-notifications',
+      {
+        params: { userId: req.user.id }
+      }
+    );
     const notificationsJSON = notificationsRequest.data;
-  
+
     notificationsNum = notificationsJSON.notifications.length;
-    
 
     res.render('students', {
       path: 'students',
@@ -234,26 +259,26 @@ router.get(
   isProfessorUser,
   async (req, res) => {
     try {
-      let isStudent = false
-      let isProfessor = false
-      let isDean = false
-      let isAdmin = false
-  
+      let isStudent = false;
+      let isProfessor = false;
+      let isDean = false;
+      let isAdmin = false;
+
       for (rol of req.user.roles) {
-        if(rol.rolId === 1) {
-          isDean = true
+        if (rol.rolId === 1) {
+          isDean = true;
         }
-  
-        if(rol.rolId === 2) {
-          isProfessor = true
+
+        if (rol.rolId === 2) {
+          isProfessor = true;
         }
-  
-        if(rol.rolId === 3) {
-          isStudent = true
+
+        if (rol.rolId === 3) {
+          isStudent = true;
         }
-  
-        if(rol.rolId === 4) {
-          isAdmin = true
+
+        if (rol.rolId === 4) {
+          isAdmin = true;
         }
       }
 
@@ -263,16 +288,22 @@ router.get(
       const studentJSON = request.data;
 
       student = studentJSON.estudiante;
-      gpa = studentJSON.gpa
-      gpaList = studentJSON.gpaList
+      gpa = studentJSON.gpa;
+      gpaList = studentJSON.gpaList;
 
-      fs.writeFileSync(global.appRoot + "/public/img/tmp/" + student.nombreImagen, new Buffer.from(student.imagen, "binary"))
+      fs.writeFileSync(
+        global.appRoot + '/public/img/tmp/' + student.nombreImagen,
+        new Buffer.from(student.imagen, 'binary')
+      );
 
-      const notificationsRequest = await axiosInstance.get('/active-notifications', {
-        params: { userId: req.user.id }
-      });
+      const notificationsRequest = await axiosInstance.get(
+        '/active-notifications',
+        {
+          params: { userId: req.user.id }
+        }
+      );
       const notificationsJSON = notificationsRequest.data;
-    
+
       notificationsNum = notificationsJSON.notifications.length;
 
       res.render('student', {
@@ -298,26 +329,26 @@ router.get(
 
 router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
   try {
-    let isStudent = false
-    let isProfessor = false
-    let isDean = false
-    let isAdmin = false
+    let isStudent = false;
+    let isProfessor = false;
+    let isDean = false;
+    let isAdmin = false;
 
     for (rol of req.user.roles) {
-      if(rol.rolId === 1) {
-        isDean = true
+      if (rol.rolId === 1) {
+        isDean = true;
       }
 
-      if(rol.rolId === 2) {
-        isProfessor = true
+      if (rol.rolId === 2) {
+        isProfessor = true;
       }
 
-      if(rol.rolId === 3) {
-        isStudent = true
+      if (rol.rolId === 3) {
+        isStudent = true;
       }
 
-      if(rol.rolId === 4) {
-        isAdmin = true
+      if (rol.rolId === 4) {
+        isAdmin = true;
       }
     }
 
@@ -327,7 +358,7 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
     meetings = reportsJSON.reuniones;
     meetingsNum = meetings.length;
 
-    // Fixes meeting date format 
+    // Fixes meeting date format
     for (let i = 0; i < meetingsNum; i++) {
       const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
       meetings[i].fecha =
@@ -343,18 +374,18 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
     conditionedNum = reportsJSON.conditionedUsersNum;
 
     // deleted meetings
-    reunionesEliminadas = reportsJSON.reunionesEliminadas
-    reunionesEliminadasNum = reunionesEliminadas.length
+    reunionesEliminadas = reportsJSON.reunionesEliminadas;
+    reunionesEliminadasNum = reunionesEliminadas.length;
 
     // retrieves semesters
-    const semesterRequest = await axiosInstance.get('/semesters')
-    const semesterJSON = semesterRequest.data
-    semesters = semesterJSON.semestres  
+    const semesterRequest = await axiosInstance.get('/semesters');
+    const semesterJSON = semesterRequest.data;
+    semesters = semesterJSON.semestres;
 
     // retrieves carreras
-    const carreraRequest = await axiosInstance.get('/carreras')
-    const carreraJSON = carreraRequest.data
-    carreras = carreraJSON.carreras
+    const carreraRequest = await axiosInstance.get('/carreras');
+    const carreraJSON = carreraRequest.data;
+    carreras = carreraJSON.carreras;
 
     res.render('reports', {
       path: 'reports',
@@ -380,13 +411,15 @@ router.get('/reports', isLoggedIn, isDeanUser, async (req, res) => {
 
 // report filters
 router.get('/reports-by-semester/:semesterId', async (req, res) => {
-  semesterReportsRequest = await axiosInstance.get('/reports-by-semester', {params: {semesterId: req.params.semesterId}})
-  semesterReportJSON = semesterReportsRequest.data
+  semesterReportsRequest = await axiosInstance.get('/reports-by-semester', {
+    params: { semesterId: req.params.semesterId }
+  });
+  semesterReportJSON = semesterReportsRequest.data;
 
-  meetings = semesterReportJSON.reuniones
-  meetingsNum = meetings.length
+  meetings = semesterReportJSON.reuniones;
+  meetingsNum = meetings.length;
 
-  // Fixes meeting date format 
+  // Fixes meeting date format
   for (let i = 0; i < meetingsNum; i++) {
     const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
     meetings[i].fecha =
@@ -398,17 +431,19 @@ router.get('/reports-by-semester/:semesterId', async (req, res) => {
       dateTimeValues[3].text;
   }
 
-  res.send(semesterReportJSON)
-})
+  res.send(semesterReportJSON);
+});
 
 router.get('/reports-by-carrera/:carreraId', async (req, res) => {
-  carreraReportsRequest = await axiosInstance.get('/reports-by-carrera', {params: {carreraId: req.params.carreraId}})
-  carreraReportJSON = carreraReportsRequest.data
+  carreraReportsRequest = await axiosInstance.get('/reports-by-carrera', {
+    params: { carreraId: req.params.carreraId }
+  });
+  carreraReportJSON = carreraReportsRequest.data;
 
-  meetings = carreraReportJSON.reuniones
-  meetingsNum = meetings.length
+  meetings = carreraReportJSON.reuniones;
+  meetingsNum = meetings.length;
 
-  // Fixes meeting date format 
+  // Fixes meeting date format
   for (let i = 0; i < meetingsNum; i++) {
     const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
     meetings[i].fecha =
@@ -420,19 +455,19 @@ router.get('/reports-by-carrera/:carreraId', async (req, res) => {
       dateTimeValues[3].text;
   }
 
-  res.send(carreraReportJSON)
-})
+  res.send(carreraReportJSON);
+});
 
 // reports without filters
 router.get('/reports-without-filters', async (req, res) => {
-  try{
-    reportsRequest = await axiosInstance.get('/reports')
-    reportsJSON = reportsRequest.data
+  try {
+    reportsRequest = await axiosInstance.get('/reports');
+    reportsJSON = reportsRequest.data;
 
-    meetings = reportsJSON.reuniones
-    meetingsNum = meetings.length
-  
-    // Fixes meeting date format 
+    meetings = reportsJSON.reuniones;
+    meetingsNum = meetings.length;
+
+    // Fixes meeting date format
     for (let i = 0; i < meetingsNum; i++) {
       const dateTimeValues = utils.getDateTimeValues(meetings[i].fecha);
       meetings[i].fecha =
@@ -443,11 +478,10 @@ router.get('/reports-without-filters', async (req, res) => {
         dateTimeValues[2] +
         dateTimeValues[3].text;
     }
-  
-    res.send(reportsJSON)
 
+    res.send(reportsJSON);
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
   }
 });
 
@@ -457,31 +491,31 @@ router.get(
   isLoggedIn,
   isUserStudentOrProfessor,
   async (req, res) => {
-    let isStudent = false
-    let isProfessor = false
-    let isDean = false
-    let isAdmin = false
+    let isStudent = false;
+    let isProfessor = false;
+    let isDean = false;
+    let isAdmin = false;
 
     for (rol of req.user.roles) {
-      if(rol.rolId === 1) {
-        isDean = true
+      if (rol.rolId === 1) {
+        isDean = true;
       }
 
-      if(rol.rolId === 2) {
-        isProfessor = true
+      if (rol.rolId === 2) {
+        isProfessor = true;
       }
 
-      if(rol.rolId === 3) {
-        isStudent = true
+      if (rol.rolId === 3) {
+        isStudent = true;
       }
 
-      if(rol.rolId === 4) {
-        isAdmin = true
+      if (rol.rolId === 4) {
+        isAdmin = true;
       }
     }
 
-    if(global.showNotifications) {
-      global.showNotifications = false
+    if (global.showNotifications) {
+      global.showNotifications = false;
     }
 
     const request = await axiosInstance.get('/notifications', {
@@ -492,17 +526,17 @@ router.get(
     role = notificationsJSON.rol;
     notifications = notificationsJSON.notifications;
 
-    const notificationsNum = notifications.length
+    const notificationsNum = notifications.length;
 
-    for(i = 0; i < notificationsNum; i++) {
-      const dateTimeValues = utils.getDateTimeValues(notifications[i].fecha)
-      notifications[i].fecha = 
-      dateTimeValues[0] +
-      ' ' +
-      dateTimeValues[1] +
-      ':' +
-      dateTimeValues[2] +
-      dateTimeValues[3].text;
+    for (i = 0; i < notificationsNum; i++) {
+      const dateTimeValues = utils.getDateTimeValues(notifications[i].fecha);
+      notifications[i].fecha =
+        dateTimeValues[0] +
+        ' ' +
+        dateTimeValues[1] +
+        ':' +
+        dateTimeValues[2] +
+        dateTimeValues[3].text;
     }
 
     res.render('notifications', {
@@ -521,17 +555,29 @@ router.get(
 );
 
 router.post('/notifications', async (req, res) => {
-  meetingOption = req.body.meetingOption
-  notificationId = req.body.notificationId
-  meetingId = req.body.meetingId
-  profesorId = req.body.profesorId
-  comment = req.body.comment
-  email = req.user.correoInstitucional
+  meetingOption = req.body.meetingOption;
+  notificationId = req.body.notificationId;
+  meetingId = req.body.meetingId;
+  profesorId = req.body.profesorId;
+  comment = req.body.comment;
+  email = req.user.correoInstitucional;
 
-  if (meetingOption === "1") {
-    request = await axiosInstance.post('/meetings/accept', {meetingId: meetingId, notificationId: notificationId, comment: comment, profesorId: profesorId, email: email})
+  if (meetingOption === '1') {
+    request = await axiosInstance.post('/meetings/accept', {
+      meetingId: meetingId,
+      notificationId: notificationId,
+      comment: comment,
+      profesorId: profesorId,
+      email: email
+    });
   } else {
-    request = await axiosInstance.post('/meetings/reject', {meetingId: meetingId, notificationId: notificationId, comment: comment, profesorId: profesorId, email: email})
+    request = await axiosInstance.post('/meetings/reject', {
+      meetingId: meetingId,
+      notificationId: notificationId,
+      comment: comment,
+      profesorId: profesorId,
+      email: email
+    });
   }
 
   res.redirect('/notifications');
@@ -539,59 +585,67 @@ router.post('/notifications', async (req, res) => {
 
 router.get('/delete-notification/:notificationId', async (req, res) => {
   try {
-    request = await axiosInstance.post('/delete-notification', {notificationId: req.params.notificationId})
+    request = await axiosInstance.post('/delete-notification', {
+      notificationId: req.params.notificationId
+    });
 
-    res.redirect('/notifications')
+    res.redirect('/notifications');
   } catch (error) {
     console.error(error.message);
   }
-
-})
+});
 
 router.get('/archive-notification/:notificationId', async (req, res) => {
   try {
-    request = await axiosInstance.post('/archive-notification', {notificationId: req.params.notificationId})
+    request = await axiosInstance.post('/archive-notification', {
+      notificationId: req.params.notificationId
+    });
 
-    res.redirect('/notifications')
+    res.redirect('/notifications');
   } catch (error) {
     console.error(error.message);
   }
 });
 
 router.post('/viewed-notification', async (req, res) => {
-  await axiosInstance.post('/viewed-notification', {notificationId: req.body.notificationId})
+  await axiosInstance.post('/viewed-notification', {
+    notificationId: req.body.notificationId
+  });
 
-  res.send({status: "ok"})
+  res.send({ status: 'ok' });
 });
 
 // EDIT PROFILE
 router.get('/edit-profile', isLoggedIn, async (req, res) => {
-  let isStudent = false
-  let isProfessor = false
-  let isDean = false
-  let isAdmin = false
+  let isStudent = false;
+  let isProfessor = false;
+  let isDean = false;
+  let isAdmin = false;
 
   for (rol of req.user.roles) {
-    if(rol.rolId === 1) {
-      isDean = true
+    if (rol.rolId === 1) {
+      isDean = true;
     }
 
-    if(rol.rolId === 2) {
-      isProfessor = true
+    if (rol.rolId === 2) {
+      isProfessor = true;
     }
 
-    if(rol.rolId === 3) {
-      isStudent = true
+    if (rol.rolId === 3) {
+      isStudent = true;
     }
 
-    if(rol.rolId === 4) {
-      isAdmin = true
+    if (rol.rolId === 4) {
+      isAdmin = true;
     }
   }
 
-  const notificationsRequest = await axiosInstance.get('/active-notifications', {
-    params: { userId: req.user.id }
-  });
+  const notificationsRequest = await axiosInstance.get(
+    '/active-notifications',
+    {
+      params: { userId: req.user.id }
+    }
+  );
   const notificationsJSON = notificationsRequest.data;
 
   notificationsNum = notificationsJSON.notifications.length;
@@ -606,67 +660,82 @@ router.get('/edit-profile', isLoggedIn, async (req, res) => {
     showNotifications: global.showNotifications,
     success: req.flash('success'),
     error: req.flash('error')
-  })
+  });
 });
 
-router.post('/edit-profile', isLoggedIn, upload.single("file"), async (req, res) => {
-  try {
-    file = undefined
-    if(req.file){ 
-      filePath = global.appRoot + '/public/img/uploads/' + req.file.filename
-      file = {
-        formato: req.file.mimetype,
-        nombre: `${Date.now()}-${req.file.originalname}`,
-        datos: fs.readFileSync(filePath).toString("binary"),
-        uploadedOn: new Date()
+router.post(
+  '/edit-profile',
+  isLoggedIn,
+  upload.single('file'),
+  async (req, res) => {
+    try {
+      file = undefined;
+      if (req.file) {
+        filePath = global.appRoot + '/public/img/uploads/' + req.file.filename;
+        file = {
+          formato: req.file.mimetype,
+          nombre: `${Date.now()}-${req.file.originalname}`,
+          datos: fs.readFileSync(filePath).toString('binary'),
+          uploadedOn: new Date()
+        };
+
+        console.log('Deleting created file from system...');
+
+        // removes file after saved into DB
+        fs.unlinkSync(filePath);
+
+        console.log('File has been deleted');
       }
 
-      console.log("Deleting created file from system...");
-          
-      // removes file after saved into DB 
-      fs.unlinkSync(filePath)
+      editProfileRequest = await axiosInstance.post('/edit-profile', {
+        firstNames: req.body.userNames,
+        lastNames: req.body.userLastNames,
+        email: req.body.userEmail,
+        phone: req.body.userPhone,
+        userId: req.user.id,
+        file: file
+      });
 
-      console.log("File has been deleted");
+      req.flash('success', 'Tus datos han sido actualizados exitosamente!');
+
+      res.redirect('/home');
+    } catch (error) {
+      console.error(error.message);
     }
-
-    editProfileRequest = await axiosInstance.post('/edit-profile', {firstNames: req.body.userNames, lastNames: req.body.userLastNames, email: req.body.userEmail, phone: req.body.userPhone, userId: req.user.id, file: file})
-    
-    req.flash('success', 'Tus datos han sido actualizados exitosamente!');
-
-    res.redirect('/home')
-  } catch (error) {
-    console.error(error.message);
   }
-})
+);
 
 // CHANGE PASSWORD
 router.get('/change-password/', isLoggedIn, async (req, res) => {
-  let isStudent = false
-  let isProfessor = false
-  let isDean = false
-  let isAdmin = false
+  let isStudent = false;
+  let isProfessor = false;
+  let isDean = false;
+  let isAdmin = false;
 
   for (rol of req.user.roles) {
-    if(rol.rolId === 1) {
-      isDean = true
+    if (rol.rolId === 1) {
+      isDean = true;
     }
 
-    if(rol.rolId === 2) {
-      isProfessor = true
+    if (rol.rolId === 2) {
+      isProfessor = true;
     }
 
-    if(rol.rolId === 3) {
-      isStudent = true
+    if (rol.rolId === 3) {
+      isStudent = true;
     }
 
-    if(rol.rolId === 4) {
-      isAdmin = true
+    if (rol.rolId === 4) {
+      isAdmin = true;
     }
   }
 
-  const notificationsRequest = await axiosInstance.get('/active-notifications', {
-    params: { userId: req.user.id }
-  });
+  const notificationsRequest = await axiosInstance.get(
+    '/active-notifications',
+    {
+      params: { userId: req.user.id }
+    }
+  );
   const notificationsJSON = notificationsRequest.data;
 
   notificationsNum = notificationsJSON.notifications.length;
@@ -688,51 +757,32 @@ router.get('/change-password/', isLoggedIn, async (req, res) => {
 
 router.post('/change-password', isLoggedIn, async (req, res) => {
   userId = req.body.userId;
-  oldPassword = req.body.oldPassword
+  oldPassword = req.body.oldPassword;
   newPassword = req.body.newPassword;
   confirmation = req.body.confirmation;
 
-  passwordsMatch = await utils.matchPassword(oldPassword, req.user.hash)
+  passwordsMatch = await utils.matchPassword(oldPassword, req.user.hash);
 
-  if(passwordsMatch){
-    if(newPassword === confirmation) {
-      newHash = await utils.encryptPassword(newPassword)
+  if (passwordsMatch) {
+    if (newPassword === confirmation) {
+      newHash = await utils.encryptPassword(newPassword);
 
-      request = await axiosInstance.post('/change-password', {hash: newHash, userId: req.user.id})
-      changepwdJSON = request.data
+      request = await axiosInstance.post('/change-password', {
+        hash: newHash,
+        userId: req.user.id
+      });
+      changepwdJSON = request.data;
 
       req.flash('success', 'La contraseña fue cambiada con exito!');
-      res.redirect('/home')
+      res.redirect('/home');
     } else {
       req.flash('error', 'La nueva contraseña y confirmación no coinciden.');
-      res.redirect('/change-password')
+      res.redirect('/change-password');
     }
   } else {
     req.flash('error', 'La contraseña ingresada no es la correcta.');
-    res.redirect('/change-password')
+    res.redirect('/change-password');
   }
-})
-
-router.get('/upload', (req, res) => {
-  res.render('file-upload')
-})
-
-router.post('/upload', upload.single("file"), async (req, res) => {
-  try {
-    file = {
-      formato: req.file.mimetype,
-      nombre: `${Date.now()}-${req.file.originalname}`,
-      datos: fs.readFileSync(global.appRoot + '/public/img/uploads/' + req.file.filename).toString("binary"),
-      uploadedOn: new Date()
-    }
-
-    uploadRequest = await axiosInstance.post('/upload', {file: file})
-
-    res.redirect('/upload')
-    
-  } catch (error) {
-    console.error(error.message);
-  }
-})
+});
 
 module.exports = router;
