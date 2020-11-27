@@ -7,7 +7,7 @@ const axiosInstance = require('../http-client');
 
 const sendPasswordReset = async (user) => {
   try {
-    const res = await axiosInstance.post('/sendmail', user);
+    const res = await axiosInstance.post('/send-pwd-reset', user);
     console.log(`Status:  ${res.status}`);
     console.log('Body: ', res.data);
   } catch (err) {

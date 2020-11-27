@@ -65,6 +65,7 @@ utils.getDateTimeFormat = (date, hours, minutes, format) => {
   return dateTime;
 };
 
+// function to change datetime format for readability
 utils.getDateTimeValues = (dateString) => {
   date = new Date(dateString);
 

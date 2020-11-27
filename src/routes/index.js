@@ -527,11 +527,39 @@ router.post('/notifications', async (req, res) => {
   profesorId = req.body.profesorId
   comment = req.body.comment
   email = req.user.correoInstitucional
+  request = ""
 
   if (meetingOption === "1") {
     request = await axiosInstance.post('/meetings/accept', {meetingId: meetingId, notificationId: notificationId, comment: comment, profesorId: profesorId, email: email})
   } else {
     request = await axiosInstance.post('/meetings/reject', {meetingId: meetingId, notificationId: notificationId, comment: comment, profesorId: profesorId, email: email})
+  }
+
+  meetingJSON = request.data
+  meeting = meetingJSON.meeting
+
+  console.log("meeting: ", meeting);
+
+  if(meeting.emailNotificacion) {
+    professorRequest = await axiosInstance.get('/user-by-id', {params: {userId: req.body.profesorId}})
+    professor = professorRequest.data
+  
+    student = req.user
+  
+    // change date format 
+    const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
+    meeting.fecha =
+    dateTimeValues[0] +
+    ' ' +
+    dateTimeValues[1] +
+    ':' +
+    dateTimeValues[2] +
+    dateTimeValues[3].text;
+  
+    console.log("Meeting: ", meeting);
+  
+    emailRequest = await axiosInstance.post('/send-meeting-notification', {student: student, professor: professor, meeting: meeting})
+    emailJSON = emailRequest.data
   }
 
   res.redirect('/notifications');
