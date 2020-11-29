@@ -42,13 +42,15 @@ router.get('/', async (req, res) => {
   adminJSON = adminRequest.data;
 
   users = adminJSON.users;
+  semesters = adminJSON.semesters;
 
-  console.log('Usuarios registrados: ', users);
+  console.log("Semesters: ", semesters);
 
   res.render('admin/home', {
     path: 'admin-home',
     user: req.user,
     users,
+    semesters,
     isStudent,
     isProfessor,
     isDean,
@@ -116,5 +118,19 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     console.error(error.message);
   }
 });
+
+router.post('/current-semester', async (req, res) => {
+  console.log("Datos ingresados: ", req.body);
+
+  semesterId = req.body.semester
+
+  global.currentSemester = semesterId
+
+  semesterRequest = await axiosInstance.post('/admin/current-semester', {semesterId: semesterId})
+
+  req.flash('success', `El semestre actual fue actualizado con exito!`);
+
+  res.redirect('/home')
+})
 
 module.exports = router;

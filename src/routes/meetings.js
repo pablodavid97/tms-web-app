@@ -160,13 +160,21 @@ router.get('/go-to-meeting/:meetingId/:notificationId', async (req, res) => {
   }
 });
 
+// changes meeting state to 1
 router.post('/create', async (req, res) => {
+  console.log("Datos Ingresados: ", req.body);
+
   dateTime = utils.getDateTimeFormat(
     req.body.date,
     req.body.hours,
     req.body.minutes,
     req.body.format
   );
+
+  emailNotification = false
+  if(req.body.emailNotification) {
+    emailNotification = true
+  }
 
   try {
     request = await axiosInstance.post('/meetings/create', {
@@ -176,18 +184,44 @@ router.post('/create', async (req, res) => {
       professorId: req.user.id,
       studentId: req.body.student,
       semesterId: global.currentSemester,
-      email: req.user.correoInstitucional
+      email: req.user.correoInstitucional,
+      emailNotification: emailNotification
     });
     meetingJSON = request.data;
 
+    if(emailNotification) {
+      studentRequest = await axiosInstance.get('/user-by-id', {params: {userId: req.body.student}})
+      student = studentRequest.data
+
+      professor = req.user
+      meeting = meetingJSON.meeting
+
+      // change date format 
+      const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
+      meeting.fecha =
+        dateTimeValues[0] +
+        ' ' +
+        dateTimeValues[1] +
+        ':' +
+        dateTimeValues[2] +
+        dateTimeValues[3].text;
+
+      console.log("Meeting: ", meeting);
+
+      emailRequest = await axiosInstance.post('/send-meeting-notification', {student: student, professor: professor, meeting: meeting})
+      emailJSON = emailRequest.data
+    }
+
     req.flash('success', 'La reunión fue creada con exito!');
     res.redirect('/meetings');
+    
   } catch (error) {
     console.error(error.message);
   }
   // Create a new meeting
 });
 
+// changes meeting state to 5
 router.get(
   '/delete/:meetingId/:studentId',
   isLoggedIn,
@@ -200,6 +234,30 @@ router.get(
         email: req.user.correoInstitucional
       });
       deleteJSON = request.data;
+      meeting = deleteJSON.meeting
+
+      if(meeting.emailNotificacion) {
+        studentRequest = await axiosInstance.get('/user-by-id', {params: {userId: req.params.studentId}})
+        student = studentRequest.data
+  
+        professor = req.user
+  
+        // change date format 
+        const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
+        meeting.fecha =
+          dateTimeValues[0] +
+          ' ' +
+          dateTimeValues[1] +
+          ':' +
+          dateTimeValues[2] +
+          dateTimeValues[3].text;
+  
+        console.log("Meeting: ", meeting);
+  
+        emailRequest = await axiosInstance.post('/send-meeting-notification', {student: student, professor: professor, meeting: meeting})
+        emailJSON = emailRequest.data
+      }
+  
 
       req.flash('success', 'La reunión fue eliminada con exito');
 
@@ -210,6 +268,7 @@ router.get(
   }
 );
 
+// changes meeting state to 2
 router.get(
   '/edit/:meetingId',
   isLoggedIn,
@@ -308,6 +367,29 @@ router.post('/edit', async (req, res) => {
       meetingId: req.body.meetingId
     });
     editMeetingJSON = request.data;
+    meeting = editMeetingJSON.meeting
+
+    if(meeting.emailNotificacion) {
+      studentRequest = await axiosInstance.get('/user-by-id', {params: {userId: req.body.studentId}})
+      student = studentRequest.data
+
+      professor = req.user
+
+      // change date format 
+      const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
+      meeting.fecha =
+        dateTimeValues[0] +
+        ' ' +
+        dateTimeValues[1] +
+        ':' +
+        dateTimeValues[2] +
+        dateTimeValues[3].text;
+
+      console.log("Meeting: ", meeting);
+
+      emailRequest = await axiosInstance.post('/send-meeting-notification', {student: student, professor: professor, meeting: meeting})
+      emailJSON = emailRequest.data
+    }
 
     req.flash('success', 'La reunión fue actualizada con exito!');
 
@@ -350,6 +432,44 @@ router.post('/done', async (req, res) => {
       isProfessor: isProfessor,
       isStudent: isStudent
     });
+    meetingJSON = meetingRequest.data
+
+    meeting = meetingJSON.meeting
+
+    if(meeting.emailNotificacion) {
+      console.log("Break1");
+      studentRequest = await axiosInstance.get('/user-by-id', {params: {userId: meeting.estudianteId}})
+      student = studentRequest.data
+
+      professor = req.user
+
+      // change date format 
+      const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
+      meeting.fecha =
+        dateTimeValues[0] +
+        ' ' +
+        dateTimeValues[1] +
+        ':' +
+        dateTimeValues[2] +
+        dateTimeValues[3].text;
+
+      console.log("Meeting option: ", req.body.meetingOption);
+
+      if(req.body.meetingOption === "1") {
+        meeting.estadoId = 7
+      } else {
+        meeting.estadoId = 8
+      }
+
+      console.log("Meeting: ", meeting);
+
+      emailRequest1 = await axiosInstance.post('/send-meeting-notification', {student: student, professor: professor, meeting: meeting, isProfessor: true})
+      emailJSON1 = emailRequest1.data
+
+      emailRequest2 = await axiosInstance.post('/send-meeting-notification', {student: student, professor: professor, meeting: meeting, isStudent: true})
+      emailJSON2 = emailRequest2.data
+    }
+
     req.flash('success', 'La reunión fue actualizada con exito!');
 
     res.redirect('/notifications');
@@ -457,8 +577,33 @@ router.post('/reschedule', async (req, res) => {
       meetingId: req.body.meetingId,
       notificationId: req.body.notificationId
     });
-
     rescheduleMeetingJSON = request.data;
+    meeting = rescheduleMeetingJSON.meeting
+
+      // sends email notification
+      if(meeting.emailNotificacion) {
+        studentRequest = await axiosInstance.get('/user-by-id', {params: {userId: req.body.studentId}})
+        student = studentRequest.data
+  
+        professor = req.user
+  
+        // change date format 
+        const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
+        meeting.fecha =
+          dateTimeValues[0] +
+          ' ' +
+          dateTimeValues[1] +
+          ':' +
+          dateTimeValues[2] +
+          dateTimeValues[3].text;
+
+          console.log("Meeting: ", meeting);
+
+  
+        emailRequest = await axiosInstance.post('/send-meeting-notification', {student: student, professor: professor, meeting: meeting})
+        emailJSON = emailRequest.data
+      }
+
 
     req.flash('success', 'La reunión fue reagendada con exito!');
 

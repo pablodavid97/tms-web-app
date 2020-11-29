@@ -717,7 +717,7 @@ html {
   }
 
   .users-table-container {
-	max-height: 600px;
+	max-height: 400px;
 	overflow-y: scroll;
   }
   
@@ -728,3 +728,8 @@ html {
   .border-top { border-top: 1px solid #e5e5e5; }
   .border-bottom { border-bottom: 1px solid #e5e5e5; }
   
+/* Current Semester Selection */
+
+.current-semester-form .semester-item {
+	padding: 1rem;
+}
