@@ -2,9 +2,9 @@
             <div class="row">
                 <div class="col-sm-6 personal-brand">
                     {{#if student.imagen}}
-                        <img id="userImg" class="img mb-4" src="/img/tmp/{{student.nombreImagen}}">
+                        <img id="userImg" class="img mb-4" src="/img/tmp/{{student.imagen.nombre}}">
                     {{else}}
-                        <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar">
+                        <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar.jpg">
                     {{/if}}
 
                     <h3>{{student.nombres}} {{student.apellidos}}</h3>

@@ -11,7 +11,7 @@ const {
 const router = express.Router();
 const axiosInstance = require('../http-client');
 const utils = require('../lib/utils');
-const upload = require('../lib/upload');
+const {imageUpload, fileUpload} = require('../lib/upload');
 const fs = require('fs');
 
 router.get('/', isNotLoggedIn, (req, res) => {
@@ -25,15 +25,18 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try {
-    console.log('User: ', req.user);
-    console.log('Storing user image...');
 
-    fs.writeFileSync(
-      global.appRoot + '/public/img/tmp/' + req.user.nombreImagen,
-      new Buffer.from(req.user.imagen, 'binary')
-    );
+    if(req.user.imagen) {
+      console.log("usuario tiene imagen!!!!");
+      console.log('Storing user image...');
 
-    console.log('User image has been stored!');
+      fs.writeFileSync(
+        global.appRoot + '/public/img/tmp/' + req.user.imagen.nombre,
+        new Buffer.from(req.user.imagen.datos, 'binary')
+      );
+
+      console.log('User image has been stored!');
+    }
 
     const request = await axiosInstance.get('/home', {
       params: { userId: req.user.id, userRoles: req.user.roles }
@@ -62,14 +65,6 @@ router.get('/home', isLoggedIn, async (req, res) => {
         isAdmin = true;
       }
     }
-
-    console.log(
-      'Roles (dean, prof, estud, admin): ',
-      isDean,
-      isProfessor,
-      isStudent,
-      isAdmin
-    );
 
     gpa = 0;
     tutor = {};
@@ -155,10 +150,21 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
     studentInfo = tutorJSON.studentInfo;
     tutor = tutorJSON.tutor;
 
-    fs.writeFileSync(
-      global.appRoot + '/public/img/tmp/' + tutor.nombreImagen,
-      new Buffer.from(tutor.imagen, 'binary')
-    );
+    console.log("Tutor: ", tutor);
+
+    if(tutor.imagenId) {
+      const imageRequest = await axiosInstance.get('/image-by-id', {
+        params: {imageId: tutor.imagenId}
+      });
+      imageJSON = imageRequest.data;
+
+      tutor.imagen =imageJSON
+
+      fs.writeFileSync(
+        global.appRoot + '/public/img/tmp/' + tutor.imagen.nombre,
+        new Buffer.from(tutor.imagen.datos, 'binary')
+      );
+    }
 
     const notificationsRequest = await axiosInstance.get(
       '/active-notifications',
@@ -220,8 +226,6 @@ router.get('/students', isLoggedIn, isProfessorUser, async (req, res) => {
     const studentsJSON = request.data;
 
     students = studentsJSON.estudiantes;
-
-    console.log('Estudiantes: ', students);
 
     const notificationsRequest = await axiosInstance.get(
       '/active-notifications',
@@ -289,10 +293,23 @@ router.get(
       gpa = studentJSON.gpa;
       gpaList = studentJSON.gpaList;
 
-      fs.writeFileSync(
-        global.appRoot + '/public/img/tmp/' + student.nombreImagen,
-        new Buffer.from(student.imagen, 'binary')
-      );
+      console.log("Student: ", student);
+
+      if(student.imagenId) {
+        const imageRequest = await axiosInstance.get('/image-by-id', {
+          params: {imageId: student.imagenId}
+        });
+        imageJSON = imageRequest.data;
+  
+        student.imagen = imageJSON
+
+        console.log("Student: ", student);
+
+        fs.writeFileSync(
+          global.appRoot + '/public/img/tmp/' + student.imagen.nombre,
+          new Buffer.from(student.imagen.datos, 'binary')
+        );
+      }
 
       const notificationsRequest = await axiosInstance.get(
         '/active-notifications',
@@ -553,16 +570,22 @@ router.get(
 );
 
 router.post('/notifications', async (req, res) => {
-  meetingOption = req.body.meetingOption
-  notificationId = req.body.notificationId
-  meetingId = req.body.meetingId
-  profesorId = req.body.profesorId
-  comment = req.body.comment
-  email = req.user.correoInstitucional
-  request = ""
+  meetingOption = req.body.meetingOption;
+  notificationId = req.body.notificationId;
+  meetingId = req.body.meetingId;
+  profesorId = req.body.profesorId;
+  comment = req.body.comment;
+  email = req.user.correoInstitucional;
+  request = '';
 
-  if (meetingOption === "1") {
-    request = await axiosInstance.post('/meetings/accept', {meetingId: meetingId, notificationId: notificationId, comment: comment, profesorId: profesorId, email: email})
+  if (meetingOption === '1') {
+    request = await axiosInstance.post('/meetings/accept', {
+      meetingId: meetingId,
+      notificationId: notificationId,
+      comment: comment,
+      profesorId: profesorId,
+      email: email
+    });
   } else {
     request = await axiosInstance.post('/meetings/reject', {
       meetingId: meetingId,
@@ -573,31 +596,33 @@ router.post('/notifications', async (req, res) => {
     });
   }
 
-  meetingJSON = request.data
-  meeting = meetingJSON.meeting
+  meetingJSON = request.data;
+  meeting = meetingJSON.meeting;
 
-  console.log("meeting: ", meeting);
+  if (meeting.emailNotificacion) {
+    professorRequest = await axiosInstance.get('/user-by-id', {
+      params: { userId: req.body.profesorId }
+    });
+    professor = professorRequest.data;
 
-  if(meeting.emailNotificacion) {
-    professorRequest = await axiosInstance.get('/user-by-id', {params: {userId: req.body.profesorId}})
-    professor = professorRequest.data
-  
-    student = req.user
-  
-    // change date format 
+    student = req.user;
+
+    // change date format
     const dateTimeValues = utils.getDateTimeValues(meeting.fecha);
     meeting.fecha =
-    dateTimeValues[0] +
-    ' ' +
-    dateTimeValues[1] +
-    ':' +
-    dateTimeValues[2] +
-    dateTimeValues[3].text;
-  
-    console.log("Meeting: ", meeting);
-  
-    emailRequest = await axiosInstance.post('/send-meeting-notification', {student: student, professor: professor, meeting: meeting})
-    emailJSON = emailRequest.data
+      dateTimeValues[0] +
+      ' ' +
+      dateTimeValues[1] +
+      ':' +
+      dateTimeValues[2] +
+      dateTimeValues[3].text;
+
+    emailRequest = await axiosInstance.post('/send-meeting-notification', {
+      student: student,
+      professor: professor,
+      meeting: meeting
+    });
+    emailJSON = emailRequest.data;
   }
 
   res.redirect('/notifications');
@@ -686,7 +711,7 @@ router.get('/edit-profile', isLoggedIn, async (req, res) => {
 router.post(
   '/edit-profile',
   isLoggedIn,
-  upload.single('file'),
+  imageUpload.single('file'),
   async (req, res) => {
     try {
       file = undefined;
@@ -715,6 +740,11 @@ router.post(
         userId: req.user.id,
         file: file
       });
+      editProfileJSON = editProfileRequest.data
+
+      console.log("User replacement: ", editProfileJSON);
+
+      req.user = editProfileJSON.user
 
       req.flash('success', 'Tus datos han sido actualizados exitosamente!');
 

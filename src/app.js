@@ -5,7 +5,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const uuid = require('uuid');
 const mysql = require('mysql');
-const axiosInstance = require('./http-client')
+const axiosInstance = require('./http-client');
 
 // Dev dependencies
 const reload = require('reload');
@@ -79,11 +79,11 @@ if (process.env.NODE_ENV === 'production') {
     console.log(`Server running at http://${hostname}:${port}/`);
 
     // Retrieves current semester
-    semesterRequest = await axiosInstance.get('/current_semester')
-    currentSemester = semesterRequest.data.semestre
+    semesterRequest = await axiosInstance.get('/current_semester');
+    currentSemester = semesterRequest.data.semestre;
     global.currentSemester = currentSemester.id;
 
-    console.log("Current Semester: ", global.currentSemester);
+    console.log('Current Semester: ', global.currentSemester);
   });
 } else {
   reload(app)
@@ -93,11 +93,11 @@ if (process.env.NODE_ENV === 'production') {
         console.log(`Server running at http://${hostname}:${port}/`);
 
         // Retrieves current semester
-        semesterRequest = await axiosInstance.get('/current_semester')
-        currentSemester = semesterRequest.data.semestre
+        semesterRequest = await axiosInstance.get('/current_semester');
+        currentSemester = semesterRequest.data.semestre;
         global.currentSemester = currentSemester.id;
 
-        console.log("Current Semester: ", global.currentSemester);
+        console.log('Current Semester: ', global.currentSemester);
       });
     })
     .catch((err) => {

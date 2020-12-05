@@ -16,9 +16,9 @@
                 <div class="user-img-container">
                     <!-- Uploaded image area-->
                     {{#if user.imagen}}
-                        <div class="image-area mt-4"><img id="imgResult" src="/img/tmp/{{user.nombreImagen}}" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
+                        <div class="image-area mt-4"><img id="imgResult" src="/img/tmp/{{user.imagen.nombre}}" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
                     {{else}}
-                        <div class="image-area mt-4"><img id="imgResult" src="/img/unknown-user-avatar" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
+                        <div class="image-area mt-4"><img id="imgResult" src="/img/unknown-user-avatar.jpg" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
                     {{/if}}
 
                      <!-- Upload image input-->

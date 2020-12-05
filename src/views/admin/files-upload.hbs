@@ -1,0 +1,74 @@
+                    <div class="files-upload-container">
+                        <h1>Datos del Sistema</h1>
+                        <p>Los datos ingresados en este formulario corresponden a la información inicial del sistema. Si estos se suben nuevamente la información registrada con anterioridad se perderá.</p>
+                        <p>Estos datos serán ingresados al sistema <strong>únicamente</strong> cuando se seleccionen todos los archivos al sistema (carreras, semestres, decanos, profesores y estudiantes).</p>
+                        <div class="row">
+                            <div class="col-sm-8 mt-3">
+                                <form
+                                    class="mt-4 files-upload-form"
+                                    action="/admin/files-upload"
+                                    method="POST"
+                                    enctype="multipart/form-data"
+                                    >
+                                    <!-- Careers -->
+                                    <div class="form-group row">
+                                        <div class="col-sm-3">
+                                            <label for="carreerInput">Carreras: </label>
+                                        </div>
+                                        <input type="file" name="careersFile" id="carreerInput" class="file-input border"/>
+                                    </div>
+
+                                    <!-- Semesters -->
+                                    <div class="form-group row">
+                                        <div class="col-sm-3">
+                                            <label for="semesterInput">Semestres: </label>
+                                        </div>
+                                        <input type="file" name="semestersFile" id="semesterInput" class="file-input border"/>
+                                    </div>
+
+                                    <!-- Deans -->
+                                    <div class="form-group row">
+                                        <div class="col-sm-3">
+                                            <label for="deanInput">Decanos: </label>
+                                        </div>
+                                        <input type="file" name="deansFile" id="deanInput" class="file-input border"/>
+                                    </div>
+
+                                    <!-- Professors -->
+                                    <div class="form-group row">
+                                        <div class="col-sm-3">
+                                            <label for="professorInput">Profesores: </label>
+                                        </div>
+                                        <input type="file" name="professorsFile" id="professorInput" class="file-input border"/>
+                                    </div>
+
+                                    <!-- Estudiantes -->
+                                    <div class="form-group row">
+                                        <div class="col-sm-3">
+                                            <label for="studentsInput">Estudiantes: </label>
+                                        </div>
+                                        <input type="file" name="studentsFile" id="studentsInput" class="file-input border"/>
+                                    </div>
+
+
+                                    <!-- Admins -->
+                                    <div class="form-group row">
+                                        <div class="col-sm-3">
+                                            <label for="adminsInput">Administradores: </label>
+                                        </div>
+                                        <input type="file" name="adminsFile" id="adminsInput" class="file-input border"/>
+                                    </div>
+
+                                    
+                                    <div class="btn-container">
+                                        <button type="submit" class="btn btn-primary">Subir Archivos</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="preview-images"></div>
+                            </div>
+                        </div>
+                    </div>

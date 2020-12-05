@@ -673,6 +673,11 @@ html {
    * Navbar
    */
 
+   .sidebar {
+	   position: absolute;
+	   height: 100%;
+   }
+
   .admin-navbar {
       padding: 10px 0;
       z-index: 500;
@@ -732,4 +737,36 @@ html {
 
 .current-semester-form .semester-item {
 	padding: 1rem;
+}
+
+/* File inputs styles */
+
+.file-input {
+	margin: 0 3rem
+}
+
+.files-upload-container {
+	border: 1px solid #c9c9c9;
+	padding: 3rem 6rem;
+	margin-left: 25%;
+	margin-right: 10%;
+}
+
+.files-upload-form {
+  width: 50vw;
+  text-align: center;
+}
+
+/* Image Upload Styles */
+.img-upload-container {
+	margin-left: 30%;
+    margin-right: 10%;
+	width: auto;
+	border: 1px solid #c9c9c9;
+	padding: 5rem 14rem;
+}
+
+.img-upload-container .user-img-options {
+	margin-top: 1rem;
+	padding: 0 1rem;
 }
