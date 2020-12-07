@@ -24,13 +24,13 @@ passport.use(
         if (signInJSON) {
           user = signInJSON;
 
-          if(user.imagenId) {
+          if (user.imagenId) {
             const imageRequest = await axiosInstance.get('/image-by-id', {
-              params: {imageId: user.imagenId}
+              params: { imageId: user.imagenId }
             });
             imageJSON = imageRequest.data;
-  
-            user.imagen = imageJSON
+
+            user.imagen = imageJSON;
           }
 
           rolesRequest = await axiosInstance.get('/user-roles', {
@@ -85,13 +85,13 @@ passport.deserializeUser(async (id, done) => {
   user.roles = rolesJSON.userRoles;
 
   // adds user images
-  if(user.imagenId) {
+  if (user.imagenId) {
     const imageRequest = await axiosInstance.get('/image-by-id', {
-      params: {imageId: user.imagenId}
+      params: { imageId: user.imagenId }
     });
     imageJSON = imageRequest.data;
 
-    user.imagen = imageJSON
+    user.imagen = imageJSON;
   }
 
   done(null, user);

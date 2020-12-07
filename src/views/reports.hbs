@@ -1,349 +1,351 @@
-        <div class="container reports-container main-container">
-            <div class="page-header">
-                <div class="container">
-                   <div class="row">
-                      <div class="col-md-12">
-                         <h1>Reportes</h1>
-                      </div>
-                   </div>
-                </div>
-             </div>
-
-            <div class="kpi-section row">
-                <div class="kpi-container col-sm-3">
-                    <div id="createdMeetingsKPI" class="kpi">
-                        <div class="kpi-header"><h4>Reuniones Creadas</h4></div>
-                        <span class="kpi-value">{{meetingsNum}}</span>
-                    </div>
-                </div>
-                <div class="kpi-container col-sm-3">
-                    <div id="deletedMeetingsKPI" class="kpi">
-                        <div class="kpi-header"><h4 class="kpi-header">Reuniones Eliminadas</h4></div>
-                        <span class="kpi-value">{{reunionesEliminadasNum}}</span>
-                    </div>
-                </div>
-                <div class="kpi-container col-sm-3">
-                    <div id="averageGPAKPI" class="kpi">
-                        <div class="kpi-header"><h4 class="kpi-header">GPA Promedio</h4></div>
-                        <span class="kpi-value">{{gpa}}</span>
-                    </div>
-                </div>
-                <div class="kpi-container col-sm-3">
-                    <div id="conditionedStudentsKPI" class="kpi">
-                        <div class="kpi-header"><h4 class="kpi-header">Estudiantes Condicionados</h4></div>
-                        <span class="kpi-value">{{conditionedNum}}</span>
-                    </div>
+<div class="container reports-container main-container">
+    <div class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Reportes</h1>
                 </div>
             </div>
-
-            <div class="generate-report-section">
-                <button id="generateReportButton" class="btn btn-secondary" onclick="generateCSV({meetings: {{json meetings}}, filter:0})">Generar Reporte</button>     
-            </div>
-
-            <div class="report-filters row">
-                <div class="filter col-sm-4">
-                    <label for="semesterFilter">Semestre </label>
-                    <select id="semesterFilter" name="semester" class="custom-select" onchange="filterBySemester(this)">
-                        <option value="0" selected>Todos los semestres</option>
-                        {{#each semesters}}
-                            <option value="{{this.id}}">{{this.semestre}}</option>
-                        {{/each}}
-                    </select>
-                </div> 
-                <div class="filter col-sm-4">
-                    <label for="carreraFilter">Carrera </label>
-                    <select id="carreraFilter" name="carrera" class="custom-select" onchange="filterByCarrera(this)">
-                        <option value="0" selected>Todas las carreras</option>
-                        {{#each carreras}}
-                            <option value="{{this.id}}">{{this.carrera}}</option>
-                        {{/each}}
-                    </select>
-                </div> 
-                <div id="clearFiltersContainer" class="filter col-sm-4">
-                    <button id="clearFiltersButton" class="btn btn-secondary" onclick="clearFilters()">Quitar Filtros</button>
-                </div>
-            </div>
-
-            <div class="section-header header-left">
-                   <div class="row">
-                      <div class="col-md-12">
-                         <h2>Historial de Reuniones</h2>
-                      </div>
-                   </div>
-             </div>
-            <div class="meetings-table-container">
-                <table id="meetingsTable"class="table table-hover meetings-table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Número</th>
-                            <th scope="col">Tema</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Profesor</th>
-                            <th scope="col">Estudiante</th>
-                            <th scope="col">Semestre</th>
-                            <th scope="col">Estado</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            {{#each meetings}}
-                                <tr>
-                                    <td scope="row">{{this.id}}</td>
-                                    <td>{{this.tema}}</td>
-                                    <td>{{this.descripcion}}</td>
-                                    <td>{{this.fecha}}</td>
-                                    <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
-                                    <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
-                                    <td>{{this.semestre}}</td>
-                                    <td>{{this.estado}}</td>
-                                    
-                                    {{#if (or this.estadoId 7 this.estadoId 8)}}
-                                        <td><a href="/meetings/meeting-details/{{this.id}}">Ver detalles</a></td>
-                                    {{else}}
-                                        <td></td>
-                                    {{/if}}
-                                </tr>
-                            {{/each}}
-                    </tbody>
-                </table>
-            </div>
-        
         </div>
-        <script>
-            $(document).ready(function() {
-                $("#meetingsTable").DataTable({
-                    "lengthMenu":  [5, 10, 20, 30]
-                });
-                $(".meetings-length").addClass("bs-select");
-            })
-
-            function generateCSV(jsonData) {
-                meetings = jsonData.meetings
-                filter = jsonData.filter
-
-                fileName = ""
-                if(filter === 0) {
-                    fileName = 'ReporteCompleto-' + Date.now() + '.csv';
-                } else if (filter === 1) {
-                    fileName = 'ReportePorSemestre-' + Date.now() + '.csv';
-                } else if (filter === 2) {
-                    fileName = 'ReportePorCarrera-' + Date.now() + '.csv';
-                }
-
-                // KPI data
-                const createdMeetings = document.getElementById("createdMeetingsKPI").childNodes
-                const deletedMeetings = document.getElementById('deletedMeetingsKPI').childNodes
-                const averageGPA = document.getElementById('averageGPAKPI').childNodes
-                const conditionedStudents = document.getElementById('conditionedStudentsKPI').childNodes
-                const meetingsTableBody = document.getElementById('meetingsTable').getElementsByTagName("tbody")[0]
-
-                var csv = 'Reuniones Creadas, Reuniones Eliminadas, GPA Promedio, Estudiantes Condicionados\n';
-
-                csv += createdMeetings[3].innerHTML + ", " + deletedMeetings[3].innerHTML + ', ' + averageGPA[3].innerHTML + ', ' + conditionedStudents[3].innerHTML + '\n\n'
-
-                // Meetings data                
-                var data = [];
-
-                meetings.forEach(function(meeting) {
-                    data.push([meeting.id, meeting.tema, meeting.descripcion, meeting.fecha, meeting.nombresProfesor + " " + meeting.apellidosProfesor, meeting.nombresEstudiante + " " + meeting.apellidosEstudiante, meeting.estado, meeting.comentariosProfesor, meeting.comentariosEstudiante])
-                });
-
-                // sorts meetings by id
-                sortByKey(data, '0')
-
-                csv += 'Numero, Tema, Descripción, Fecha, Profesor, Estudiante, Estado, Comentarios Profesor, Comentarios Estudiante\n';
-                data.forEach(function(row) {
-                    csv += row.join(',');
-                    csv += "\n";
-                });
-
-                var hiddenElement = document.createElement('a');
-                hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-                hiddenElement.target = '_blank';
-                hiddenElement.download = fileName;
-                hiddenElement.click();
+    </div>
+    <div class="kpi-section row">
+        <div class="kpi-container col-sm-3">
+            <div id="createdMeetingsKPI" class="kpi">
+                <div class="kpi-header">
+                    <h4>Reuniones Creadas</h4>
+                </div>
+                <span class="kpi-value">{{meetingsNum}}</span>
+            </div>
+        </div>
+        <div class="kpi-container col-sm-3">
+            <div id="deletedMeetingsKPI" class="kpi">
+                <div class="kpi-header">
+                    <h4 class="kpi-header">Reuniones Eliminadas</h4>
+                </div>
+                <span class="kpi-value">{{reunionesEliminadasNum}}</span>
+            </div>
+        </div>
+        <div class="kpi-container col-sm-3">
+            <div id="averageGPAKPI" class="kpi">
+                <div class="kpi-header">
+                    <h4 class="kpi-header">GPA Promedio</h4>
+                </div>
+                <span class="kpi-value">{{gpa}}</span>
+            </div>
+        </div>
+        <div class="kpi-container col-sm-3">
+            <div id="conditionedStudentsKPI" class="kpi">
+                <div class="kpi-header">
+                    <h4 class="kpi-header">Estudiantes Condicionados</h4>
+                </div>
+                <span class="kpi-value">{{conditionedNum}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="generate-report-section">
+        <button id="generateReportButton" class="btn btn-secondary" onclick="generateCSV({meetings: {{json meetings}}, filter:0})">Generar Reporte</button>     
+    </div>
+    <div class="report-filters row">
+        <div class="filter col-sm-4">
+            <label for="semesterFilter">Semestre </label>
+            <select id="semesterFilter" name="semester" class="custom-select" onchange="filterBySemester(this)">
+                <option value="0" selected>Todos los semestres</option>
+                {{#each semesters}}
+                <option value="{{this.id}}">{{this.semestre}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="filter col-sm-4">
+            <label for="carreraFilter">Carrera </label>
+            <select id="carreraFilter" name="carrera" class="custom-select" onchange="filterByCarrera(this)">
+                <option value="0" selected>Todas las carreras</option>
+                {{#each carreras}}
+                <option value="{{this.id}}">{{this.carrera}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div id="clearFiltersContainer" class="filter col-sm-4">
+            <button id="clearFiltersButton" class="btn btn-secondary" onclick="clearFilters()">Quitar Filtros</button>
+        </div>
+    </div>
+    <div class="section-header header-left">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Historial de Reuniones</h2>
+            </div>
+        </div>
+    </div>
+    <div class="meetings-table-container">
+        <table id="meetingsTable"class="table table-hover meetings-table table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Número</th>
+                    <th scope="col">Tema</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Profesor</th>
+                    <th scope="col">Estudiante</th>
+                    <th scope="col">Semestre</th>
+                    <th scope="col">Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each meetings}}
+                <tr>
+                    <td scope="row">{{this.id}}</td>
+                    <td>{{this.tema}}</td>
+                    <td>{{this.descripcion}}</td>
+                    <td>{{this.fecha}}</td>
+                    <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
+                    <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
+                    <td>{{this.semestre}}</td>
+                    <td>{{this.estado}}</td>
+                    {{#if (or this.estadoId 7 this.estadoId 8)}}
+                    <td><a href="/meetings/meeting-details/{{this.id}}">Ver detalles</a></td>
+                    {{else}}
+                    <td></td>
+                    {{/if}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#meetingsTable").DataTable({
+            "lengthMenu":  [5, 10, 20, 30]
+        });
+        $(".meetings-length").addClass("bs-select");
+    })
+    
+    function generateCSV(jsonData) {
+        meetings = jsonData.meetings
+        filter = jsonData.filter
+    
+        fileName = ""
+        if(filter === 0) {
+            fileName = 'ReporteCompleto-' + Date.now() + '.csv';
+        } else if (filter === 1) {
+            fileName = 'ReportePorSemestre-' + Date.now() + '.csv';
+        } else if (filter === 2) {
+            fileName = 'ReportePorCarrera-' + Date.now() + '.csv';
+        }
+    
+        // KPI data
+        const createdMeetings = document.getElementById("createdMeetingsKPI").childNodes
+        const deletedMeetings = document.getElementById('deletedMeetingsKPI').childNodes
+        const averageGPA = document.getElementById('averageGPAKPI').childNodes
+        const conditionedStudents = document.getElementById('conditionedStudentsKPI').childNodes
+        const meetingsTableBody = document.getElementById('meetingsTable').getElementsByTagName("tbody")[0]
+    
+        var csv = 'Reuniones Creadas, Reuniones Eliminadas, GPA Promedio, Estudiantes Condicionados\n';
+    
+        csv += createdMeetings[3].innerHTML + ", " + deletedMeetings[3].innerHTML + ', ' + averageGPA[3].innerHTML + ', ' + conditionedStudents[3].innerHTML + '\n\n'
+    
+        // Meetings data                
+        var data = [];
+    
+        meetings.forEach(function(meeting) {
+            data.push([meeting.id, meeting.tema, meeting.descripcion, meeting.fecha, meeting.nombresProfesor + " " + meeting.apellidosProfesor, meeting.nombresEstudiante + " " + meeting.apellidosEstudiante, meeting.estado, meeting.comentariosProfesor, meeting.comentariosEstudiante])
+        });
+    
+        // sorts meetings by id
+        sortByKey(data, '0')
+    
+        csv += 'Numero, Tema, Descripción, Fecha, Profesor, Estudiante, Estado, Comentarios Profesor, Comentarios Estudiante\n';
+        data.forEach(function(row) {
+            csv += row.join(',');
+            csv += "\n";
+        });
+    
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = fileName;
+        hiddenElement.click();
+    }
+    
+    function sortByKey(array, key) {
+        return array.sort(function(a, b) {
+            var x = a[key]; var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    }
+    
+    function filterBySemester(semester) {
+        filterValue = 1
+    
+        if(semester.value === "0") {
+            filterValue = 0
+        }
+    
+        // resets career filter to avoid conflict
+        const carreraFilter = document.getElementById("carreraFilter")
+        carreraFilter.value = 0
+    
+        $.ajax({
+            url: 'http://localhost:4000/reports-by-semester/' + semester.value,
+            type: 'GET',
+            success: function (data) {
+                console.log("Success: ", data)
+                modifyMeetingsDataTable(data, filterValue)
+            },
+            error: function(xhr, status, error) {
+                console.log('Error: ' + error.message);
             }
-
-            function sortByKey(array, key) {
-                return array.sort(function(a, b) {
-                    var x = a[key]; var y = b[key];
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                });
+        })
+    }
+    
+    function filterByCarrera(carrera) {
+        filterValue = 2
+    
+        if(carrera.value === "0") {
+            filterValue = 0
+        }
+    
+        // resets semester filter to avoid conflict
+        const semestreFilter = document.getElementById("semesterFilter")
+        semestreFilter.value = 0
+    
+        $.ajax({
+            url: 'http://localhost:4000/reports-by-carrera/' + carrera.value,
+            type: 'GET',
+            success: function (data) {
+                console.log("Success: ", data)
+                modifyMeetingsDataTable(data, filterValue)
+            },
+            error: function(xhr, status, error) {
+                console.log('Error: ' + error.message);
             }
-
-            function filterBySemester(semester) {
-                filterValue = 1
-
-                if(semester.value === "0") {
-                    filterValue = 0
-                }
-
-                // resets career filter to avoid conflict
-                const carreraFilter = document.getElementById("carreraFilter")
-                carreraFilter.value = 0
-
-                $.ajax({
-                    url: 'http://localhost:4000/reports-by-semester/' + semester.value,
-                    type: 'GET',
-                    success: function (data) {
-                        console.log("Success: ", data)
-                        modifyMeetingsDataTable(data, filterValue)
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error: ' + error.message);
-                    }
-                })
+        })
+    }
+    
+    function clearFilters() {
+        filterValue = 0
+    
+        // resets semester filter to avoid conflict
+        const semestreFilter = document.getElementById("semesterFilter")
+        semestreFilter.value = 0
+    
+    
+        // resets career filter to avoid conflict
+        const carreraFilter = document.getElementById("carreraFilter")
+        carreraFilter.value = 0
+    
+        $.ajax({
+            url: 'http://localhost:4000/reports-without-filters',
+            type: 'GET',
+            success: function (data) {
+                console.log("Success: ", data)
+                modifyMeetingsDataTable(data, filterValue)
+    
+            },
+            error: function(xhr, status, error) {
+                console.log('Error: ' + error.message);
             }
-
-            function filterByCarrera(carrera) {
-                filterValue = 2
-
-                if(carrera.value === "0") {
-                    filterValue = 0
-                }
-
-                // resets semester filter to avoid conflict
-                const semestreFilter = document.getElementById("semesterFilter")
-                semestreFilter.value = 0
-
-                $.ajax({
-                    url: 'http://localhost:4000/reports-by-carrera/' + carrera.value,
-                    type: 'GET',
-                    success: function (data) {
-                        console.log("Success: ", data)
-                        modifyMeetingsDataTable(data, filterValue)
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error: ' + error.message);
-                    }
-                })
+        })
+    }
+    // Modifies meetigs table data and pagination
+    function modifyMeetingsDataTable(data, filter) {
+        const createdMeetings = document.getElementById("createdMeetingsKPI").childNodes
+        const deletedMeetings = document.getElementById('deletedMeetingsKPI').childNodes
+        const averageGPA = document.getElementById('averageGPAKPI').childNodes
+        const conditionedStudents = document.getElementById('conditionedStudentsKPI').childNodes
+    
+        // modify kpi values
+        var meetingsNum = data.reuniones.length
+        createdMeetings[3].innerHTML = meetingsNum
+        deletedMeetings[3].innerHTML = data.reunionesEliminadas.length
+        averageGPA[3].innerHTML = data.gpa
+        conditionedStudents[3].innerHTML = data.conditionedUsersNum
+    
+        // replace button onclick
+        const reportButton = document.getElementById("generateReportButton")
+        reportButton.setAttribute("onClick", "generateCSV(" + "{meetings: " + JSON.stringify(data.reuniones) + `, filter: ${filter}})`)
+    
+        // generate new data table
+        const meetingsTableWrapper = document.getElementById('meetingsTable_wrapper')
+        const meetingsContainer = meetingsTableWrapper.parentNode
+        meetingsContainer.removeChild(meetingsTableWrapper)
+    
+        var newMeetingsTable = document.createElement('table')
+        newMeetingsTable.id = "meetingsTable"
+        newMeetingsTable.classList.add("meetings-table")
+        newMeetingsTable.classList.add("table")
+        newMeetingsTable.classList.add("table-hover")
+    
+        meetingsContainer.appendChild(newMeetingsTable)
+    
+        let tHead = newMeetingsTable.createTHead();
+        let row = tHead.insertRow();
+        tHead.classList.add("thead-dark")
+    
+        // inserts table headers
+        var tHeaders = ["Número", "Tema", "Descripción", "Fecha", "Profesor", "Estudiante", "Semestre", "Estado", ""]
+    
+        // inserts table headers into table
+        for (header of tHeaders) {
+            let th = document.createElement("th");
+            let text = document.createTextNode(header)
+            th.appendChild(text);
+            row.appendChild(th);
+        }
+    
+        var newTbody = document.createElement('tbody');
+        newMeetingsTable.appendChild(newTbody)
+    
+        // insert new rows in table 
+        for (var i = 0; i < meetingsNum; i++) {
+            let row = newTbody.insertRow()
+    
+            let cellId = row.insertCell();
+            let textId = document.createTextNode(data.reuniones[i].id)
+            cellId.appendChild(textId)
+    
+            let cellTopic = row.insertCell();
+            let textTopic = document.createTextNode(data.reuniones[i].tema)
+            cellTopic.appendChild(textTopic)
+    
+            let cellDescription = row.insertCell()
+            let textDescription = document.createTextNode(data.reuniones[i].descripcion)
+            cellDescription.appendChild(textDescription)
+    
+            let cellFecha = row.insertCell();
+            let textFecha = document.createTextNode(data.reuniones[i].fecha)
+            cellFecha.appendChild(textFecha)
+    
+            let cellProfesor = row.insertCell()
+            let textProfesor = document.createTextNode(data.reuniones[i].nombresProfesor + " " + data.reuniones[i].apellidosProfesor)
+            cellProfesor.appendChild(textProfesor)
+    
+            let cellEstudiante = row.insertCell()
+            let textEstudiante = document.createTextNode(data.reuniones[i].nombresEstudiante + " " + data.reuniones[i].apellidosEstudiante)
+            cellEstudiante.appendChild(textEstudiante)
+    
+            let cellSemestre = row.insertCell()
+            let textSemestre = document.createTextNode(data.reuniones[i].semestre)
+            cellSemestre.appendChild(textSemestre)
+    
+            let cellEstado = row.insertCell()
+            let textEstado = document.createTextNode(data.reuniones[i].estado)
+            cellEstado.appendChild(textEstado)
+    
+            let cellDetalles = row.insertCell()
+    
+            if (data.reuniones[i].estadoId === 7 || data.reuniones[i].estadoId === 8) {
+                let cellDetalles = row.insertCell()
+                let linkDetalles = document.createElement("a")
+                linkDetalles.href = `/meetings/meeting-details/${data.reuniones[i].id}`
+                linkDetalles.innerHTML = "Ver detalles"
+                cellDetalles.appendChild(linkDetalles)
             }
-
-            function clearFilters() {
-                filterValue = 0
-
-                // resets semester filter to avoid conflict
-                const semestreFilter = document.getElementById("semesterFilter")
-                semestreFilter.value = 0
-
-
-                // resets career filter to avoid conflict
-                const carreraFilter = document.getElementById("carreraFilter")
-                carreraFilter.value = 0
-
-                $.ajax({
-                    url: 'http://localhost:4000/reports-without-filters',
-                    type: 'GET',
-                    success: function (data) {
-                        console.log("Success: ", data)
-                        modifyMeetingsDataTable(data, filterValue)
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error: ' + error.message);
-                    }
-                })
-            }
-            // Modifies meetigs table data and pagination
-            function modifyMeetingsDataTable(data, filter) {
-                const createdMeetings = document.getElementById("createdMeetingsKPI").childNodes
-                const deletedMeetings = document.getElementById('deletedMeetingsKPI').childNodes
-                const averageGPA = document.getElementById('averageGPAKPI').childNodes
-                const conditionedStudents = document.getElementById('conditionedStudentsKPI').childNodes
-
-                // modify kpi values
-                var meetingsNum = data.reuniones.length
-                createdMeetings[3].innerHTML = meetingsNum
-                deletedMeetings[3].innerHTML = data.reunionesEliminadas.length
-                averageGPA[3].innerHTML = data.gpa
-                conditionedStudents[3].innerHTML = data.conditionedUsersNum
-
-                // replace button onclick
-                const reportButton = document.getElementById("generateReportButton")
-                reportButton.setAttribute("onClick", "generateCSV(" + "{meetings: " + JSON.stringify(data.reuniones) + `, filter: ${filter}})`)
-
-                // generate new data table
-                const meetingsTableWrapper = document.getElementById('meetingsTable_wrapper')
-                const meetingsContainer = meetingsTableWrapper.parentNode
-                meetingsContainer.removeChild(meetingsTableWrapper)
-
-                var newMeetingsTable = document.createElement('table')
-                newMeetingsTable.id = "meetingsTable"
-                newMeetingsTable.classList.add("meetings-table")
-                newMeetingsTable.classList.add("table")
-                newMeetingsTable.classList.add("table-hover")
-
-                meetingsContainer.appendChild(newMeetingsTable)
-
-                let tHead = newMeetingsTable.createTHead();
-                let row = tHead.insertRow();
-                tHead.classList.add("thead-dark")
-
-                // inserts table headers
-                var tHeaders = ["Número", "Tema", "Descripción", "Fecha", "Profesor", "Estudiante", "Semestre", "Estado", ""]
-
-                // inserts table headers into table
-                for (header of tHeaders) {
-                    let th = document.createElement("th");
-                    let text = document.createTextNode(header)
-                    th.appendChild(text);
-                    row.appendChild(th);
-                }
-
-                var newTbody = document.createElement('tbody');
-                newMeetingsTable.appendChild(newTbody)
-
-                // insert new rows in table 
-                for (var i = 0; i < meetingsNum; i++) {
-                    let row = newTbody.insertRow()
-
-                    let cellId = row.insertCell();
-                    let textId = document.createTextNode(data.reuniones[i].id)
-                    cellId.appendChild(textId)
-
-                    let cellTopic = row.insertCell();
-                    let textTopic = document.createTextNode(data.reuniones[i].tema)
-                    cellTopic.appendChild(textTopic)
-
-                    let cellDescription = row.insertCell()
-                    let textDescription = document.createTextNode(data.reuniones[i].descripcion)
-                    cellDescription.appendChild(textDescription)
-
-                    let cellFecha = row.insertCell();
-                    let textFecha = document.createTextNode(data.reuniones[i].fecha)
-                    cellFecha.appendChild(textFecha)
-
-                    let cellProfesor = row.insertCell()
-                    let textProfesor = document.createTextNode(data.reuniones[i].nombresProfesor + " " + data.reuniones[i].apellidosProfesor)
-                    cellProfesor.appendChild(textProfesor)
-
-                    let cellEstudiante = row.insertCell()
-                    let textEstudiante = document.createTextNode(data.reuniones[i].nombresEstudiante + " " + data.reuniones[i].apellidosEstudiante)
-                    cellEstudiante.appendChild(textEstudiante)
-
-                    let cellSemestre = row.insertCell()
-                    let textSemestre = document.createTextNode(data.reuniones[i].semestre)
-                    cellSemestre.appendChild(textSemestre)
-
-                    let cellEstado = row.insertCell()
-                    let textEstado = document.createTextNode(data.reuniones[i].estado)
-                    cellEstado.appendChild(textEstado)
-
-                    let cellDetalles = row.insertCell()
-
-                    if (data.reuniones[i].estadoId === 7 || data.reuniones[i].estadoId === 8) {
-                        let cellDetalles = row.insertCell()
-                        let linkDetalles = document.createElement("a")
-                        linkDetalles.href = `/meetings/meeting-details/${data.reuniones[i].id}`
-                        linkDetalles.innerHTML = "Ver detalles"
-                        cellDetalles.appendChild(linkDetalles)
-                    }
-                }
-
-                $("#meetingsTable").DataTable({
-                    "lengthMenu": [5, 10, 20, 30]
-                });
-                $(".meetings-length").addClass("bs-select");
-            }
-        </script>
+        }
+    
+        $("#meetingsTable").DataTable({
+            "lengthMenu": [5, 10, 20, 30]
+        });
+        $(".meetings-length").addClass("bs-select");
+    }
+</script>

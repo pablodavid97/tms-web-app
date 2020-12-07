@@ -11,7 +11,7 @@ const {
 const router = express.Router();
 const axiosInstance = require('../http-client');
 const utils = require('../lib/utils');
-const {imageUpload, fileUpload} = require('../lib/upload');
+const { imageUpload, fileUpload } = require('../lib/upload');
 const fs = require('fs');
 
 router.get('/', isNotLoggedIn, (req, res) => {
@@ -25,9 +25,8 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.get('/home', isLoggedIn, async (req, res) => {
   try {
-
-    if(req.user.imagen) {
-      console.log("usuario tiene imagen!!!!");
+    if (req.user.imagen) {
+      console.log('usuario tiene imagen!!!!');
       console.log('Storing user image...');
 
       fs.writeFileSync(
@@ -150,15 +149,15 @@ router.get('/tutor', isLoggedIn, isStudentUser, async (req, res) => {
     studentInfo = tutorJSON.studentInfo;
     tutor = tutorJSON.tutor;
 
-    console.log("Tutor: ", tutor);
+    console.log('Tutor: ', tutor);
 
-    if(tutor.imagenId) {
+    if (tutor.imagenId) {
       const imageRequest = await axiosInstance.get('/image-by-id', {
-        params: {imageId: tutor.imagenId}
+        params: { imageId: tutor.imagenId }
       });
       imageJSON = imageRequest.data;
 
-      tutor.imagen =imageJSON
+      tutor.imagen = imageJSON;
 
       fs.writeFileSync(
         global.appRoot + '/public/img/tmp/' + tutor.imagen.nombre,
@@ -293,17 +292,17 @@ router.get(
       gpa = studentJSON.gpa;
       gpaList = studentJSON.gpaList;
 
-      console.log("Student: ", student);
+      console.log('Student: ', student);
 
-      if(student.imagenId) {
+      if (student.imagenId) {
         const imageRequest = await axiosInstance.get('/image-by-id', {
-          params: {imageId: student.imagenId}
+          params: { imageId: student.imagenId }
         });
         imageJSON = imageRequest.data;
-  
-        student.imagen = imageJSON
 
-        console.log("Student: ", student);
+        student.imagen = imageJSON;
+
+        console.log('Student: ', student);
 
         fs.writeFileSync(
           global.appRoot + '/public/img/tmp/' + student.imagen.nombre,
@@ -740,11 +739,11 @@ router.post(
         userId: req.user.id,
         file: file
       });
-      editProfileJSON = editProfileRequest.data
+      editProfileJSON = editProfileRequest.data;
 
-      console.log("User replacement: ", editProfileJSON);
+      console.log('User replacement: ', editProfileJSON);
 
-      req.user = editProfileJSON.user
+      req.user = editProfileJSON.user;
 
       req.flash('success', 'Tus datos han sido actualizados exitosamente!');
 

@@ -1,69 +1,65 @@
-        <div class="container profile-container main-container">
-            <div class="row">
-                <div class="col-sm-6 personal-brand">
-                    {{#if user.imagen}}
-                        <img id="userImg" class="img mb-4" src="/img/tmp/{{user.imagen.nombre}}">
-                    {{else}}
-                        <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar.jpg">
-                    {{/if}}
-                    <h3>{{user.nombres}} {{user.apellidos}}</h3>
-                    
-                    {{#if (and isProfessor true isDean true)}}
-                        <h4>Decano</h4>
-                    {{else}}
-                        {{#if isDean}}
-                            <h4>Decano</h4>
-                        {{/if}}
-
-                        {{#if isProfessor}}
-                            <h4>Profesor</h4>
-                        {{/if}}
-                    {{/if}}
-
-                    {{#if isStudent}}
-                        <h4>Estudiante</h4>
-                    {{/if}}
-
-                    {{#if isAdmin}}
-                        <h4>Administrador</h4>
-                    {{/if}}
-                </div>
-                <div class="col-sm-6 user-info">
-                    <p><span class="user-info-lbl">Código: </span> {{user.codigo}}</p>
-                    {{#if isStudent }}
-                        <p><span class="user-info-lbl">Carrera: </span> {{studentInfo.carrera}}</p>
-                        <p><span class="user-info-lbl">GPA Global: </span> {{gpa}}</p>
-                        <p><span class="user-info-lbl">Tutor: </span>{{tutor.nombres}} {{tutor.apellidos}}</p>
-                    {{/if}}
-                    <p><span class="user-info-lbl">Correo Institucional: </span>{{user.correoInstitucional}}</p>
-                    <p><span class="user-info-lbl">Correo Personal: </span>{{user.correoPersonal}}</p>
-                    <p><span class="user-info-lbl">Teléfono: </span>{{user.telefono}}</p>
-                    {{#if isStudent}}
-                        <p><span class="user-info-lbl">Periodo de Admisión: </span>{{studentInfo.periodoDeAdmision}}</p>
-                        <p><span class="user-info-lbl">Tipo de Admisión: </span>{{studentInfo.tipoDeAdmision}}</p>
-                        <p><span class="user-info-lbl">Status: </span>{{studentInfo.status}}</p>
-                    {{/if}}
-                </div>
-            </div>
+<div class="container profile-container main-container">
+    <div class="row">
+        <div class="col-sm-6 personal-brand">
+            {{#if user.imagen}}
+                <img id="userImg" class="img mb-4" src="/img/tmp/{{user.imagen.nombre}}">
+            {{else}}
+                <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar.jpg">
+            {{/if}}
+            <h3>{{user.nombres}} {{user.apellidos}}</h3>
+            {{#if (and isProfessor true isDean true)}}
+                <h4>Decano</h4>
+            {{else}}
+                {{#if isDean}}
+                    <h4>Decano</h4>
+                {{/if}}
+                {{#if isProfessor}}
+                    <h4>Profesor</h4>
+                {{/if}}
+            {{/if}}
             {{#if isStudent}}
-                <div class="gpa-by-semester-container container">
-                    <h2>GPA Por Semestre</h2>
-                    <div class="gpa-table-container scrollable-container">
-                        <table id="gpaTable" class="table table-striped">
-                            <thead>
-                                <th>Semestre</th>
-                                <th>gpa</th>
-                            </thead>
-                            <tbody>
-                                {{#each gpaList}}
-                                    <tr>
-                                        <td>{{this.semestre}}</td>
-                                        <td>{{this.gpa}}</td>
-                                    </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <h4>Estudiante</h4>
+            {{/if}}
+            {{#if isAdmin}}
+                <h4>Administrador</h4>
             {{/if}}
         </div>
+        <div class="col-sm-6 user-info">
+            <p><span class="user-info-lbl">Código: </span> {{user.codigo}}</p>
+            {{#if isStudent }}
+                <p><span class="user-info-lbl">Carrera: </span> {{studentInfo.carrera}}</p>
+                <p><span class="user-info-lbl">GPA Global: </span> {{gpa}}</p>
+                <p><span class="user-info-lbl">Tutor: </span>{{tutor.nombres}} {{tutor.apellidos}}</p>
+            {{/if}}
+                <p><span class="user-info-lbl">Correo Institucional: </span>{{user.correoInstitucional}}</p>
+                <p><span class="user-info-lbl">Correo Personal: </span>{{user.correoPersonal}}</p>
+                <p><span class="user-info-lbl">Teléfono: </span>{{user.telefono}}</p>
+            {{#if isStudent}}
+                <p><span class="user-info-lbl">Periodo de Admisión: </span>{{studentInfo.periodoDeAdmision}}</p>
+                <p><span class="user-info-lbl">Tipo de Admisión: </span>{{studentInfo.tipoDeAdmision}}</p>
+                <p><span class="user-info-lbl">Status: </span>{{studentInfo.status}}</p>
+            {{/if}}
+        </div>
+    </div>
+    {{#if isStudent}}
+        <div class="gpa-by-semester-container container">
+            <h2>GPA Por Semestre</h2>
+            <div class="gpa-table-container scrollable-container">
+                <table id="gpaTable" class="table table-striped table-responsive">
+                    <thead>
+                        <th>Semestre</th>
+                        <th>gpa</th>
+                    </thead>
+                    <tbody>
+                        {{#each gpaList}}
+                        <tr>
+                            <td>{{this.semestre}}</td>
+                            <td>{{this.gpa}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {{/if}}
+</div>

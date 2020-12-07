@@ -1,471 +1,484 @@
-            
-            <div class="meeting-notifications-container container main-container">
-                <div class="row">
-                    <div class="col-md-6 pane">
-                        <div class="notifications-container scrollable-container bg-white rounded shadow-sm">
-                            <h1 class="border-bottom border-gray pb-2 mb-0">Notificaciones</h1>
-                            {{#each notifications}}
-                                {{#if (isNot this.estadoNotificacionId 3)}}
-                                    {{#if (is this.estadoId 1)}}
-                                        <div class="notification-container">
-                                            <span class="notification-options">
-                                                <a href="/archive-notification/{{this.id}}">Archivar</a>
-                                                <a href="/delete-notification/{{this.id}}">Eliminar</a>
-                                            </span>
-                                            <div class="card  meeting-notification border-gray">
-                                                <div class="card-body text-muted">
-                                                    <div class="row notification-text">
-                                                        <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#fcba03"></rect><text x="50%" y="50%" fill="#fcba03" dy=".3em">32x32</text></svg>
-                                                        <p class="media-body pb-3 mb-0 small lh-125">
-                                                        <a onclick="populateDetailsPane({{ json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Nueva Invitación Recibida</a>
-                                                        {{this.nombresProfesor}} {{this.apellidosProfesor}} te ha invitado a una reunión.
-                                                        </p>
-                                                    </div>
-                                                    <div class="meeting-info-container row">
-                                                        <span><i class="notification-icon far fa-calendar-alt"></i></span>
-                                                        <div class="meeting-info">
-                                                            <strong>Tema: </strong><span>{{this.tema}}</span><br>
-                                                            <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {{/if}}
-                                    {{#if (is this.estadoId 2)}}
-                                        <div class="notification-container">
-                                            <span class="notification-options">
-                                                <a href="/archive-notification/{{this.id}}">Archivar</a>
-                                                <a href="/delete-notification/{{this.id}}">Eliminar</a>
-                                            </span>
-                                            <div class="card  meeting-notification border-gray">
-                                                <div class="card-body text-muted">
-                                                    <div class="row notification-text">
-                                                        <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#4d2996"></rect><text x="50%" y="50%" fill="#4d2996" dy=".3em">32x32</text></svg>
-                                                        <p class="media-body pb-3 mb-0 small lh-125">
-                                                        <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Editada</a>
-                                                        {{this.nombresProfesor}} {{this.nombresProfesor}} editó una reunión en la que participabas. Haz click en la notificación para ver más detalles.
-                                                    </div>
-                                                    <div class="meeting-info-container row">
-                                                        <span><i class="notification-icon far fa-calendar-alt"></i></span>
-                                                        <div class="meeting-info">
-                                            
-                                                            <strong>Tema: </strong><span>{{this.tema}}</span><br>
-                                                            <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {{/if}}
-                                    {{#if (is this.estadoId 3)}}
-                                        <div class="notification-container">
-                                            <span class="notification-options">
-                                                <a href="/archive-notification/{{this.id}}">Archivar</a>
-                                                <a href="/delete-notification/{{this.id}}">Eliminar</a>
-                                            </span>
-                                            <div class="card  meeting-notification border-gray">
-                                                <div class="card-body text-muted">
-                                                    <div class="row notification-text">
-                                                        <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#32a852"></rect><text x="50%" y="50%" fill="#32a852" dy=".3em">32x32</text></svg>
-                                                        <p class="media-body pb-3 mb-0 small lh-125">
-                                                        <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Aceptada</a>
-                                                        {{this.nombresEstudiante}} {{this.apellidosEstudiante}} aceptó la reunión.
-                                                    </div>
-                                                    <div class="meeting-info-container row">
-                                                        <span><i class="notification-icon far fa-calendar-alt"></i></span>
-                                                        <div class="meeting-info">
-                                                            <strong>Tema: </strong><span>{{this.tema}}</span><br>
-                                                            <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {{/if}}
-
-                                    {{#if (is this.estadoId 4)}}
-                                        <div class="notification-container">
-                                            <span class="notification-options">
-                                                <a href="/archive-notification/{{this.id}}">Archivar</a>
-                                                <a href="/delete-notification/{{this.id}}">Eliminar</a>
-                                            </span>
-                                            <div class="card  meeting-notification border-gray">
-                                                <div class="card-body text-muted">
-                                                    <div class="row notification-text">
-                                                        <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#b8322e"></rect><text x="50%" y="50%" fill="#b8322e" dy=".3em">32x32</text></svg>
-                                                        <p class="media-body pb-3 mb-0 small lh-125">
-                                                        <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Rechazada</a>
-                                                        {{this.nombresEstudiante}} {{this.apellidosEstudiante}} rechazó la reunión que creaste, has click en esta notificación para ver más detalles.
-                                                    </div>
-                                                    <div class="meeting-info-container row">
-                                                        <span><i class="notification-icon far fa-calendar-alt"></i></span>
-                                                        <div class="meeting-info">
-                                                        
-                                                            <strong>Tema: </strong><span>{{this.tema}}</span><br>
-                                                            <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {{/if}}
-
-                                    {{#if (is this.estadoId 5)}}
-                                        <div class="notification-container">
-                                            <span class="notification-options">
-                                                <a href="/archive-notification/{{this.id}}">Archivar</a>
-                                                <a href="/delete-notification/{{this.id}}">Eliminar</a>
-                                            </span>
-                                            <div class="card  meeting-notification border-gray">
-                                                <div class="card-body text-muted">
-                                                    <div class="row notification-text">
-                                                        <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#000000"></rect><text x="50%" y="50%" fill="#000000" dy=".3em">32x32</text></svg>
-                                                        <p class="media-body pb-3 mb-0 small lh-125">
-                                                        <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Eliminada</a>
-                                                        {{this.nombresProfesor}} {{this.apellidosProfesor}} eliminó una reunión en la que participabas, ponte en contacto con tu profesor para más información.
-                                                    </div>
-                                                    <div class="meeting-info-container row">
-                                                        <span><i class="notification-icon far fa-calendar-alt"></i></span>
-                                                        <div class="meeting-info">
-                                                
-                                                            <strong>Tema: </strong><span>{{this.tema}}</span><br>
-                                                            <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {{/if}}
-
-                                    {{#if (is this.estadoId 6)}}
-                                        <div class="notification-container">
-                                            <span class="notification-options">
-                                                <a href="/archive-notification/{{this.id}}">Archivar</a>
-                                                <a href="/delete-notification/{{this.id}}">Eliminar</a>
-                                            </span>
-                                            <div class="card  meeting-notification border-gray">
-                                                <div class="card-body text-muted">
-                                                    <div class="row notification-text">
-                                                        <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#268efc"></rect><text x="50%" y="50%" fill="#268efc" dy=".3em">32x32</text></svg>
-                                                        <p class="media-body pb-3 mb-0 small lh-125">
-                                                        <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión En Progreso</a>
-                                                        Tienes una reunión fijada para el día de hoy, haz click en esta notificación para ver más detalles.
-                                                    </div>
-                                                    <div class="meeting-info-container row">
-                                                        <span><i class="notification-icon far fa-calendar-alt"></i></span>
-                                                        <div class="meeting-info">
-                                                
-                                                            <strong>Tema: </strong><span>{{this.tema}}</span><br>
-                                                            <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {{/if}}
-
-                                    {{#if (is this.estadoId 7)}}
-                                        <div class="notification-container">
-                                            <span class="notification-options">
-                                                <a href="/archive-notification/{{this.id}}">Archivar</a>
-                                                <a href="/delete-notification/{{this.id}}">Eliminar</a>
-                                            </span>
-                                            <div class="card  meeting-notification border-gray">
-                                                <div class="card-body text-muted">
-                                                    <div class="row notification-text">
-                                                        <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#9e9e9e"></rect><text x="50%" y="50%" fill="#9e9e9e" dy=".3em">32x32</text></svg>
-                                                        <p class="media-body pb-3 mb-0 small lh-125">
-                                                        <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Realizada</a>
-                                                        {{#if ../isProfessor}}
-                                                            Indicaste que la reunión se realizó, haz click aquí para ver más detalles. 
-                                                        {{else}}
-                                                            {{this.nombresProfesor}} {{this.apellidosProfesor}} indicó que la reunión se realizó con exito, ponte en contacto con tu tutor para saber más detalles. 
-                                                        {{/if}}
-                                                    </div>
-                                                    <div class="meeting-info-container row">
-                                                        <span><i class="notification-icon far fa-calendar-alt"></i></span>
-                                                        <div class="meeting-info">
-                                                
-                                                            <strong>Tema: </strong><span>{{this.tema}}</span><br>
-                                                            <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {{/if}}
-
-                                    {{#if (is this.estadoId 8)}}
-                                        <div class="notification-container">
-                                            <span class="notification-options">
-                                                <a href="/archive-notification/{{this.id}}">Archivar</a>
-                                                <a href="/delete-notification/{{this.id}}">Eliminar</a>
-                                            </span>
-                                            <div class="card  meeting-notification border-gray">
-                                                <div class="card-body text-muted">
-                                                    <div class="row notification-text">
-                                                        <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#9e9e9e"></rect><text x="50%" y="50%" fill="#9e9e9e" dy=".3em">32x32</text></svg>
-                                                        <p class="media-body pb-3 mb-0 small lh-125">
-                                                        <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión No Realizada</a>
-                                                        {{#if ../isProfessor}}
-                                                            Indicaste que la reunión no se realizó, haz click aquí para ver más detalles. 
-                                                        {{else}}
-                                                            {{this.nombresProfesor}} {{this.apellidosProfesor}} indicó que la reunión no se realizó, ponte en contacto con tu tutor para saber más detalles. 
-                                                        {{/if}}
-                                                    </div>
-                                                    <div class="meeting-info-container row">
-                                                        <span><i class="notification-icon far fa-calendar-alt"></i></span>
-                                                        <div class="meeting-info">
-                                                
-                                                            <strong>Tema: </strong><span>{{this.tema}}</span><br>
-                                                            <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {{/if}}
-                                {{/if}}
-                          
-                            {{/each}}
-                        </div>
-                    </div>
-                    <div class="col-md-6 pane meeting-details-pane">
-                        <div class="meeting-details-content">
-                                <div class="meeting-section">
-                                    <div id="rejectedMeetingHeader" class="row border-bottom border-gray">
-                                        <div class="col-sm-7">
-                                            <h2 id="detailsPaneRejectedMeetingSubject"></h2>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <a href="" id="editMeetingButton" class="btn btn-secondary">Reagendar reunión</a>
-                                        </div>
-                                    </div>
-
-                                    <div id="dailyMeetingHeader" class="row border-bottom border-gray">
-                                        <div class="col-sm-7">
-                                            <h2 id="detailsPaneDailyMeetingSubject"></h2>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <a href="" id="goToMeetingButton" class="btn btn-secondary">Ir a reunión</a>
-                                        </div>
-                                    </div>
-                                
-                                    <div id="meetingHeader">
-                                        <h2 id="detailsPaneMeetingSubject" class="border-bottom border-gray pb-2"></h2>
-                                    </div>
+<div class="meeting-notifications-container container main-container">
+    <div class="row">
+        <div class="col-md-6 pane">
+            <div class="notifications-container scrollable-container bg-white rounded shadow-sm">
+                <h1 class="border-bottom border-gray pb-2 mb-0">Notificaciones</h1>
+                {{#each notifications}}
+                {{#if (isNot this.estadoNotificacionId 3)}}
+                {{#if (is this.estadoId 1)}}
+                <div class="notification-container">
+                    <span class="notification-options">
+                    <a href="/archive-notification/{{this.id}}">Archivar</a>
+                    <a href="/delete-notification/{{this.id}}">Eliminar</a>
+                    </span>
+                    <div class="card  meeting-notification border-gray">
+                        <div class="card-body text-muted">
+                            <div class="row notification-text">
+                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                    <title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#fcba03"></rect>
+                                    <text x="50%" y="50%" fill="#fcba03" dy=".3em">32x32</text>
+                                </svg>
+                                <p class="media-body pb-3 mb-0 small lh-125">
+                                    <a onclick="populateDetailsPane({{ json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Nueva Invitación Recibida</a>
+                                    {{this.nombresProfesor}} {{this.apellidosProfesor}} te ha invitado a una reunión.
+                                </p>
+                            </div>
+                            <div class="meeting-info-container row">
+                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                <div class="meeting-info">
+                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
                                 </div>
-                                <div class="meeting-section">
-                                    <label class="meetingLabel">Reunión No: </label> <span id="detailsPaneMeetingId"></span>
-                                </div>
-                                <div class="meeting-section">
-                                    <label class="meetingLabel">Fecha:</label> <span id="detailsPaneDate"></span>
-                                </div>
-                                <div class="row meeting-section">
-                                    <div class="col-sm-6">
-                                        <label class="meetingLabel" for="professorMeetingInput">Profesor:</label>
-                                        <span id="detailsPaneProfessor"></span>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label class="meetingLabel" for="studentMeetingInput">Estudiante:</label>
-                                        <span id="detailsPaneStudent"></span>
-                                    </div>
-                                </div>
-                                <div class="meeting-section">
-                                    <label class="meetingLabel">Descripción</label>
-                                    <p id="detailsPaneDescription">
-                                    </p>
-                                </div>
-                                
-                                <div id="studentResponseSection" class="meeting-section">
-                                    <form action="/notifications" method="POST">
-                                        <input type="hidden" class="form-control form-input notification-id" id="detailsPaneNotificationId" name="notificationId">
-                                        <input type="hidden" class="form-control form-input meeting-id" id="detailsPaneMeetingIdInput" name="meetingId">
-                                        <input type="hidden" class="form-control form-input profesor-id" id="detailsPaneProfesorId" name="profesorId">
-                                        <label class="meetingLabel">¿Aceptas la reunión?</label>
-                                        <div class="form-group student-form-response">
-                                            <div class="form-check form-check-inline col-sm-1">
-                                                <input class="form-check-input" type="radio" name="meetingOption" id="yesRadioOptn" value="1">
-                                                <label class="form-check-label" for="yesRadioOptn">Si</label>
-                                            </div>
-                                            <div class="form-check form-check-inline col-sm-1">
-                                                <input class="form-check-input" type="radio" name="meetingOption" id="noRadioOptn" value="0">
-                                                <label class="form-check-label" for="noRadioOptn">No</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group student-form-response">
-                                            <label class="meetingLabel" for="studentCommentTextArea">Comentarios</label>
-                                            <textarea name="comment" id="studentCommentTextArea" class="meeting-student-comment form-control" rows="5"></textarea>
-                                        </div>                                    
-                                        <div id="submitButtonContainer" class="form-container-btn">
-                                            <button type="submit" class="btn btn-primary">Envíar Respuesta</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            
-                                <div id="studentCommentSection" class="meeting-section">
-                                    <label class="meetingLabel" for="detailsPaneStudentComment">Comentarios</label>
-                                    <p id="detailsPaneStudentComment"></p>
-                                </div>
-
-                                <div id="doneMeetingCommentsSection" class="meeting-section">
-                                    {{#if isStudent}}
-                                        <label class="meetingLabel" for="doneMeetingStudentComment">Comentarios Estudiante: </label>
-                                        <p id="doneMeetingStudentComment"></p>
-                                    {{/if}}
-
-                                    {{#if isProfessor}}
-                                        <label class="meetingLabel" for="doneMeetingProfessorComment">Comentarios Profesor: </label>
-                                        <p id="doneMeetingProfessorComment"></p>
-                                    {{/if}}
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {{/if}}
+                {{#if (is this.estadoId 2)}}
+                <div class="notification-container">
+                    <span class="notification-options">
+                    <a href="/archive-notification/{{this.id}}">Archivar</a>
+                    <a href="/delete-notification/{{this.id}}">Eliminar</a>
+                    </span>
+                    <div class="card  meeting-notification border-gray">
+                        <div class="card-body text-muted">
+                            <div class="row notification-text">
+                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                    <title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#4d2996"></rect>
+                                    <text x="50%" y="50%" fill="#4d2996" dy=".3em">32x32</text>
+                                </svg>
+                                <p class="media-body pb-3 mb-0 small lh-125">
+                                    <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Editada</a>
+                                    {{this.nombresProfesor}} {{this.nombresProfesor}} editó una reunión en la que participabas. Haz click en la notificación para ver más detalles.
+                            </div>
+                            <div class="meeting-info-container row">
+                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                <div class="meeting-info">
+                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if (is this.estadoId 3)}}
+                <div class="notification-container">
+                    <span class="notification-options">
+                    <a href="/archive-notification/{{this.id}}">Archivar</a>
+                    <a href="/delete-notification/{{this.id}}">Eliminar</a>
+                    </span>
+                    <div class="card  meeting-notification border-gray">
+                        <div class="card-body text-muted">
+                            <div class="row notification-text">
+                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                    <title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#32a852"></rect>
+                                    <text x="50%" y="50%" fill="#32a852" dy=".3em">32x32</text>
+                                </svg>
+                                <p class="media-body pb-3 mb-0 small lh-125">
+                                    <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Aceptada</a>
+                                    {{this.nombresEstudiante}} {{this.apellidosEstudiante}} aceptó la reunión.
+                            </div>
+                            <div class="meeting-info-container row">
+                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                <div class="meeting-info">
+                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if (is this.estadoId 4)}}
+                <div class="notification-container">
+                    <span class="notification-options">
+                    <a href="/archive-notification/{{this.id}}">Archivar</a>
+                    <a href="/delete-notification/{{this.id}}">Eliminar</a>
+                    </span>
+                    <div class="card  meeting-notification border-gray">
+                        <div class="card-body text-muted">
+                            <div class="row notification-text">
+                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                    <title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#b8322e"></rect>
+                                    <text x="50%" y="50%" fill="#b8322e" dy=".3em">32x32</text>
+                                </svg>
+                                <p class="media-body pb-3 mb-0 small lh-125">
+                                    <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Rechazada</a>
+                                    {{this.nombresEstudiante}} {{this.apellidosEstudiante}} rechazó la reunión que creaste, has click en esta notificación para ver más detalles.
+                            </div>
+                            <div class="meeting-info-container row">
+                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                <div class="meeting-info">
+                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if (is this.estadoId 5)}}
+                <div class="notification-container">
+                    <span class="notification-options">
+                    <a href="/archive-notification/{{this.id}}">Archivar</a>
+                    <a href="/delete-notification/{{this.id}}">Eliminar</a>
+                    </span>
+                    <div class="card  meeting-notification border-gray">
+                        <div class="card-body text-muted">
+                            <div class="row notification-text">
+                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                    <title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#000000"></rect>
+                                    <text x="50%" y="50%" fill="#000000" dy=".3em">32x32</text>
+                                </svg>
+                                <p class="media-body pb-3 mb-0 small lh-125">
+                                    <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Eliminada</a>
+                                    {{this.nombresProfesor}} {{this.apellidosProfesor}} eliminó una reunión en la que participabas, ponte en contacto con tu profesor para más información.
+                            </div>
+                            <div class="meeting-info-container row">
+                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                <div class="meeting-info">
+                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if (is this.estadoId 6)}}
+                <div class="notification-container">
+                    <span class="notification-options">
+                    <a href="/archive-notification/{{this.id}}">Archivar</a>
+                    <a href="/delete-notification/{{this.id}}">Eliminar</a>
+                    </span>
+                    <div class="card  meeting-notification border-gray">
+                        <div class="card-body text-muted">
+                            <div class="row notification-text">
+                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                    <title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#268efc"></rect>
+                                    <text x="50%" y="50%" fill="#268efc" dy=".3em">32x32</text>
+                                </svg>
+                                <p class="media-body pb-3 mb-0 small lh-125">
+                                    <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión En Progreso</a>
+                                    Tienes una reunión fijada para el día de hoy, haz click en esta notificación para ver más detalles.
+                            </div>
+                            <div class="meeting-info-container row">
+                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                <div class="meeting-info">
+                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if (is this.estadoId 7)}}
+                <div class="notification-container">
+                    <span class="notification-options">
+                    <a href="/archive-notification/{{this.id}}">Archivar</a>
+                    <a href="/delete-notification/{{this.id}}">Eliminar</a>
+                    </span>
+                    <div class="card  meeting-notification border-gray">
+                        <div class="card-body text-muted">
+                            <div class="row notification-text">
+                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                    <title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#9e9e9e"></rect>
+                                    <text x="50%" y="50%" fill="#9e9e9e" dy=".3em">32x32</text>
+                                </svg>
+                                <p class="media-body pb-3 mb-0 small lh-125">
+                                    <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión Realizada</a>
+                                    {{#if ../isProfessor}}
+                                    Indicaste que la reunión se realizó, haz click aquí para ver más detalles. 
+                                    {{else}}
+                                    {{this.nombresProfesor}} {{this.apellidosProfesor}} indicó que la reunión se realizó con exito, ponte en contacto con tu tutor para saber más detalles. 
+                                    {{/if}}
+                            </div>
+                            <div class="meeting-info-container row">
+                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                <div class="meeting-info">
+                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if (is this.estadoId 8)}}
+                <div class="notification-container">
+                    <span class="notification-options">
+                    <a href="/archive-notification/{{this.id}}">Archivar</a>
+                    <a href="/delete-notification/{{this.id}}">Eliminar</a>
+                    </span>
+                    <div class="card  meeting-notification border-gray">
+                        <div class="card-body text-muted">
+                            <div class="row notification-text">
+                                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                    <title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#9e9e9e"></rect>
+                                    <text x="50%" y="50%" fill="#9e9e9e" dy=".3em">32x32</text>
+                                </svg>
+                                <p class="media-body pb-3 mb-0 small lh-125">
+                                    <a onclick="populateDetailsPane({{json this}})" href="#" class="d-block text-gray-dark stretched-link notification-link">Reunión No Realizada</a>
+                                    {{#if ../isProfessor}}
+                                    Indicaste que la reunión no se realizó, haz click aquí para ver más detalles. 
+                                    {{else}}
+                                    {{this.nombresProfesor}} {{this.apellidosProfesor}} indicó que la reunión no se realizó, ponte en contacto con tu tutor para saber más detalles. 
+                                    {{/if}}
+                            </div>
+                            <div class="meeting-info-container row">
+                                <span><i class="notification-icon far fa-calendar-alt"></i></span>
+                                <div class="meeting-info">
+                                    <strong>Tema: </strong><span>{{this.tema}}</span><br>
+                                    <strong>Fecha: </strong><span>{{this.fecha}}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+                {{/if}}
+                {{/each}}
             </div>
-            <script>
-                function populateDetailsPane (notification) {
-                    if(notification.estadoNotificacionId === 1) {
-                        $.ajax({
-                            url: 'http://localhost:4000/viewed-notification',
-                            data: {"notificationId": notification.id},
-                            type: 'POST',
-                            success: function (data) {
-                                console.log("Success: ", data)
-                            },
-                            error: function(xhr, status, error) {
-                                console.log('Error: ' + error.message);
-                            }
-                        })
-                    }
-
-                    var meetingId = document.getElementById('detailsPaneMeetingId')
-                    var date = document.getElementById('detailsPaneDate')
-                    var professor = document.getElementById('detailsPaneProfessor')
-                    var student = document.getElementById('detailsPaneStudent')
-                    var description = document.getElementById('detailsPaneDescription')
-                    var studentResponse = document.getElementById('studentResponseSection')
-                    var meetingDetailsContent = document.getElementsByClassName('meeting-details-content')
-                    var notificationId = document.getElementById('detailsPaneNotificationId')
-                    var meetingIdInput = document.getElementById('detailsPaneMeetingIdInput')
-                    var profesorId = document.getElementById('detailsPaneProfesorId')
-                    var studentCommentSection = document.getElementById('studentCommentSection')
-                    var studentComment = document.getElementById('detailsPaneStudentComment')
-                    var meetingSubject = document.getElementById('detailsPaneMeetingSubject')
-                    var dailyMeetingSubject = document.getElementById('detailsPaneDailyMeetingSubject')
-                    var dailyMeetingHeader = document.getElementById('dailyMeetingHeader')
-                    var meetingHeader = document.getElementById('meetingHeader')
-                    var goToMeetingButton = document.getElementById('goToMeetingButton')
-                    var rejectedMeetingHeader = document.getElementById('rejectedMeetingHeader')
-                    var rejectedMeetingSubject = document.getElementById('detailsPaneRejectedMeetingSubject')
-                    var editMeetingButton = document.getElementById('editMeetingButton')
-                    var doneMeetingCommentsSection = document.getElementById('doneMeetingCommentsSection')
-                    var doneMeetingStudentComment = document.getElementById('doneMeetingStudentComment')
-                    var doneMeetingProfessorComment = document.getElementById('doneMeetingProfessorComment')
-
-                    meetingDetailsContent[0].style.display = "block"
-
-                    // reuniones creadas
-                    if(notification.estadoId === 1) {
-                        studentResponse.style.display = "block"
-                        notificationId.value = notification.id
-                        meetingIdInput.value = notification.reunionId
-                        profesorId.value = notification.profesorId
-                        studentCommentSection.style.display = "none"
-                        meetingHeader.style.display = "block"
-                        dailyMeetingHeader.style.display = "none"
-                        rejectedMeetingHeader.style.display = "none"
-                        if(doneMeetingCommentsSection) {
-                            doneMeetingCommentsSection.style.display = "none"
-                        }
-                    } 
-                    // reuniones editadas
-                    else if (notification.estadoId === 2) {
-                        studentResponse.style.display = "block"
-                        notificationId.value = notification.id
-                        meetingIdInput.value = notification.reunionId
-                        profesorId.value = notification.profesorId
-                        studentCommentSection.style.display = "none"
-                        meetingHeader.style.display = "block"
-                        dailyMeetingHeader.style.display = "none"
-                        rejectedMeetingHeader.style.display = "none"
-                        if(doneMeetingCommentsSection) {
-                            doneMeetingCommentsSection.style.display = "none"
-                        }
-                    } 
-                    // reuniones aceptadas
-                    else if (notification.estadoId === 3) {
-                        studentResponse.style.display = "none"
-                        studentCommentSection.style.display = "block"
-                        studentComment.innerHTML = notification.comentariosEstudiante
-                        meetingHeader.style.display = "block"
-                        dailyMeetingHeader.style.display = "none"
-                        rejectedMeetingHeader.style.display = "none"
-                        if(doneMeetingCommentsSection) {
-                            doneMeetingCommentsSection.style.display = "none"
-                        }
-                    } 
-                    // reuniones rechazadas
-                    else if (notification.estadoId === 4){
-                        studentResponse.style.display = "none"
-                        studentCommentSection.style.display = "block"
-                        studentComment.innerHTML = notification.comentariosEstudiante
-                        meetingHeader.style.display = "none"
-                        dailyMeetingHeader.style.display = "none"
-                        rejectedMeetingHeader.style.display = "flex"
-                        editMeetingButton.href = "/meetings/reschedule/" + notification.reunionId + "/" + notification.id
-                        if(doneMeetingCommentsSection) {
-                            doneMeetingCommentsSection.style.display = "none"
-                        }
-                    }
-                    // reuniones eliminadas
-                    else if (notification.estadoId === 5) {
-                        rejectedMeetingHeader.style.display = "none"
-                        studentResponse.style.display = "none"
-                        studentCommentSection.style.display = "none"
-                        meetingHeader.style.display = "block"
-                        dailyMeetingHeader.style.display = "none"
-                    }
-                    // reuniones en progreso
-                    else if (notification.estadoId === 6) {
-                        studentResponse.style.display = "none"
-                        studentCommentSection.style.display = "block"
-                        studentComment.innerHTML = notification.comentariosEstudiante
-                        meetingHeader.style.display = "none"
-                        rejectedMeetingHeader.style.display = "none"
-                        dailyMeetingHeader.style.display = "flex"
-                        goToMeetingButton.href = "/meetings/go-to-meeting/" + notification.reunionId + "/" + notification.id
-                        if(doneMeetingCommentsSection) {
-                            doneMeetingCommentsSection.style.display = "none"
-                        }
-                    }
-                    // reuniones realizadas y no realizadas
-                    else if (notification.estadoId === 7 || notification.estadoId === 8) {
-                        rejectedMeetingHeader.style.display = "none"
-                        studentResponse.style.display = "none"
-                        studentCommentSection.style.display = "none"
-                        meetingHeader.style.display = "block"
-                        dailyMeetingHeader.style.display = "none"
-                        doneMeetingCommentsSection.style.display = "block"
-
-                        if(doneMeetingProfessorComment){
-                            doneMeetingProfessorComment.innerHTML = notification.comentariosProfesor
-                        }
-
-                        if(doneMeetingStudentComment) {
-                            doneMeetingStudentComment.innerHTML = notification.comentariosEstudiante
-                        }
-                    }
-                
-                    meetingSubject.innerHTML = notification.tema
-                    dailyMeetingSubject.innerHTML = notification.tema
-                    rejectedMeetingSubject.innerHTML = notification.tema
-                    meetingId.innerHTML = notification.reunionId
-                    date.innerHTML = notification.fecha
-                    professor.innerHTML = notification.nombresProfesor + " " + notification.apellidosProfesor
-                    student.innerHTML = notification.nombresEstudiante + " " + notification.apellidosEstudiante
-                    description.innerHTML = notification.descripcion
-
-                } 
-            </script>
+        </div>
+        <div class="col-md-6 pane meeting-details-pane">
+            <div class="meeting-details-content">
+                <div class="meeting-section">
+                    <div id="rejectedMeetingHeader" class="row border-bottom border-gray">
+                        <div class="col-sm-7">
+                            <h2 id="detailsPaneRejectedMeetingSubject"></h2>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="" id="editMeetingButton" class="btn btn-secondary">Reagendar reunión</a>
+                        </div>
+                    </div>
+                    <div id="dailyMeetingHeader" class="row border-bottom border-gray">
+                        <div class="col-sm-7">
+                            <h2 id="detailsPaneDailyMeetingSubject"></h2>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="" id="goToMeetingButton" class="btn btn-secondary">Ir a reunión</a>
+                        </div>
+                    </div>
+                    <div id="meetingHeader">
+                        <h2 id="detailsPaneMeetingSubject" class="border-bottom border-gray pb-2"></h2>
+                    </div>
+                </div>
+                <div class="meeting-section">
+                    <label class="meetingLabel">Reunión No: </label> <span id="detailsPaneMeetingId"></span>
+                </div>
+                <div class="meeting-section">
+                    <label class="meetingLabel">Fecha:</label> <span id="detailsPaneDate"></span>
+                </div>
+                <div class="row meeting-section">
+                    <div class="col-sm-6">
+                        <label class="meetingLabel" for="professorMeetingInput">Profesor:</label>
+                        <span id="detailsPaneProfessor"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="meetingLabel" for="studentMeetingInput">Estudiante:</label>
+                        <span id="detailsPaneStudent"></span>
+                    </div>
+                </div>
+                <div class="meeting-section">
+                    <label class="meetingLabel">Descripción</label>
+                    <p id="detailsPaneDescription">
+                    </p>
+                </div>
+                <div id="studentResponseSection" class="meeting-section">
+                    <form action="/notifications" method="POST">
+                        <input type="hidden" class="form-control form-input notification-id" id="detailsPaneNotificationId" name="notificationId">
+                        <input type="hidden" class="form-control form-input meeting-id" id="detailsPaneMeetingIdInput" name="meetingId">
+                        <input type="hidden" class="form-control form-input profesor-id" id="detailsPaneProfesorId" name="profesorId">
+                        <label class="meetingLabel">¿Aceptas la reunión?</label>
+                        <div class="form-group student-form-response">
+                            <div class="form-check form-check-inline col-sm-1">
+                                <input class="form-check-input" type="radio" name="meetingOption" id="yesRadioOptn" value="1">
+                                <label class="form-check-label" for="yesRadioOptn">Si</label>
+                            </div>
+                            <div class="form-check form-check-inline col-sm-1">
+                                <input class="form-check-input" type="radio" name="meetingOption" id="noRadioOptn" value="0">
+                                <label class="form-check-label" for="noRadioOptn">No</label>
+                            </div>
+                        </div>
+                        <div class="form-group student-form-response">
+                            <label class="meetingLabel" for="studentCommentTextArea">Comentarios</label>
+                            <textarea name="comment" id="studentCommentTextArea" class="meeting-student-comment form-control" rows="5"></textarea>
+                        </div>
+                        <div id="submitButtonContainer" class="form-container-btn">
+                            <button type="submit" class="btn btn-primary">Envíar Respuesta</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="studentCommentSection" class="meeting-section">
+                    <label class="meetingLabel" for="detailsPaneStudentComment">Comentarios</label>
+                    <p id="detailsPaneStudentComment"></p>
+                </div>
+                <div id="doneMeetingCommentsSection" class="meeting-section">
+                    {{#if isStudent}}
+                    <label class="meetingLabel" for="doneMeetingStudentComment">Comentarios Estudiante: </label>
+                    <p id="doneMeetingStudentComment"></p>
+                    {{/if}}
+                    {{#if isProfessor}}
+                    <label class="meetingLabel" for="doneMeetingProfessorComment">Comentarios Profesor: </label>
+                    <p id="doneMeetingProfessorComment"></p>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function populateDetailsPane (notification) {
+        if(notification.estadoNotificacionId === 1) {
+            $.ajax({
+                url: 'http://localhost:4000/viewed-notification',
+                data: {"notificationId": notification.id},
+                type: 'POST',
+                success: function (data) {
+                    console.log("Success: ", data)
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            })
+        }
+    
+        var meetingId = document.getElementById('detailsPaneMeetingId')
+        var date = document.getElementById('detailsPaneDate')
+        var professor = document.getElementById('detailsPaneProfessor')
+        var student = document.getElementById('detailsPaneStudent')
+        var description = document.getElementById('detailsPaneDescription')
+        var studentResponse = document.getElementById('studentResponseSection')
+        var meetingDetailsContent = document.getElementsByClassName('meeting-details-content')
+        var notificationId = document.getElementById('detailsPaneNotificationId')
+        var meetingIdInput = document.getElementById('detailsPaneMeetingIdInput')
+        var profesorId = document.getElementById('detailsPaneProfesorId')
+        var studentCommentSection = document.getElementById('studentCommentSection')
+        var studentComment = document.getElementById('detailsPaneStudentComment')
+        var meetingSubject = document.getElementById('detailsPaneMeetingSubject')
+        var dailyMeetingSubject = document.getElementById('detailsPaneDailyMeetingSubject')
+        var dailyMeetingHeader = document.getElementById('dailyMeetingHeader')
+        var meetingHeader = document.getElementById('meetingHeader')
+        var goToMeetingButton = document.getElementById('goToMeetingButton')
+        var rejectedMeetingHeader = document.getElementById('rejectedMeetingHeader')
+        var rejectedMeetingSubject = document.getElementById('detailsPaneRejectedMeetingSubject')
+        var editMeetingButton = document.getElementById('editMeetingButton')
+        var doneMeetingCommentsSection = document.getElementById('doneMeetingCommentsSection')
+        var doneMeetingStudentComment = document.getElementById('doneMeetingStudentComment')
+        var doneMeetingProfessorComment = document.getElementById('doneMeetingProfessorComment')
+    
+        meetingDetailsContent[0].style.display = "block"
+    
+        // reuniones creadas
+        if(notification.estadoId === 1) {
+            studentResponse.style.display = "block"
+            notificationId.value = notification.id
+            meetingIdInput.value = notification.reunionId
+            profesorId.value = notification.profesorId
+            studentCommentSection.style.display = "none"
+            meetingHeader.style.display = "block"
+            dailyMeetingHeader.style.display = "none"
+            rejectedMeetingHeader.style.display = "none"
+            if(doneMeetingCommentsSection) {
+                doneMeetingCommentsSection.style.display = "none"
+            }
+        } 
+        // reuniones editadas
+        else if (notification.estadoId === 2) {
+            studentResponse.style.display = "block"
+            notificationId.value = notification.id
+            meetingIdInput.value = notification.reunionId
+            profesorId.value = notification.profesorId
+            studentCommentSection.style.display = "none"
+            meetingHeader.style.display = "block"
+            dailyMeetingHeader.style.display = "none"
+            rejectedMeetingHeader.style.display = "none"
+            if(doneMeetingCommentsSection) {
+                doneMeetingCommentsSection.style.display = "none"
+            }
+        } 
+        // reuniones aceptadas
+        else if (notification.estadoId === 3) {
+            studentResponse.style.display = "none"
+            studentCommentSection.style.display = "block"
+            studentComment.innerHTML = notification.comentariosEstudiante
+            meetingHeader.style.display = "block"
+            dailyMeetingHeader.style.display = "none"
+            rejectedMeetingHeader.style.display = "none"
+            if(doneMeetingCommentsSection) {
+                doneMeetingCommentsSection.style.display = "none"
+            }
+        } 
+        // reuniones rechazadas
+        else if (notification.estadoId === 4){
+            studentResponse.style.display = "none"
+            studentCommentSection.style.display = "block"
+            studentComment.innerHTML = notification.comentariosEstudiante
+            meetingHeader.style.display = "none"
+            dailyMeetingHeader.style.display = "none"
+            rejectedMeetingHeader.style.display = "flex"
+            editMeetingButton.href = "/meetings/reschedule/" + notification.reunionId + "/" + notification.id
+            if(doneMeetingCommentsSection) {
+                doneMeetingCommentsSection.style.display = "none"
+            }
+        }
+        // reuniones eliminadas
+        else if (notification.estadoId === 5) {
+            rejectedMeetingHeader.style.display = "none"
+            studentResponse.style.display = "none"
+            studentCommentSection.style.display = "none"
+            meetingHeader.style.display = "block"
+            dailyMeetingHeader.style.display = "none"
+        }
+        // reuniones en progreso
+        else if (notification.estadoId === 6) {
+            studentResponse.style.display = "none"
+            studentCommentSection.style.display = "block"
+            studentComment.innerHTML = notification.comentariosEstudiante
+            meetingHeader.style.display = "none"
+            rejectedMeetingHeader.style.display = "none"
+            dailyMeetingHeader.style.display = "flex"
+            goToMeetingButton.href = "/meetings/go-to-meeting/" + notification.reunionId + "/" + notification.id
+            if(doneMeetingCommentsSection) {
+                doneMeetingCommentsSection.style.display = "none"
+            }
+        }
+        // reuniones realizadas y no realizadas
+        else if (notification.estadoId === 7 || notification.estadoId === 8) {
+            rejectedMeetingHeader.style.display = "none"
+            studentResponse.style.display = "none"
+            studentCommentSection.style.display = "none"
+            meetingHeader.style.display = "block"
+            dailyMeetingHeader.style.display = "none"
+            doneMeetingCommentsSection.style.display = "block"
+    
+            if(doneMeetingProfessorComment){
+                doneMeetingProfessorComment.innerHTML = notification.comentariosProfesor
+            }
+    
+            if(doneMeetingStudentComment) {
+                doneMeetingStudentComment.innerHTML = notification.comentariosEstudiante
+            }
+        }
+    
+        meetingSubject.innerHTML = notification.tema
+        dailyMeetingSubject.innerHTML = notification.tema
+        rejectedMeetingSubject.innerHTML = notification.tema
+        meetingId.innerHTML = notification.reunionId
+        date.innerHTML = notification.fecha
+        professor.innerHTML = notification.nombresProfesor + " " + notification.apellidosProfesor
+        student.innerHTML = notification.nombresEstudiante + " " + notification.apellidosEstudiante
+        description.innerHTML = notification.descripcion
+    
+    } 
+</script>

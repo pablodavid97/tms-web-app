@@ -1,53 +1,50 @@
-      <div class="container daily-meeting-container main-container">
-        <div class="meeting-details">
-                <div class="meeting-section">
-                    <h1>{{meeting.tema}}</h1>
-                </div>
-                <div class="meeting-section">
-                    <p>{{meeting.descripcion}}</p>
-                </div>
-
-                {{#if isProfessor}}
-                    <div class="meeting-section">
-                        <h2>Información del Estudiante</h2>
-                        <div class="meeting-student-info">
-                            <p><span class="student-info-lbl">Nombre Completo: </span> {{student.nombres}} {{student.apellidos}}</p>
-                            <p><span class="student-info-lbl">GPA Global: </span> {{gpa}}</p>
-                            <p><span class="student-info-lbl">Periodo de Admisión: </span>{{student.periodoDeAdmision}}</p>
-                            <p><span class="student-info-lbl">Tipo de Admisión: </span>{{student.tipoDeAdmision}}</p>
-                            <p><span class="student-info-lbl">Status: </span>{{student.status}}</p>
-                        </div>
-                    </div>
-                {{/if}}
-                <form action="/meetings/done" method="POST">
-                    <input name="meetingId" type="hidden" id="meetingId" class="form-control" value="{{meeting.id}}">
-                    <input name="notificationId" type="hidden" id="notificationId" class="form-control" value="{{notificationId}}">
-                    {{#if isProfessor}}
-                        <div class="row meeting-section">
-                            <div class="col-md-3">
-                                <label class="meetingLabel">¿Se realizó la reunión?</label>
-                            </div>
-                            <div class="form-check form-check-inline col-sm-1">
-                                <input class="form-check-input" type="radio" name="meetingOption" id="yesRadioOptn" value="1">
-                                <label class="form-check-label" for="yesRadioOptn">Si</label>
-                            </div>
-                            <div class="form-check form-check-inline col-sm-1">
-                                <input class="form-check-input" type="radio" name="meetingOption" id="noRadioOptn" value="0">
-                                <label class="form-check-label" for="noRadioOptn">No</label>
-                            </div>
-                        </div>
-                        <label class="meetingLabel" for="meetingProfessorComment">Comentarios</label>
-                        <textarea name="comment" id="meetingProfessorComment" class="form-control" rows="5"></textarea>
-                    {{/if}}
-                    
-                    {{#if isStudent}}
-                        <label class="meetingLabel" for="meetingStudentComment">Comentarios</label>
-                        <textarea name="comment" id="meetingStudentComment" class="form-control" rows="5"></textarea>
-                    {{/if}}
-                    <div class="form-container-btn">
-                        <button type="submit" class="btn btn-primary">Envíar Comentarios</button>
-                    </div>
-                </form>
-            
+<div class="container daily-meeting-container main-container">
+    <div class="meeting-details">
+        <div class="meeting-section">
+            <h1>{{meeting.tema}}</h1>
         </div>
-    </div> 
+        <div class="meeting-section">
+            <p>{{meeting.descripcion}}</p>
+        </div>
+        {{#if isProfessor}}
+        <div class="meeting-section">
+            <h2>Información del Estudiante</h2>
+            <div class="meeting-student-info">
+                <p><span class="student-info-lbl">Nombre Completo: </span> {{student.nombres}} {{student.apellidos}}</p>
+                <p><span class="student-info-lbl">GPA Global: </span> {{gpa}}</p>
+                <p><span class="student-info-lbl">Periodo de Admisión: </span>{{student.periodoDeAdmision}}</p>
+                <p><span class="student-info-lbl">Tipo de Admisión: </span>{{student.tipoDeAdmision}}</p>
+                <p><span class="student-info-lbl">Status: </span>{{student.status}}</p>
+            </div>
+        </div>
+        {{/if}}
+        <form action="/meetings/done" method="POST">
+            <input name="meetingId" type="hidden" id="meetingId" class="form-control" value="{{meeting.id}}">
+            <input name="notificationId" type="hidden" id="notificationId" class="form-control" value="{{notificationId}}">
+            {{#if isProfessor}}
+            <div class="row meeting-section">
+                <div class="col-md-3">
+                    <label class="meetingLabel">¿Se realizó la reunión?</label>
+                </div>
+                <div class="form-check form-check-inline col-sm-1">
+                    <input class="form-check-input" type="radio" name="meetingOption" id="yesRadioOptn" value="1">
+                    <label class="form-check-label" for="yesRadioOptn">Si</label>
+                </div>
+                <div class="form-check form-check-inline col-sm-1">
+                    <input class="form-check-input" type="radio" name="meetingOption" id="noRadioOptn" value="0">
+                    <label class="form-check-label" for="noRadioOptn">No</label>
+                </div>
+            </div>
+            <label class="meetingLabel" for="meetingProfessorComment">Comentarios</label>
+            <textarea name="comment" id="meetingProfessorComment" class="form-control" rows="5"></textarea>
+            {{/if}}
+            {{#if isStudent}}
+            <label class="meetingLabel" for="meetingStudentComment">Comentarios</label>
+            <textarea name="comment" id="meetingStudentComment" class="form-control" rows="5"></textarea>
+            {{/if}}
+            <div class="form-container-btn">
+                <button type="submit" class="btn btn-primary">Envíar Comentarios</button>
+            </div>
+        </form>
+    </div>
+</div>

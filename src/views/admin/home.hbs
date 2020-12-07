@@ -57,12 +57,14 @@
         <div class="col-md-2">
             <h2>Carreras</h2>
             <div class="careers-table-container scrollable-container">
-                <table id="careersTable" class="table table-striped">
-                  <tbody>
-                    {{#each careers}}
-                        <tr><td>{{this.carrera}}</td></tr>
-                    {{/each}}
-                  </tbody>
+                <table id="careersTable" class="table table-striped table-responsive">
+                    <tbody>
+                        {{#each careers}}
+                        <tr>
+                            <td>{{this.carrera}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
                 </table>
             </div>
         </div>

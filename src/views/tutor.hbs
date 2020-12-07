@@ -1,19 +1,19 @@
-        <div class="container profile-container main-container">
-            <div class="row">
-                <div class="col-sm-6 personal-brand">
-                    {{#if tutor.imagen}}
-                        <img id="userImg" class="img mb-4" src="/img/tmp/{{tutor.imagen.nombre}}">
-                    {{else}}
-                        <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar.jpg">
-                    {{/if}}
-                    <h3>{{tutor.nombres}} {{tutor.apellidos}}</h3>
-                    <h4>Profesor</h4>
-                </div>
-                <div class="col-sm-6 user-info">
-                    <p><span class="user-info-lbl">Código: </span> {{tutor.codigo}}</p>
-                    <p><span class="user-info-lbl">Correo Institucional: </span>{{tutor.correoInstitucional}}</p>
-                    <p><span class="user-info-lbl">Correo Personal: </span>{{tutor.correoPersonal}}</p>
-                    <p><span class="user-info-lbl">Teléfono: </span>{{tutor.telefono}}</p>
-                </div>
-            </div>
+<div class="container profile-container main-container">
+    <div class="row">
+        <div class="col-sm-6 personal-brand">
+            {{#if tutor.imagen}}
+            <img id="userImg" class="img mb-4" src="/img/tmp/{{tutor.imagen.nombre}}">
+            {{else}}
+            <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar.jpg">
+            {{/if}}
+            <h3>{{tutor.nombres}} {{tutor.apellidos}}</h3>
+            <h4>Profesor</h4>
         </div>
+        <div class="col-sm-6 user-info">
+            <p><span class="user-info-lbl">Código: </span> {{tutor.codigo}}</p>
+            <p><span class="user-info-lbl">Correo Institucional: </span>{{tutor.correoInstitucional}}</p>
+            <p><span class="user-info-lbl">Correo Personal: </span>{{tutor.correoPersonal}}</p>
+            <p><span class="user-info-lbl">Teléfono: </span>{{tutor.telefono}}</p>
+        </div>
+    </div>
+</div>

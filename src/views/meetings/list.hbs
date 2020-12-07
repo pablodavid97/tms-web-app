@@ -1,191 +1,185 @@
-        <div class="container meetings-container main-container">
-            <div class="page-header header-left">
-                <div class="row">
-                        <div class="col-md-3">
-                         <h1>Reuniones</h1>
-                      </div>
-                      {{#if isProfessor}}
-                        <div class="btn-container col-md-3">
-                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#createMeetingModal">Crear Reunión</button>
-                        </div>
-                      {{/if}}
-                </div>
-             </div>
-
-             <!-- Modal -->
-             <div id="createMeetingModal" class="modal fade">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="/meetings/create" method="POST">
-                            <div class="modal-header">
-                                <h1 class="form-header header-left">Agendar Reunión</h1>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-            
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Reunión No: </label>
-                                        <div class="col-sm-2 meeting-id">
-                                            <span>{{lastId}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputMeetingSubject">Tema</label>
-                                        <input name="subject" type="text" class="form-control" id="exampleInputSubject" placeholder="Ingresa el tema de la reunión">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputMeetingDescription">Descripción</label>
-                                        <textarea name="description" class="form-control" id="inputMeetingDescription" rows="3" placeholder="Ingresa la descripción de la reunión"></textarea>
-                                    </div>
-                                    <div class="form-group form-check">
-                                        <input name="emailNotification" type="checkbox" class="form-check-input" id="meetingEmailCheck" checked="checked">
-                                        <label class="form-check-label" for="meetingEmailCheck">Mandar notificaciones por correo</label>
-                                    </div>
-                                    <label for="meetingDatePicker">Fecha</label>
-                                    <div class="row">
-                                        <div class="form-group datepicker-container col-sm-6">
-                                            <div class="input-group date">
-                                                <input name="date" type="text" class="form-control">
-                                                <span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-sm-2">
-                                            <select name="hours" class="custom-select">
-                                                <option  selected>Hora</option>
-                                                {{#each hourValues}}
-                                                    <option value="{{this}}">{{this}}</option>
-                                                {{/each}}
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-sm-2">
-                                            <select name="minutes" class="custom-select">
-                                                <option  selected>Min</option>
-                                                {{#each minuteValues}}
-                                                    <option value="{{this}}">{{this}}</option>
-                                                {{/each}}
-                                        </select>
-                                        </div>
-                                        <div class="form-group col-sm-2">
-                                            <select name="format" class="custom-select">
-                                                <option value="1" selected>AM</option>
-                                                <option value="2">PM</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-sm-6">
-                                            <label for="professorMeetingInput">Profesor</label>
-                                            <input name="professor" type="text" id="professorMeetingInput" class="form-control" value="{{user.nombres}} {{user.apellidos}}" readonly>
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="studentMeetingInput">Estudiante</label>
-                                            <select name="student" class="custom-select">
-                                                <option selected>--Estudiante--</option>
-                                                {{#each students}}
-                                                    <option value={{this.id}}>
-                                                        {{this.nombres}} {{this.apellidos}}
-                                                    </option>
-                                                {{/each}}
-                                            </select>
-                                        </div>
-                                    </div>
-                                
-                            </div>
-                            <div class="modal-footer meeting-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-primary">Crear Reunión</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+<div class="container meetings-container main-container">
+    <div class="page-header header-left">
+        <div class="row">
+            <div class="col-md-3">
+                <h1>Reuniones</h1>
             </div>
-            <div class="meetings-table-container">
-                <table id="meetingsTable"class="table table-hover meetings-table">
-                    <thead class="thead-dark">
-                        <tr>
-                            {{#if isProfessor}}
-                                <th scope="col">Número</th>
-                                <th scope="col">Tema</th>
-                                <th scope="col">Descripción</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Profesor</th>
-                                <th scope="col">Estudiante</th>
-                                <th scope="col">Semestre</th>
-                                <th scope="col">Estado</th>
-                                <th></th>
-                                <th></th>
-                            {{else }}
-                                <th scope="col">Número</th>
-                                <th scope="col">Tema</th>
-                                <th scope="col">Descripción</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Profesor</th>
-                                <th scope="col">Estudiante</th>
-                                <th scope="col">Semestre</th>
-                                <th scope="col">Estado</th>
-                                <th></th>
-                            {{/if}}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#if isProfessor}}
-                            {{#each meetings}}
-                                <tr>
-                                    <td scope="row">{{this.id}}</td>
-                                    <td>{{this.tema}}</td>
-                                    <td>{{this.descripcion}}</td>
-                                    <td>{{this.fecha}}</td>
-                                    <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
-                                    <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
-                                    <td>{{this.semestre}}</td>
-                                    <td>{{this.estado}}</td>
-                                    {{#if (or this.estadoId 1 this.estadoId 2)}}
-                                        <td><a href="/meetings/edit/{{this.id}}">Editar</a></td>
-                                        <td><a href="/meetings/delete/{{this.id}}/{{this.estudianteId}}">Eliminar</a></td>
-                                    {{else}}
-                                        {{#if (or this.estadoId 7 this.estadoId 8)}}
-                                            <td><a href="/meetings/meeting-details/{{this.id}}">Ver detalles</a></td>
-                                            <td></td>
-                                        {{else}}
-                                            <td></td>
-                                            <td></td>
-                                        {{/if}}
-                                    {{/if}}
-                                </tr>
-                            {{/each}}
-
-                        {{else}}
-                            {{#each meetings}}
-                                <tr>
-                                    <td scope="row">{{this.id}}</td>
-                                    <td>{{this.tema}}</td>
-                                    <td>{{this.descripcion}}</td>
-                                    <td>{{this.fecha}}</td>
-                                    <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
-                                    <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
-                                    <td>{{this.semestre}}</td>
-                                    <td>{{this.estado}}</td>
-
-                                    {{#if (or this.estadoId 7 this.estadoId 8)}}
-                                        <td><a href="/meetings/meeting-details/{{this.id}}">Ver detalles</a></td>
-                                    {{else}}
-                                        <td></td>
-                                    {{/if}}
-                                </tr>
-                            {{/each}}
-
-                        {{/if}}
-                    </tbody>
-                </table>
+            {{#if isProfessor}}
+            <div class="btn-container col-md-3">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#createMeetingModal">Crear Reunión</button>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="createMeetingModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/meetings/create" method="POST">
+                    <div class="modal-header">
+                        <h1 class="form-header header-left">Agendar Reunión</h1>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Reunión No: </label>
+                            <div class="col-sm-2 meeting-id">
+                                <span>{{lastId}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputMeetingSubject">Tema</label>
+                            <input name="subject" type="text" class="form-control" id="exampleInputSubject" placeholder="Ingresa el tema de la reunión">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputMeetingDescription">Descripción</label>
+                            <textarea name="description" class="form-control" id="inputMeetingDescription" rows="3" placeholder="Ingresa la descripción de la reunión"></textarea>
+                        </div>
+                        <div class="form-group form-check">
+                            <input name="emailNotification" type="checkbox" class="form-check-input" id="meetingEmailCheck" checked="checked">
+                            <label class="form-check-label" for="meetingEmailCheck">Mandar notificaciones por correo</label>
+                        </div>
+                        <label for="meetingDatePicker">Fecha</label>
+                        <div class="row">
+                            <div class="form-group datepicker-container col-sm-6">
+                                <div class="input-group date">
+                                    <input name="date" type="text" class="form-control">
+                                    <span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-2">
+                                <select name="hours" class="custom-select">
+                                    <option  selected>Hora</option>
+                                    {{#each hourValues}}
+                                    <option value="{{this}}">{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-2">
+                                <select name="minutes" class="custom-select">
+                                    <option  selected>Min</option>
+                                    {{#each minuteValues}}
+                                    <option value="{{this}}">{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-2">
+                                <select name="format" class="custom-select">
+                                    <option value="1" selected>AM</option>
+                                    <option value="2">PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="professorMeetingInput">Profesor</label>
+                                <input name="professor" type="text" id="professorMeetingInput" class="form-control" value="{{user.nombres}} {{user.apellidos}}" readonly>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="studentMeetingInput">Estudiante</label>
+                                <select name="student" class="custom-select">
+                                    <option selected>--Estudiante--</option>
+                                    {{#each students}}
+                                    <option value={{this.id}}>
+                                        {{this.nombres}} {{this.apellidos}}
+                                    </option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer meeting-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear Reunión</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <script>
-            $(document).ready(function() {
-                $("#meetingsTable").DataTable({
-                    "lengthMenu":  [5, 10, 20, 30]
-                });
-                $(".meetings-length").addClass("bs-select");
-            })
-        </script>
+    </div>
+    <div class="meetings-table-container">
+        <table id="meetingsTable"class="table table-hover meetings-table table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    {{#if isProfessor}}
+                    <th scope="col">Número</th>
+                    <th scope="col">Tema</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Profesor</th>
+                    <th scope="col">Estudiante</th>
+                    <th scope="col">Semestre</th>
+                    <th scope="col">Estado</th>
+                    <th></th>
+                    <th></th>
+                    {{else }}
+                    <th scope="col">Número</th>
+                    <th scope="col">Tema</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Profesor</th>
+                    <th scope="col">Estudiante</th>
+                    <th scope="col">Semestre</th>
+                    <th scope="col">Estado</th>
+                    <th></th>
+                    {{/if}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#if isProfessor}}
+                {{#each meetings}}
+                <tr>
+                    <td scope="row">{{this.id}}</td>
+                    <td>{{this.tema}}</td>
+                    <td>{{this.descripcion}}</td>
+                    <td>{{this.fecha}}</td>
+                    <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
+                    <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
+                    <td>{{this.semestre}}</td>
+                    <td>{{this.estado}}</td>
+                    {{#if (or this.estadoId 1 this.estadoId 2)}}
+                    <td><a href="/meetings/edit/{{this.id}}">Editar</a></td>
+                    <td><a href="/meetings/delete/{{this.id}}/{{this.estudianteId}}">Eliminar</a></td>
+                    {{else}}
+                    {{#if (or this.estadoId 7 this.estadoId 8)}}
+                    <td><a href="/meetings/meeting-details/{{this.id}}">Ver detalles</a></td>
+                    <td></td>
+                    {{else}}
+                    <td></td>
+                    <td></td>
+                    {{/if}}
+                    {{/if}}
+                </tr>
+                {{/each}}
+                {{else}}
+                {{#each meetings}}
+                <tr>
+                    <td scope="row">{{this.id}}</td>
+                    <td>{{this.tema}}</td>
+                    <td>{{this.descripcion}}</td>
+                    <td>{{this.fecha}}</td>
+                    <td>{{this.nombresProfesor}} {{this.apellidosProfesor}}</td>
+                    <td>{{this.nombresEstudiante}} {{this.apellidosEstudiante}}</td>
+                    <td>{{this.semestre}}</td>
+                    <td>{{this.estado}}</td>
+                    {{#if (or this.estadoId 7 this.estadoId 8)}}
+                    <td><a href="/meetings/meeting-details/{{this.id}}">Ver detalles</a></td>
+                    {{else}}
+                    <td></td>
+                    {{/if}}
+                </tr>
+                {{/each}}
+                {{/if}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#meetingsTable").DataTable({
+            "lengthMenu":  [5, 10, 20, 30]
+        });
+        $(".meetings-length").addClass("bs-select");
+    })
+</script>

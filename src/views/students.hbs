@@ -1,36 +1,35 @@
-        <div class="container students-container main-container">
-            <div class="container students-container">
-            <div class="page-header header-left">
-                <div class="container">
+<div class="container students-container main-container">
+    <div class="container students-container">
+        <div class="page-header header-left">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <h1>Estudiantes</h1>
                     </div>
                 </div>
-                </div>
             </div>
-            <table class="table table-hover students-table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Nombres</th>
-                        <th scope="col">Apellidos</th>
-                        <th scope="col">Correo Institucional</th>
-                        <th scope="col">GPA</th>
-                    </tr>
-                    <tbody>
-                        {{#each students}}
-                            <tr>
-                                <td scope="row"><a href="/student/{{this.id}}">{{this.codigo}}</a></td>
-                                <td>{{this.nombres}}</td>
-                                <td>{{this.apellidos}}</td>
-                                <td>{{this.correoInstitucional}}</td>
-                                <td>{{this.gpa}}</td>
-                            </tr>
-                        {{/each}}
-                    </tbody>
-                </thead>
-    
-            </table>
         </div>
-        </div>
+        <table class="table table-hover students-table table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Correo Institucional</th>
+                    <th scope="col">GPA</th>
+                </tr>
+            <tbody>
+                {{#each students}}
+                <tr>
+                    <td scope="row"><a href="/student/{{this.id}}">{{this.codigo}}</a></td>
+                    <td>{{this.nombres}}</td>
+                    <td>{{this.apellidos}}</td>
+                    <td>{{this.correoInstitucional}}</td>
+                    <td>{{this.gpa}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+            </thead>
+        </table>
+    </div>
+</div>

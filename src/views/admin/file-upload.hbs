@@ -1,54 +1,51 @@
 <div class="img-upload-container admin-container">
-      <div class="row">
+    <div class="row">
         <div class="col-sm-12">
-          <h1>Imagenes USFQ Tutorías</h1>
-
-          <p>Esta vista sirva para ingresar imagenes al sistema. Las imagenes ingresadas podrían ser utilizadas por los usuarios a futuro. </p>
-
-          <form
-            class="mt-4"
-            action="/admin/upload"
-            method="POST"
-            enctype="multipart/form-data"
-          >
-            <div class="form-group">
-              <input
-                type="file"
-                name="file"
-                id="input-files"
-                class="form-control-file border"
-              />
-            </div>
-            <hr>
-            <button type="submit" class="btn btn-primary">Subir Imagen</button>
-          </form>
+            <h1>Imagenes USFQ Tutorías</h1>
+            <p>Esta vista sirva para ingresar imagenes al sistema. Las imagenes ingresadas podrían ser utilizadas por los usuarios a futuro. </p>
+            <form
+                class="mt-4"
+                action="/admin/upload"
+                method="POST"
+                enctype="multipart/form-data"
+                >
+                <div class="form-group">
+                    <input
+                        type="file"
+                        name="file"
+                        id="input-files"
+                        class="form-control-file border"
+                        />
+                </div>
+                <hr>
+                <button type="submit" class="btn btn-primary">Subir Imagen</button>
+            </form>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="preview-images"></div>
-        </div>
-      </div>
     </div>
-
-    <script>
-      $(document).ready(function() {
-        let imagesPreview = function(input, placeToInsertImagePreview) {
-          if (input.files) {
-            let filesAmount = input.files.length;
-            for (i = 0; i < filesAmount; i++) {
-              let reader = new FileReader();
-              reader.onload = function(event) {
-                $($.parseHTML("<img>"))
-                  .attr("src", event.target.result)
-                  .appendTo(placeToInsertImagePreview);
-              };
-              reader.readAsDataURL(input.files[i]);
-            }
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="preview-images"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+      let imagesPreview = function(input, placeToInsertImagePreview) {
+        if (input.files) {
+          let filesAmount = input.files.length;
+          for (i = 0; i < filesAmount; i++) {
+            let reader = new FileReader();
+            reader.onload = function(event) {
+              $($.parseHTML("<img>"))
+                .attr("src", event.target.result)
+                .appendTo(placeToInsertImagePreview);
+            };
+            reader.readAsDataURL(input.files[i]);
           }
-        };
-        $("#input-files").on("change", function() {
-          imagesPreview(this, "div.preview-images");
-        });
+        }
+      };
+      $("#input-files").on("change", function() {
+        imagesPreview(this, "div.preview-images");
       });
-    </script>
+    });
+</script>

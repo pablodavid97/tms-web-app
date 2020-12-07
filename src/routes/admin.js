@@ -5,16 +5,17 @@ const {
   isDeanUser,
   isProfessorUser,
   isStudentUser,
-  isUserStudentOrProfessor
+  isUserStudentOrProfessor,
+  isAdminUser
 } = require('../lib/auth');
 
 const router = express.Router();
 const axiosInstance = require('../http-client');
 const utils = require('../lib/utils');
-const {imageUpload, fileUpload} = require('../lib/upload');
+const { imageUpload, fileUpload } = require('../lib/upload');
 const fs = require('fs');
 
-router.get('/', async (req, res) => {
+router.get('/', isLoggedIn, isAdminUser, async (req, res) => {
   let isStudent = false;
   let isProfessor = false;
   let isDean = false;
@@ -43,13 +44,13 @@ router.get('/', async (req, res) => {
 
   users = adminJSON.users;
   semesters = adminJSON.semesters;
-  careers = adminJSON.careers
+  careers = adminJSON.careers;
 
   careers.sort((a, b) => {
-    return a.carrera.localeCompare(b.carrera)
-  })
+    return a.carrera.localeCompare(b.carrera);
+  });
 
-  console.log("Carreras: ", careers);
+  console.log('Carreras: ', careers);
 
   res.render('admin/home', {
     path: 'admin-home',
@@ -66,7 +67,6 @@ router.get('/', async (req, res) => {
   });
 });
 
-
 router.post('/current-semester', async (req, res) => {
   semesterId = req.body.semester;
 
@@ -81,8 +81,7 @@ router.post('/current-semester', async (req, res) => {
   res.redirect('/home');
 });
 
-router.get('/files-upload',(req, res) => {
-
+router.get('/files-upload', isLoggedIn, isAdminUser, (req, res) => {
   let isStudent = false;
   let isProfessor = false;
   let isDean = false;
@@ -115,109 +114,135 @@ router.get('/files-upload',(req, res) => {
     isAdmin,
     success: req.flash('success'),
     error: req.flash('error')
-  })
+  });
 });
 
-router.post('/files-upload', fileUpload.fields([{
-    name: 'careersFile', maxCount: 1
-  }, {
-    name: 'semestersFile', maxCount: 1
-  }, {
-    name: 'deansFile', maxCount: 1
-  }, {
-    name: 'professorsFile', maxCount: 1
-  }, {
-    name: 'studentsFile', maxCount: 1
-  }, {
-    name: 'gpasFile', maxCount: 1
-  }, {
-    name: 'adminsFile', maxCount: 1
-  }]), async (req, res) => {
-
-
-  let filesNum = Object.keys(req.files).length
-
-  if(filesNum === 7) {
-    console.log("Carreras: ", req.files.careersFile[0]);
-    console.log('Semestres: ', req.files.semestersFile[0]);
-    console.log("Decanos: ", req.files.deansFile[0]);
-    console.log('Profesores: ', req.files.professorsFile[0]);
-    console.log("Estudiantes: ", req.files.studentsFile[0]);
-    console.log("Gpas: ", req.files.gpasFile[0]);
-    console.log("Administradores: ", req.files.adminsFile[0]);
-    
-    filesPath = global.appRoot + '/public/tmp/';
-    careersPath = filesPath + req.files.careersFile[0].filename
-    semestersPath = filesPath + req.files.semestersFile[0].filename
-    deansPath = filesPath + req.files.deansFile[0].filename
-    professorsPath = filesPath + req.files.professorsFile[0].filename
-    studentsPath = filesPath + req.files.studentsFile[0].filename
-    gpasPath = filesPath + req.files.gpasFile[0].filename
-    adminsPath = filesPath + req.files.adminsFile[0].filename
-
-    careersFile = {
-      nombre: req.files.careersFile[0].filename,
-      datos: fs.readFileSync(careersPath).toString('binary')
+router.post(
+  '/files-upload',
+  fileUpload.fields([
+    {
+      name: 'careersFile',
+      maxCount: 1
     },
-    semestersFile = {
-      nombre: req.files.semestersFile[0].filename,
-      datos: fs.readFileSync(semestersPath).toString('binary')
+    {
+      name: 'semestersFile',
+      maxCount: 1
     },
-    deansFile = {
-      nombre: req.files.deansFile[0].filename,
-      datos: fs.readFileSync(deansPath).toString('binary')
+    {
+      name: 'deansFile',
+      maxCount: 1
     },
-    professorsFile = {
-      nombre: req.files.professorsFile[0].filename,
-      datos: fs.readFileSync(professorsPath).toString('binary')
+    {
+      name: 'professorsFile',
+      maxCount: 1
     },
-    studentsFile = {
-      nombre: req.files.studentsFile[0].filename, 
-      datos: fs.readFileSync(studentsPath).toString('binary'),
+    {
+      name: 'studentsFile',
+      maxCount: 1
     },
-    gpasFile = {
-      nombre: req.files.gpasFile[0].filename, 
-      datos: fs.readFileSync(gpasPath).toString('binary'),
+    {
+      name: 'gpasFile',
+      maxCount: 1
     },
-    adminsFile = {
-      nombre: req.files.adminsFile[0].filename,
-      datos: fs.readFileSync(adminsPath).toString('binary')
-    },
+    {
+      name: 'adminsFile',
+      maxCount: 1
+    }
+  ]),
+  async (req, res) => {
+    let filesNum = Object.keys(req.files).length;
 
-    files = {careers: careersFile, semesters: semestersFile, deans: deansFile, professors: professorsFile, students: studentsFile, gpas: gpasFile, admins: adminsFile}
+    if (filesNum === 7) {
+      console.log('Carreras: ', req.files.careersFile[0]);
+      console.log('Semestres: ', req.files.semestersFile[0]);
+      console.log('Decanos: ', req.files.deansFile[0]);
+      console.log('Profesores: ', req.files.professorsFile[0]);
+      console.log('Estudiantes: ', req.files.studentsFile[0]);
+      console.log('Gpas: ', req.files.gpasFile[0]);
+      console.log('Administradores: ', req.files.adminsFile[0]);
 
-    console.log("Files: ", files);
+      filesPath = global.appRoot + '/public/tmp/';
+      careersPath = filesPath + req.files.careersFile[0].filename;
+      semestersPath = filesPath + req.files.semestersFile[0].filename;
+      deansPath = filesPath + req.files.deansFile[0].filename;
+      professorsPath = filesPath + req.files.professorsFile[0].filename;
+      studentsPath = filesPath + req.files.studentsFile[0].filename;
+      gpasPath = filesPath + req.files.gpasFile[0].filename;
+      adminsPath = filesPath + req.files.adminsFile[0].filename;
 
-    console.log("Submitting files into database...");
+      (careersFile = {
+        nombre: req.files.careersFile[0].filename,
+        datos: fs.readFileSync(careersPath).toString('binary')
+      }),
+        (semestersFile = {
+          nombre: req.files.semestersFile[0].filename,
+          datos: fs.readFileSync(semestersPath).toString('binary')
+        }),
+        (deansFile = {
+          nombre: req.files.deansFile[0].filename,
+          datos: fs.readFileSync(deansPath).toString('binary')
+        }),
+        (professorsFile = {
+          nombre: req.files.professorsFile[0].filename,
+          datos: fs.readFileSync(professorsPath).toString('binary')
+        }),
+        (studentsFile = {
+          nombre: req.files.studentsFile[0].filename,
+          datos: fs.readFileSync(studentsPath).toString('binary')
+        }),
+        (gpasFile = {
+          nombre: req.files.gpasFile[0].filename,
+          datos: fs.readFileSync(gpasPath).toString('binary')
+        }),
+        (adminsFile = {
+          nombre: req.files.adminsFile[0].filename,
+          datos: fs.readFileSync(adminsPath).toString('binary')
+        }),
+        (files = {
+          careers: careersFile,
+          semesters: semestersFile,
+          deans: deansFile,
+          professors: professorsFile,
+          students: studentsFile,
+          gpas: gpasFile,
+          admins: adminsFile
+        });
 
-    filesRequest = await axiosInstance.post('/admin/files-upload', {files: files})
-    filesJSON = filesRequest.data
+      console.log('Files: ', files);
 
-    console.log("Files where submitted!");
+      console.log('Submitting files into database...');
 
-    console.log('Deleting created files from system...');
+      filesRequest = await axiosInstance.post('/admin/files-upload', {
+        files: files
+      });
+      filesJSON = filesRequest.data;
 
-    // removes file after saved into DB
-    fs.unlinkSync(careersPath)
-    fs.unlinkSync(semestersPath)
-    fs.unlinkSync(deansPath)
-    fs.unlinkSync(professorsPath)
-    fs.unlinkSync(studentsPath)
-    fs.unlinkSync(adminsPath)
+      console.log('Files where submitted!');
 
-    console.log('Files has been deleted from system');
+      console.log('Deleting created files from system...');
 
-    req.flash('success', 'Los datos se ingresaron con exito!');
+      // removes file after saved into DB
+      fs.unlinkSync(careersPath);
+      fs.unlinkSync(semestersPath);
+      fs.unlinkSync(deansPath);
+      fs.unlinkSync(professorsPath);
+      fs.unlinkSync(studentsPath);
+      fs.unlinkSync(adminsPath);
 
-    res.redirect('/home');
-  } else {
-    req.flash('error', 'Error: Se deben subir todos los archivos al sistema');
+      console.log('Files has been deleted from system');
 
-    res.redirect('/admin/files-upload');
+      req.flash('success', 'Los datos se ingresaron con exito!');
+
+      res.redirect('/home');
+    } else {
+      req.flash('error', 'Error: Se deben subir todos los archivos al sistema');
+
+      res.redirect('/admin/files-upload');
+    }
   }
-});
+);
 
-router.get('/upload', (req, res) => {
+router.get('/upload', isLoggedIn, isAdminUser, (req, res) => {
   let isStudent = false;
   let isProfessor = false;
   let isDean = false;
@@ -255,8 +280,8 @@ router.get('/upload', (req, res) => {
 
 router.post('/upload', imageUpload.single('file'), async (req, res) => {
   try {
-    console.log("Datos Ingresados: ", req.body);
-    
+    console.log('Datos Ingresados: ', req.body);
+
     file = {
       formato: req.file.mimetype,
       nombre: `${Date.now()}-${req.file.originalname}`,
@@ -278,31 +303,31 @@ router.post('/upload', imageUpload.single('file'), async (req, res) => {
   }
 });
 
-router.get('/users', async (req, res) => {
+router.get('/users', isLoggedIn, isAdminUser, async (req, res) => {
   try {
-    let usersRequest = await axiosInstance.get('/admin/users')
-    let usrsJSON = usersRequest.data
+    let usersRequest = await axiosInstance.get('/admin/users');
+    let usrsJSON = usersRequest.data;
 
-    let users = usrsJSON.users
+    let users = usrsJSON.users;
 
     let isStudent = false;
     let isProfessor = false;
     let isDean = false;
     let isAdmin = false;
-  
+
     for (rol of req.user.roles) {
       if (rol.rolId === 1) {
         isDean = true;
       }
-  
+
       if (rol.rolId === 2) {
         isProfessor = true;
       }
-  
+
       if (rol.rolId === 3) {
         isStudent = true;
       }
-  
+
       if (rol.rolId === 4) {
         isAdmin = true;
       }
@@ -319,50 +344,51 @@ router.get('/users', async (req, res) => {
       success: req.flash('success'),
       error: req.flash('error')
     });
-
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
   }
 });
 
-router.get('/edit-user/:userId', async (req, res) => {
+router.get('/edit-user/:userId', isLoggedIn, isAdminUser, async (req, res) => {
   try {
     let isStudent = false;
     let isProfessor = false;
     let isDean = false;
     let isAdmin = false;
-  
+
     for (rol of req.user.roles) {
       if (rol.rolId === 1) {
         isDean = true;
       }
-  
+
       if (rol.rolId === 2) {
         isProfessor = true;
       }
-  
+
       if (rol.rolId === 3) {
         isStudent = true;
       }
-  
+
       if (rol.rolId === 4) {
         isAdmin = true;
       }
     }
 
-    let userRequest = await axiosInstance.get('/user-by-id', {params: {userId: req.params.userId}})
-    let userJSON = userRequest.data
-    let userToEdit = userJSON
+    let userRequest = await axiosInstance.get('/user-by-id', {
+      params: { userId: req.params.userId }
+    });
+    let userJSON = userRequest.data;
+    let userToEdit = userJSON;
 
-    if(userToEdit.imagenId) {
+    if (userToEdit.imagenId) {
       const imageRequest = await axiosInstance.get('/image-by-id', {
-        params: {imageId: userToEdit.imagenId}
+        params: { imageId: userToEdit.imagenId }
       });
       imageJSON = imageRequest.data;
 
-      userToEdit.imagen = imageJSON
+      userToEdit.imagen = imageJSON;
 
-      console.log("Usuario: ", userToEdit)
+      console.log('Usuario: ', userToEdit);
 
       fs.writeFileSync(
         global.appRoot + '/public/img/tmp/' + userToEdit.imagen.nombre,
@@ -381,9 +407,8 @@ router.get('/edit-user/:userId', async (req, res) => {
       success: req.flash('success'),
       error: req.flash('error')
     });
-    
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
   }
 });
 
@@ -417,7 +442,7 @@ router.post('/edit-user', imageUpload.single('file'), async (req, res) => {
       userId: req.body.userId,
       file: file
     });
-    editUserJSON = editUserRequest.data
+    editUserJSON = editUserRequest.data;
 
     req.flash('success', 'Los datos del usuario fueron actualizados!');
 
@@ -425,125 +450,146 @@ router.post('/edit-user', imageUpload.single('file'), async (req, res) => {
   } catch (error) {
     console.error(error.message);
   }
-  
-})
-
-router.get('/delete-user/:userId', async (req, res) => {
-  try {
-    let userId = req.params.userId
-
-    let deleteRequest = await axiosInstance.post('/admin/delete-user', {userId: userId})
-    let deleteJSON = deleteRequest.data
-
-    req.flash('success', `El usuario fue eliminado con exito!`);
-
-    res.redirect('/admin/users')
-
-  } catch (error) {
-    console.error(error.message)
-  }
 });
 
-router.post('/add-users', fileUpload.fields([{
-  name: 'deansFile', maxCount: 1
-}, {
-  name: 'professorsFile', maxCount: 1
-}, {
-  name: 'studentsFile', maxCount: 1
-}, {
-  name: 'adminsFile', maxCount: 1
-}]), async (req, res) => {
+router.get(
+  '/delete-user/:userId',
+  isLoggedIn,
+  isAdminUser,
+  async (req, res) => {
+    try {
+      let userId = req.params.userId;
 
-  filesPath = global.appRoot + '/public/tmp/';
-  deansPath = undefined
-  professorsPath = undefined
-  studentsPath = undefined
-  adminsPath = undefined
-  deansFile = undefined
-  professorsFile = undefined
-  studentsFile = undefined
-  adminsFile = undefined
+      let deleteRequest = await axiosInstance.post('/admin/delete-user', {
+        userId: userId
+      });
+      let deleteJSON = deleteRequest.data;
 
+      req.flash('success', `El usuario fue eliminado con exito!`);
 
-  let filesNum = Object.keys(req.files).length
+      res.redirect('/admin/users');
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+);
 
-  if(filesNum >= 1) {
-    if(req.files.deansFile) {
-      deansPath = filesPath + req.files.deansFile[0].filename
-      deansFile = {
+router.post(
+  '/add-users',
+  fileUpload.fields([
+    {
+      name: 'deansFile',
+      maxCount: 1
+    },
+    {
+      name: 'professorsFile',
+      maxCount: 1
+    },
+    {
+      name: 'studentsFile',
+      maxCount: 1
+    },
+    {
+      name: 'adminsFile',
+      maxCount: 1
+    }
+  ]),
+  async (req, res) => {
+    filesPath = global.appRoot + '/public/tmp/';
+    deansPath = undefined;
+    professorsPath = undefined;
+    studentsPath = undefined;
+    adminsPath = undefined;
+    deansFile = undefined;
+    professorsFile = undefined;
+    studentsFile = undefined;
+    adminsFile = undefined;
+
+    let filesNum = Object.keys(req.files).length;
+
+    if (filesNum >= 1) {
+      if (req.files.deansFile) {
+        deansPath = filesPath + req.files.deansFile[0].filename;
+        deansFile = {
           nombre: req.files.deansFile[0].filename,
           datos: fs.readFileSync(deansPath).toString('binary')
-        }
-    }
-  
-    if(req.files.professorsFile) {
-      professorsPath = filesPath + req.files.professorsFile[0].filename
-      professorsFile = {
-       nombre: req.files.professorsFile[0].filename,
-       datos: fs.readFileSync(professorsPath).toString('binary')
-     }
-    }
-  
-    if(req.files.studentsFile) {
-      studentsPath = filesPath + req.files.studentsFile[0].filename
-      studentsFile = {
-        nombre: req.files.studentsFile[0].filename, 
-        datos: fs.readFileSync(studentsPath).toString('binary'),
+        };
       }
-    }
-  
-    if(req.files.adminsFile) {
-      adminsPath = filesPath + req.files.adminsFile[0].filename
-      adminsFile = {
-        nombre: req.files.adminsFile[0].filename,
-        datos: fs.readFileSync(adminsPath).toString('binary')
+
+      if (req.files.professorsFile) {
+        professorsPath = filesPath + req.files.professorsFile[0].filename;
+        professorsFile = {
+          nombre: req.files.professorsFile[0].filename,
+          datos: fs.readFileSync(professorsPath).toString('binary')
+        };
       }
-    }
-  
-      files = {deans: deansFile, professors: professorsFile, students: studentsFile, admins: adminsFile}
-  
-      console.log("Files: ", files);
-  
-      console.log("Submitting files into database...");
-  
-      filesRequest = await axiosInstance.post('/admin/add-users', {files: files})
-      filesJSON = filesRequest.data
-  
-      console.log("Files where submitted!");
-  
+
+      if (req.files.studentsFile) {
+        studentsPath = filesPath + req.files.studentsFile[0].filename;
+        studentsFile = {
+          nombre: req.files.studentsFile[0].filename,
+          datos: fs.readFileSync(studentsPath).toString('binary')
+        };
+      }
+
+      if (req.files.adminsFile) {
+        adminsPath = filesPath + req.files.adminsFile[0].filename;
+        adminsFile = {
+          nombre: req.files.adminsFile[0].filename,
+          datos: fs.readFileSync(adminsPath).toString('binary')
+        };
+      }
+
+      files = {
+        deans: deansFile,
+        professors: professorsFile,
+        students: studentsFile,
+        admins: adminsFile
+      };
+
+      console.log('Files: ', files);
+
+      console.log('Submitting files into database...');
+
+      filesRequest = await axiosInstance.post('/admin/add-users', {
+        files: files
+      });
+      filesJSON = filesRequest.data;
+
+      console.log('Files where submitted!');
+
       console.log('Deleting created files from system...');
-  
+
       // removes file after saved into DB
-  
-      if(deansPath) {
-        fs.unlinkSync(deansPath)
+
+      if (deansPath) {
+        fs.unlinkSync(deansPath);
       }
-  
-      if(professorsPath) {
-        fs.unlinkSync(professorsPath)
+
+      if (professorsPath) {
+        fs.unlinkSync(professorsPath);
       }
-  
-      if(studentsPath) {
-        fs.unlinkSync(studentsPath)
+
+      if (studentsPath) {
+        fs.unlinkSync(studentsPath);
       }
-  
-      if(adminsPath) {
-        fs.unlinkSync(adminsPath)
+
+      if (adminsPath) {
+        fs.unlinkSync(adminsPath);
       }
-  
+
       console.log('Files has been deleted from system');
-  
-    
-    req.flash('success', `Se agregó/(aron) el/los usuario(s) con exito!`); 
-    res.redirect('/admin')
-  } else {
-    req.flash('error', 'Error: Se debe subir por lo menos un archivo');
-    res.redirect('/admin/users')
+
+      req.flash('success', `Se agregó/(aron) el/los usuario(s) con exito!`);
+      res.redirect('/admin');
+    } else {
+      req.flash('error', 'Error: Se debe subir por lo menos un archivo');
+      res.redirect('/admin/users');
+    }
   }
+);
 
-});
-
-router.get('/additional-files', async (req, res) => {
+router.get('/additional-files', isLoggedIn, isAdminUser, async (req, res) => {
   let isStudent = false;
   let isProfessor = false;
   let isDean = false;
@@ -579,82 +625,96 @@ router.get('/additional-files', async (req, res) => {
   });
 });
 
-router.post('/additional-files', fileUpload.fields([{
-    name: 'careersFile', maxCount: 1
-  }, {
-    name: 'semestersFile', maxCount: 1
-  }, {
-    name: 'gpasFile', maxCount: 1
-  }]), async (req, res) => {
-
+router.post(
+  '/additional-files',
+  fileUpload.fields([
+    {
+      name: 'careersFile',
+      maxCount: 1
+    },
+    {
+      name: 'semestersFile',
+      maxCount: 1
+    },
+    {
+      name: 'gpasFile',
+      maxCount: 1
+    }
+  ]),
+  async (req, res) => {
     const filesPath = global.appRoot + '/public/tmp/';
-    let careersPath = undefined
-    let semestersPath = undefined
-    let gpasPath = undefined
-    let careersFile = undefined
-    let semestersFile = undefined
-    let gpasFile = undefined
-    
-    let filesNum = Object.keys(req.files).length
+    let careersPath = undefined;
+    let semestersPath = undefined;
+    let gpasPath = undefined;
+    let careersFile = undefined;
+    let semestersFile = undefined;
+    let gpasFile = undefined;
 
-    if(filesNum >= 1) {
-      if(req.files.careersFile) {
-        careersPath = filesPath + req.files.careersFile[0].filename
+    let filesNum = Object.keys(req.files).length;
+
+    if (filesNum >= 1) {
+      if (req.files.careersFile) {
+        careersPath = filesPath + req.files.careersFile[0].filename;
         careersFile = {
           nombre: req.files.careersFile[0].filename,
           datos: fs.readFileSync(careersPath).toString('binary')
-        }
+        };
       }
 
-      if(req.files.semestersFile) {
-        semestersPath = filesPath + req.files.semestersFile[0].filename
+      if (req.files.semestersFile) {
+        semestersPath = filesPath + req.files.semestersFile[0].filename;
         semestersFile = {
           nombre: req.files.semestersFile[0].filename,
           datos: fs.readFileSync(semestersPath).toString('binary')
-        }
+        };
       }
 
-      if(req.files.gpasFile) {
-        gpasPath = filesPath + req.files.gpasFile[0].filename
+      if (req.files.gpasFile) {
+        gpasPath = filesPath + req.files.gpasFile[0].filename;
         gpasFile = {
-          nombre: req.files.gpasFile[0].filename, 
-          datos: fs.readFileSync(gpasPath).toString('binary'),
-        }
+          nombre: req.files.gpasFile[0].filename,
+          datos: fs.readFileSync(gpasPath).toString('binary')
+        };
       }
 
-      let files = {careers: careersFile, semesters: semestersFile, gpas: gpasFile}
+      let files = {
+        careers: careersFile,
+        semesters: semestersFile,
+        gpas: gpasFile
+      };
 
-      filesRequest = await axiosInstance.post('/admin/additional-files', {files: files})
-      filesJSON = filesRequest.data
-  
-      console.log("Files where submitted!");
-  
+      filesRequest = await axiosInstance.post('/admin/additional-files', {
+        files: files
+      });
+      filesJSON = filesRequest.data;
+
+      console.log('Files where submitted!');
+
       console.log('Deleting created files from system...');
-  
-      // removes file after saved into DB
-  
-      if(careersPath) {
-        fs.unlinkSync(careersPath)
-      }
-  
-      if(semestersPath) {
-        fs.unlinkSync(semestersPath)
-      }
-  
-      if(gpasPath) {
-        fs.unlinkSync(gpasPath)
-      }
-  
-      console.log('Files has been deleted from system');
-  
-      req.flash('success', `Se agregaron los archivos con exito!`); 
-      res.redirect('/admin')
 
+      // removes file after saved into DB
+
+      if (careersPath) {
+        fs.unlinkSync(careersPath);
+      }
+
+      if (semestersPath) {
+        fs.unlinkSync(semestersPath);
+      }
+
+      if (gpasPath) {
+        fs.unlinkSync(gpasPath);
+      }
+
+      console.log('Files has been deleted from system');
+
+      req.flash('success', `Se agregaron los archivos con exito!`);
+      res.redirect('/admin');
     } else {
       req.flash('error', 'Error: Se debe subir por lo menos un archivo');
-      res.redirect('/admin/additional-files')
-    }  
-});
-
+      res.redirect('/admin/additional-files');
+    }
+  }
+);
 
 module.exports = router;
