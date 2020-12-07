@@ -1,11 +1,13 @@
-<div class="container">
+<div class="img-upload-container admin-container">
       <div class="row">
-        <div class="col-sm-8 mt-3">
-          <h4>Node.js upload images - bezkoder.com</h4>
+        <div class="col-sm-12">
+          <h1>Imagenes USFQ Tutorías</h1>
+
+          <p>Esta vista sirva para ingresar imagenes al sistema. Las imagenes ingresadas podrían ser utilizadas por los usuarios a futuro. </p>
 
           <form
             class="mt-4"
-            action="/upload"
+            action="/admin/upload"
             method="POST"
             enctype="multipart/form-data"
           >
@@ -17,11 +19,11 @@
                 class="form-control-file border"
               />
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <hr>
+            <button type="submit" class="btn btn-primary">Subir Imagen</button>
           </form>
         </div>
       </div>
-      <hr />
       <div class="row">
         <div class="col-sm-12">
           <div class="preview-images"></div>
