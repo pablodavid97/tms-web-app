@@ -375,7 +375,7 @@ html {
 }
 
 .meeting-info-container {
-	padding: 0 2.5rem;
+	padding: 0 2rem;
 	width: 100%
 }
 
@@ -385,7 +385,6 @@ html {
 
 .meeting-info {
 	font-size: 14px;
-	padding: 0 1rem;
 }
 
 .meeting-info .btn-container {
@@ -444,14 +443,27 @@ html {
 .notification-container {
     padding-right: 7rem;
     border: 1px solid rgba(0,0,0,.125);
-    margin: 1rem 2rem;
+    margin: 1rem;
 }
+
 
 .notification-container .card.meeting-notification{
     border: none;
-    padding: 1rem 4rem;
+	padding: 1rem;
+	margin-bottom: 1rem;
 }
 
+.meeting-notification .notification-text {
+	padding: 0 2rem;
+}
+
+.meeting-info-container {
+	margin: 0
+}
+
+.meeting-info-container span {
+	margin: 0 5px
+}
 
 /* Styles for notification options */
 .notification-container .notification-options {
