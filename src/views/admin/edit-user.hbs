@@ -1,0 +1,127 @@
+<div class="admin-edit-user-container admin-container">
+    <div class="edit-form-container">
+
+        <h1>Editar Usuario</h1>
+    
+        <form action="/admin/edit-user" method="POST" class="form-edit-user">
+            <div class="admin-edit-user-info"> 
+                <div class="row">
+                    <div class="col-md-5 edit-user-column">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="edit-personal-brand">
+                                    <div class="user-img-container">
+                                        <!-- Uploaded image area-->
+                                        {{#if userToEdit.imagen}}
+                                            <div class="image-area"><img id="imgResult" src="/img/tmp/{{userToEdit.imagen.nombre}}" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
+                                        {{else}}
+                                            <div class="image-area"><img id="imgResult" src="/img/unknown-user-avatar.jpg" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
+                                        {{/if}}
+
+                                        <!-- Upload image input-->
+                                        <div class="input-group rounded-pill bg-white shadow-sm">
+                                            <input id="profileImgInput" class="profile-img-input" name="file" type="file" onchange="readURL(this);" class="form-control border-0">
+                                            <label id="profileImgInputLbl" for="profileImgInput" class="font-weight-light text-muted">Elige un archivo</label>
+                                            <div class="input-group-append">
+                                                <label for="profileImgInput" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Elegir archivo</small></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <input type="hidden" name="userId" value="{{userToEdit.id}}">
+                            <div class="col-sm-6 form-lbl">
+                                <label for="userCode">Codigo: </label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" id="userCode" name="userCode" class="form-control form-input input-code" placeholder="Código" autofocus="" autocomplete="off" value="{{userToEdit.codigo}}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-lbl">
+                                <label for="userEmail">Correo Institucional: </label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" autofocus="" autocomplete="off" value="{{userToEdit.correoInstitucional}}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-5 edit-user-column">
+                        <div class="row">
+                            <div class="col-sm-6 form-lbl">
+                                <label for="userNames">Nombres: </label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" id="userNames" name="userNames" class="form-control form-input input-name" placeholder="Nombres" autofocus="" autocomplete="off" value="{{userToEdit.nombres}}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-lbl">
+                                <label for="userLastNames">Apellidos: </label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" id="userLastNames" name="userLastNames" class="form-control form-input input-lastname" placeholder="Apellidos" autofocus="" autocomplete="off" value="{{userToEdit.apellidos}}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 form-lbl">
+                                    <label for="userPersonalEmail">Correo Personal: </label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="email" id="userPersonalEmail" name="userPersonalEmail" class="form-control form-input input-email" placeholder="Email" autofocus="" autocomplete="off" value="{{userToEdit.correoPersonal}}">
+                                </div>
+                            
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 form-lbl">
+                                    <label for="userPhone">Teléfono: </label>
+                                </div>
+                            <div class="col-sm-6">
+                                <input type="text" id="userPhone" name="userPhone" class="form-control form-input input-phone" placeholder="Teléfono" autofocus="" autocomplete="off" value="{{userToEdit.telefono}}">
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="form-container-btn">
+                <button class="btn btn-primary" type="submit">Editar Usuario</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+              $('#imgResult')
+                  .attr('src', e.target.result);
+          };
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
+
+  $(function () {
+      $('#profileImgInput').on('change', function () {
+          readURL(input);
+      });
+  });
+
+  var input = document.getElementById( 'profileImgInput' );
+  var infoArea = document.getElementById( 'profileImgInputLbl' );
+
+  input.addEventListener( 'change', showFileName );
+  function showFileName( event ) {
+    var input = event.srcElement;
+    var fileName = input.files[0].name;
+    infoArea.textContent = 'Nombre del archivo: ' + fileName;
+  }
+</script>

@@ -1,0 +1,43 @@
+                    <div class="additional-files-container admin-container ">
+                        <h1>Datos Adicionales</h1>
+                        <p>En este formulario se pueden agregar nuevos semestres, nuevas carreras, y los GPAs por semestre.</p>
+                        <p>Recuerda que debes subir por lo menos un archivo o todos los archivos.</p>
+                        <div class="form-container">
+                                                            <form
+                                    class="mt-4 additional-files-upload-form"
+                                    action="/admin/additional-files"
+                                    method="POST"
+                                    enctype="multipart/form-data"
+                                    >
+                                    <div class="files-container">
+                                        <!-- Careers -->
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">
+                                                <label for="carreerInput">Carreras: </label>
+                                            </div>
+                                            <input type="file" name="careersFile" id="carreerInput" class="file-input border"/>
+                                        </div>
+
+                                        <!-- Semesters -->
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">
+                                                <label for="semesterInput">Semestres: </label>
+                                            </div>
+                                            <input type="file" name="semestersFile" id="semesterInput" class="file-input border"/>
+                                        </div>
+
+                                        <!-- GPAs Por Semestre-->
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">
+                                                <label for="gpasInput">GPAs: </label>
+                                            </div>
+                                            <input type="file" name="gpasFile", id="gpasInput", class="file-input border">
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-container">
+                                        <button type="submit" class="btn btn-primary">Subir Archivos</button>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>

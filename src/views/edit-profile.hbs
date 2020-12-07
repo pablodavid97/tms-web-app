@@ -1,14 +1,7 @@
-      <div class="container edit-profile-container">
-        <div class="flash-messages-container"></div>
+      <div class="container edit-profile-container main-container">
         <div class="page-header">
-           <div class="container">
-              <div class="row">
-                 <div class="col-md-12">
-                    <h1>Editar Perfil</h1>
-                 </div>
-              </div>
+              <h1>Editar Perfil</h1>
               <img class="mb-4" src="./img/bootstrap-solid.svg" alt="" width="72" height="72">
-           </div>
         </div>
     
         <form action="/edit-profile" method="POST" class="form-edit-profile" enctype="multipart/form-data">
@@ -34,34 +27,34 @@
             <div class="edit-user-info">
                 <div class="row">
                     <div class="col-sm-6 form-lbl">
-                      <label for="oldPasswordInput">Nombres: </label>
+                      <label for="userNames">Nombres: </label>
                     </div>
                   <div class="col-sm-5">
-                      <input type="text" id="userNames" name="userNames" class="form-control form-input input-name" placeholder="Nombres" autofocus="" autocomplete="off">
+                      <input type="text" id="userNames" name="userNames" class="form-control form-input input-name" placeholder="Nombres" autofocus="" autocomplete="off" value="{{user.nombres}}">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-lbl">
-                      <label for="oldPasswordInput">Apellidos: </label>
+                      <label for="userLastNames">Apellidos: </label>
                     </div>
                   <div class="col-sm-5">
-                      <input type="text" id="userLastNames" name="userLastNames" class="form-control form-input input-lastname" placeholder="Apellidos" autofocus="" autocomplete="off">
+                      <input type="text" id="userLastNames" name="userLastNames" class="form-control form-input input-lastname" placeholder="Apellidos" autofocus="" autocomplete="off" value="{{user.apellidos}}">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-lbl">
-                      <label for="oldPasswordInput">Correo Personal: </label>
+                      <label for="userEmail">Correo Personal: </label>
                     </div>
                   <div class="col-sm-5">
-                      <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" autofocus="" autocomplete="off">
+                      <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" autofocus="" autocomplete="off" value="{{user.correoPersonal}}">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-lbl">
-                      <label for="oldPasswordInput">Teléfono: </label>
+                      <label for="userPhone">Teléfono: </label>
                     </div>
                   <div class="col-sm-5">
-                      <input type="text" id="userPhone" name="userPhone" class="form-control form-input input-phone" placeholder="Teléfono" autofocus="" autocomplete="off">
+                      <input type="text" id="userPhone" name="userPhone" class="form-control form-input input-phone" placeholder="Teléfono" autofocus="" autocomplete="off" value="{{user.telefono}}">
                     </div>
                 </div>
             </div>

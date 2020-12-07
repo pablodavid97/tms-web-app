@@ -11,7 +11,9 @@ html {
 }
 
 .main-container {
-	padding: 5rem;
+	margin-top: 5%;
+	margin-bottom: 5%;
+	min-height: 600px;
 }
 
 .form-container {
@@ -193,7 +195,7 @@ html {
 }
 
 .password-container {
-	max-width: 650px;
+	margin: 0 20%;
 	background: #fff;
 	border: 1px solid #c9c9c9;
 	padding: 4rem;
@@ -617,8 +619,12 @@ html {
 
 /* Admin Container */
 
-.admin-container {
+.admin-home-container {
 	padding-left: 19vw;
+}
+
+.admin-container {
+	margin-top: 5%;
 }
 
 /*
@@ -626,23 +632,14 @@ html {
  */
 
  .sidebar {
-    position: fixed;
+    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     z-index: 100; /* Behind the navbar */
     padding: 0;
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-  }
-  
-  .sidebar-sticky {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 48px; /* Height of navbar */
-    height: calc(100vh - 48px);
-    padding-top: .5rem;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+	box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+	height: 60vw;
   }
   
   .sidebar .nav-link {
@@ -672,11 +669,6 @@ html {
   /*
    * Navbar
    */
-
-   .sidebar {
-	   position: absolute;
-	   height: 100%;
-   }
 
   .admin-navbar {
       padding: 10px 0;
@@ -718,7 +710,8 @@ html {
 
   .admin-sidebar {
       top: 80px;
-      height: calc(100vh - 80px);
+	  height: calc(60vw - 80px);
+	  position: sticky;
   }
 
   .users-table-container {
@@ -732,6 +725,20 @@ html {
   
   .border-top { border-top: 1px solid #e5e5e5; }
   .border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+/* Admin home styles */
+.admin-container .current-semester-form {
+	margin-bottom: 5rem;
+}
+
+.admin-container .careers-table-container {
+	max-height: 600px;
+	overflow-y: scroll;
+}
+
+.admin-container .careers-table-container .careersTable {
+	text-align: center;
+}
   
 /* Current Semester Selection */
 
@@ -757,16 +764,75 @@ html {
   text-align: center;
 }
 
+.files-upload-container .files-container {
+	margin-bottom: 4rem;
+}
+
 /* Image Upload Styles */
 .img-upload-container {
 	margin-left: 30%;
     margin-right: 10%;
 	width: auto;
 	border: 1px solid #c9c9c9;
-	padding: 5rem 14rem;
+	padding: 5rem 10rem;
 }
 
 .img-upload-container .user-img-options {
 	margin-top: 1rem;
 	padding: 0 1rem;
 }
+
+/* Admin users styles */
+
+.admin-users-container {
+	padding: 1rem 5rem;
+	margin-left: 15%;
+}
+
+.form-container.add-users-form {
+	padding: 1rem 3rem;
+	margin-bottom: 4rem;
+}
+
+.admin-users-container .add-users-form .file-input {
+	margin: 0;
+}
+
+
+  /* Edit user styles */
+  .admin-edit-user-container .edit-form-container {
+	margin-left: 25%;
+	margin-right: 5%;
+    border: 1px solid black;
+    padding: 2rem 5rem;
+  }
+
+  .admin-edit-user-container .edit-form-container h1 {
+      text-align: center;
+  }
+
+  .admin-edit-user-info .image-area {
+	  padding: 0
+  }
+
+  .admin-edit-user-info .user-img-container .input-group {
+	  margin: 0
+  }
+
+  .admin-edit-user-info {
+	  padding: 2rem 5rem;
+  }
+  
+  .admin-edit-user-info .edit-user-column {
+	  margin: 0 4.16%;
+  }
+
+
+  /* Additional Data Styles */
+
+  .additional-files-container {
+	margin-left: 30%;
+    margin-right: 15%;
+    border: 1px solid black;
+    padding: 3rem 5rem;
+  }
