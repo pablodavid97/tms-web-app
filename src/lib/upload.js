@@ -37,6 +37,6 @@ var fileStorage = multer.diskStorage({
   }
 });
 
-var fileUpload = multer({storage: fileStorage, fileFilter: fileFilter});
+var fileUpload = multer({ storage: fileStorage, fileFilter: fileFilter });
 
-module.exports = {imageUpload, fileUpload};
+module.exports = { imageUpload, fileUpload };

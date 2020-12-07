@@ -1,65 +1,56 @@
-      <div class="container meeting-details-container main-container">
-        <div class="meeting-details">
-                <div class="meeting-section">
-                    <h1>{{meeting.tema}}</h1>
-                </div>
-
-                <div class="meeting-section">
-                    <label class="meetingLabel">Reunión No: </label> <span id="meetingId">{{meeting.id}}</span>
-                </div>
-                
-                <div class="meeting-section">
-                    <label class="meetingLabel">Estado:</label> <span id="meetingStatus">{{meeting.estado}}</span>
-                </div>
-
-                <div class="meeting-section">
-                    <label class="meetingLabel">Fecha:</label> <span id="meetingDate">{{meeting.fecha}}</span>
-                </div>
-                <div class="row meeting-section">
-                    <div class="col-sm-6">
-                        <label class="meetingLabel" for="meetingProfessor">Profesor:</label>
-                        <span id="meetingProfessor">{{meeting.nombresProfesor}} {{meeting.apellidosProfesor}}</span>
-                    </div>
-                    <div class="col-sm-6">
-                        <label class="meetingLabel" for="meetingStudent">Estudiante:</label>
-                        <span id="meetingStudent">{{meeting.nombresEstudiante}} {{meeting.apellidosEstudiante}}</span>
-                    </div>
-                </div>
-                <div class="meeting-section">
-                    <label class="meetingLabel">Descripción</label>
-                    <p id="meetingDescription">
-                        {{meeting.descripcion}}
-                    </p>
-                </div>
-
-
-                <div id="doneMeetingCommentsSection" class="meeting-section">
-
-                    {{#if isDean}}
-                        <label class="meetingLabel" for="doneMeetingProfessorComment">Comentarios Profesor: </label>
-                        <p id="doneMeetingProfessorComment">
-                            {{meeting.comentariosProfesor}}
-                        </p>
-
-                        <label class="meetingLabel" for="doneMeetingStudentComment">Comentarios Estudiante: </label>
-                        <p id="doneMeetingStudentComment">
-                            {{meeting.comentariosEstudiante}}
-                        </p>
-                    {{/if}}
-
-                    {{#if isProfessor}}
-                        <label class="meetingLabel" for="doneMeetingProfessorComment">Comentarios Profesor: </label>
-                        <p id="doneMeetingProfessorComment">
-                            {{meeting.comentariosProfesor}}
-                        </p>
-                    {{/if}}
-
-                    {{#if isStudent}}
-                        <label class="meetingLabel" for="doneMeetingStudentComment">Comentarios Estudiante: </label>
-                        <p id="doneMeetingStudentComment">
-                            {{meeting.comentariosEstudiante}}
-                        </p>
-                    {{/if}}
-                </div>
+<div class="container meeting-details-container main-container">
+    <div class="meeting-details">
+        <div class="meeting-section">
+            <h1>{{meeting.tema}}</h1>
         </div>
-    </div> 
+        <div class="meeting-section">
+            <label class="meetingLabel">Reunión No: </label> <span id="meetingId">{{meeting.id}}</span>
+        </div>
+        <div class="meeting-section">
+            <label class="meetingLabel">Estado:</label> <span id="meetingStatus">{{meeting.estado}}</span>
+        </div>
+        <div class="meeting-section">
+            <label class="meetingLabel">Fecha:</label> <span id="meetingDate">{{meeting.fecha}}</span>
+        </div>
+        <div class="row meeting-section">
+            <div class="col-sm-6">
+                <label class="meetingLabel" for="meetingProfessor">Profesor:</label>
+                <span id="meetingProfessor">{{meeting.nombresProfesor}} {{meeting.apellidosProfesor}}</span>
+            </div>
+            <div class="col-sm-6">
+                <label class="meetingLabel" for="meetingStudent">Estudiante:</label>
+                <span id="meetingStudent">{{meeting.nombresEstudiante}} {{meeting.apellidosEstudiante}}</span>
+            </div>
+        </div>
+        <div class="meeting-section">
+            <label class="meetingLabel">Descripción</label>
+            <p id="meetingDescription">
+                {{meeting.descripcion}}
+            </p>
+        </div>
+        <div id="doneMeetingCommentsSection" class="meeting-section">
+            {{#if isDean}}
+            <label class="meetingLabel" for="doneMeetingProfessorComment">Comentarios Profesor: </label>
+            <p id="doneMeetingProfessorComment">
+                {{meeting.comentariosProfesor}}
+            </p>
+            <label class="meetingLabel" for="doneMeetingStudentComment">Comentarios Estudiante: </label>
+            <p id="doneMeetingStudentComment">
+                {{meeting.comentariosEstudiante}}
+            </p>
+            {{/if}}
+            {{#if isProfessor}}
+            <label class="meetingLabel" for="doneMeetingProfessorComment">Comentarios Profesor: </label>
+            <p id="doneMeetingProfessorComment">
+                {{meeting.comentariosProfesor}}
+            </p>
+            {{/if}}
+            {{#if isStudent}}
+            <label class="meetingLabel" for="doneMeetingStudentComment">Comentarios Estudiante: </label>
+            <p id="doneMeetingStudentComment">
+                {{meeting.comentariosEstudiante}}
+            </p>
+            {{/if}}
+        </div>
+    </div>
+</div>

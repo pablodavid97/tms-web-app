@@ -1,70 +1,70 @@
-        <div class="container meeting-container main-container">
-            <form action="/meetings/edit", method="POST">
-                <h1 class="form-header header-left">Editar Reunión</h1>
-                <div class="form-group row">
-                    <label for="meetingId" class="col-sm-3 col-form-label">Reunión No: </label>
-                    <div class="col-sm-2">
-                        <input name="meetingId" type="text" id="meetingId" class="form-control" value="{{meeting.id}}" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputMeetingSubject">Tema</label>
-                    <input name="subject" type="text" class="form-control" id="exampleInputSubject" placeholder="Ingresa el tema de la reunión" value="{{meeting.tema}}">
-                </div>
-                <div class="form-group">
-                    <label for="inputMeetingDescription">Descripción</label>
-                    <textarea name="description" class="form-control" id="inputMeetingDescription" rows="3" placeholder="Ingresa la descripción de la reunión">{{meeting.descripcion}}</textarea>
-                </div>
-                <div class="form-group form-check">
-                    <input name="emailNotification" type="checkbox" class="form-check-input" id="meetingEmailCheck">
-                    <label class="form-check-label" for="meetingEmailCheck">Mandar notificaciones por correo</label>
-                </div>
-                  <label for="meetingDatePicker">Fecha</label>
-                  <div class="row">
-                    <div class="form-group datepicker-container col-sm-6">
-                        <div class="input-group date">
-                            <input name="date" type="text" class="form-control" value="{{date}}">
-                            <span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-2">
-                        <select name="hours" class="custom-select">
-                            <option value="{{hours}}"selected>{{hours}}</option>
-                            {{#each hourValues}}
-                                <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-2">
-                        <select name="minutes" class="custom-select">
-                            <option value={{minutes}} selected>{{minutes}}</option>
-                            {{#each minuteValues}}
-                                <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-2">
-                        <select name="format" class="custom-select">
-                            <option value="{{format.value}}" selected>{{format.text}}</option>
-                            <option value="1">AM</option>
-                            <option value="2">PM</option>
-                          </select>
-                    </div>
-                  </div>
-                <div class="row">
-                    <div class="form-group col-sm-6">
-                        <label for="professorMeetingInput">Profesor</label>
-                        <input name="professor" type="text" id="professorMeetingInput" class="form-control" value="{{meeting.nombresProfesor}} {{meeting.apellidosProfesor}}" readonly>
-                    </div>
-                    <div class="form-group col-sm-6">
-                        <label for="studentMeetingInput">Estudiante</label>
-                        <input name="studentId" type="hidden" id="studentId" class="form-control" value="{{meeting.estudianteId}}">
-                        <input type="text" id="studentMeetingInput" class="form-control" value="{{meeting.nombresEstudiante}} {{meeting.apellidosEstudiante}}" readonly>
-                    </div>
-                </div>
-                <div class="form-container-btn">
-                    <a class="btn btn-secondary" href="/meetings">Cancelar</a>
-                    <button type="submit" class="btn btn-primary">Editar Reunión</button>
-                  </div>
-            </form>
+<div class="container meeting-container main-container">
+    <form action="/meetings/edit", method="POST">
+        <h1 class="form-header header-left">Editar Reunión</h1>
+        <div class="form-group row">
+            <label for="meetingId" class="col-sm-3 col-form-label">Reunión No: </label>
+            <div class="col-sm-2">
+                <input name="meetingId" type="text" id="meetingId" class="form-control" value="{{meeting.id}}" readonly>
+            </div>
         </div>
+        <div class="form-group">
+            <label for="inputMeetingSubject">Tema</label>
+            <input name="subject" type="text" class="form-control" id="exampleInputSubject" placeholder="Ingresa el tema de la reunión" value="{{meeting.tema}}">
+        </div>
+        <div class="form-group">
+            <label for="inputMeetingDescription">Descripción</label>
+            <textarea name="description" class="form-control" id="inputMeetingDescription" rows="3" placeholder="Ingresa la descripción de la reunión">{{meeting.descripcion}}</textarea>
+        </div>
+        <div class="form-group form-check">
+            <input name="emailNotification" type="checkbox" class="form-check-input" id="meetingEmailCheck">
+            <label class="form-check-label" for="meetingEmailCheck">Mandar notificaciones por correo</label>
+        </div>
+        <label for="meetingDatePicker">Fecha</label>
+        <div class="row">
+            <div class="form-group datepicker-container col-sm-6">
+                <div class="input-group date">
+                    <input name="date" type="text" class="form-control" value="{{date}}">
+                    <span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
+                </div>
+            </div>
+            <div class="form-group col-sm-2">
+                <select name="hours" class="custom-select">
+                    <option value="{{hours}}"selected>{{hours}}</option>
+                    {{#each hourValues}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group col-sm-2">
+                <select name="minutes" class="custom-select">
+                    <option value={{minutes}} selected>{{minutes}}</option>
+                    {{#each minuteValues}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group col-sm-2">
+                <select name="format" class="custom-select">
+                    <option value="{{format.value}}" selected>{{format.text}}</option>
+                    <option value="1">AM</option>
+                    <option value="2">PM</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="professorMeetingInput">Profesor</label>
+                <input name="professor" type="text" id="professorMeetingInput" class="form-control" value="{{meeting.nombresProfesor}} {{meeting.apellidosProfesor}}" readonly>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="studentMeetingInput">Estudiante</label>
+                <input name="studentId" type="hidden" id="studentId" class="form-control" value="{{meeting.estudianteId}}">
+                <input type="text" id="studentMeetingInput" class="form-control" value="{{meeting.nombresEstudiante}} {{meeting.apellidosEstudiante}}" readonly>
+            </div>
+        </div>
+        <div class="form-container-btn">
+            <a class="btn btn-secondary" href="/meetings">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Editar Reunión</button>
+        </div>
+    </form>
+</div>

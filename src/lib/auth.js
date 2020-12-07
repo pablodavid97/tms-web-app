@@ -74,5 +74,21 @@ module.exports = {
     } else {
       return res.redirect('/home');
     }
+  },
+
+  isAdminUser(req, res, next) {
+    let isAdminUser = false;
+
+    for (rol of req.user.roles) {
+      if (rol.rolId === 4) {
+        isAdminUser = true;
+      }
+    }
+
+    if (isAdminUser) {
+      return next();
+    } else {
+      return res.redirect('/home');
+    }
   }
 };

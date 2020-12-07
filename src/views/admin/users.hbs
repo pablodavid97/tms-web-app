@@ -1,37 +1,36 @@
 <div class="admin-users-container">
-        <div class="page-header">
-            <h1>Usuarios</h1>
-        </div>
-        <h2>Agregar Usuarios</h2>
-        <p>Para agregar nuevos usuarios debes subir un archivo por cada rol y envíar los cambios. Se puede subir uno o multiples archivos.</p>
-        <div class="form-container add-users-form">
-            <form action="/admin/add-users" method="POST" enctype="multipart/form-data">
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label for="decanosInput">Decanos</label>
-                        <input type="file" name="deansFile" id="decanosInput" class="file-input border"/>
-                    </div>
-                    <div class="form-group col-md-3">
-                         <label for="profesoresInput">Profesores</label>
-                        <input type="file" name="professorsFile" id="profesoresInput" class="file-input border"/>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="estudiantesInput">Estudiantes</label>
-                        <input type="file" name="studentsFile" id="estudiantesInput" class="file-input border"/>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="adminsInput">Administradores</label>
-                        <input type="file" name="adminsFile" id="adminsInput" class="file-input border"/>
-                    </div>
+    <div class="page-header">
+        <h1>Usuarios</h1>
+    </div>
+    <h2>Agregar Usuarios</h2>
+    <p>Para agregar nuevos usuarios debes subir un archivo por cada rol y envíar los cambios. Se puede subir uno o multiples archivos.</p>
+    <div class="form-container add-users-form">
+        <form action="/admin/add-users" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label for="decanosInput">Decanos</label>
+                    <input type="file" name="deansFile" id="decanosInput" class="file-input border"/>
                 </div>
-                <div class="btn-container">
-                    <button type="submit" class="btn btn-primary">Enviar Cambios</button>
+                <div class="form-group col-md-3">
+                    <label for="profesoresInput">Profesores</label>
+                    <input type="file" name="professorsFile" id="profesoresInput" class="file-input border"/>
                 </div>
-            </form>
-        </div>
-
-        <h2>Usuarios Registrados</h2>
-        <div class="table-responsive users-table-container scrollable-container">
+                <div class="form-group col-md-3">
+                    <label for="estudiantesInput">Estudiantes</label>
+                    <input type="file" name="studentsFile" id="estudiantesInput" class="file-input border"/>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="adminsInput">Administradores</label>
+                    <input type="file" name="adminsFile" id="adminsInput" class="file-input border"/>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button type="submit" class="btn btn-primary">Enviar Cambios</button>
+            </div>
+        </form>
+    </div>
+    <h2>Usuarios Registrados</h2>
+    <div class="table-responsive users-table-container scrollable-container">
         <table id="usersTable" class="table table-striped table-sm">
             <thead>
                 <tr>
@@ -59,11 +58,11 @@
                     <td>{{this.telefono}}</td>
                     <td>{{this.rolesText}}</td>
                     {{#if (is this.id 1)}}
-                        <td></td>
-                        <td></td>
+                    <td></td>
+                    <td></td>
                     {{else}}
-                        <td><a href="/admin/edit-user/{{this.id}}">Editar</a></td>
-                        <td><a href="/admin/delete-user/{{this.id}}">Eliminar</a></td>
+                    <td><a href="/admin/edit-user/{{this.id}}">Editar</a></td>
+                    <td><a href="/admin/delete-user/{{this.id}}">Eliminar</a></td>
                     {{/if}}
                 </tr>
                 {{/each}}
