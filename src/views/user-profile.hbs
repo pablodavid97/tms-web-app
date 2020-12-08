@@ -6,22 +6,22 @@
             {{else}}
                 <img id="userImg" class="img mb-4" src="/img/unknown-user-avatar.jpg">
             {{/if}}
-            <h3>{{user.nombres}} {{user.apellidos}}</h3>
+            <h2>{{user.nombres}} {{user.apellidos}}</h2>
             {{#if (and isProfessor true isDean true)}}
-                <h4>Decano</h4>
+                <h3>Decano</h3>
             {{else}}
                 {{#if isDean}}
-                    <h4>Decano</h4>
+                    <h3>Decano</h3>
                 {{/if}}
                 {{#if isProfessor}}
-                    <h4>Profesor</h4>
+                    <h3>Profesor</h3>
                 {{/if}}
             {{/if}}
             {{#if isStudent}}
-                <h4>Estudiante</h4>
+                <h3>Estudiante</h3>
             {{/if}}
             {{#if isAdmin}}
-                <h4>Administrador</h4>
+                <h3>Administrador</h3>
             {{/if}}
         </div>
         <div class="col-sm-6 user-info">

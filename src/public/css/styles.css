@@ -7,28 +7,88 @@
 body,
 html {
 	height: 100%;
-	font-family: Poppins-Regular, sans-serif;
+	font-family: "Helvetica L",Arial,Verdana,sans-serif;
+	font-size: 1rem;
+	font-weight: normal;
+	line-height: 1.5;
+	color: #212529;
+	text-align: left;
+}
+
+/* Header styles */
+h1, h2, h3, h4{
+	font-family: "Baskerville",Garamond,"Times New Roman",serif;
+}
+
+h1 {
+	font-size: 2.5rem;	
+}
+
+h2 {
+	font-size: 2rem;
+}
+
+h3 {
+	font-size: 1.5rem;
+}
+
+h4 {
+	font-size: 1.2rem;
+}
+
+/* Navbar styles */
+.navbar {
+	font-size: 1.15rem;
+	font-family: "Baskerville",Garamond,"Times New Roman",serif;
+	box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
+    position: sticky;
+    top: 0;
+	z-index: 500;
+	background-color: #ffff!important
+}
+
+.navbar .navbar-brand {
+	margin: 0.5rem 5rem;
+}
+
+.navbar .navbar-brand img {
+	height: 50px;
+	width: auto;
 }
 
 .main-container {
-	margin-top: 5%;
-	margin-bottom: 5%;
+	margin-top: 3rem;
+	margin-bottom: 3rem;
 	min-height: 600px;
+	background: #ffff;
+	z-index: 100;
 }
 
 .form-container {
 	text-align: center;
+	z-index: 500;
+}
+
+  /* Sign in video */
+  #signinVideo {
+	width: 100%;
+	height: auto;
+	position: absolute;
+	margin-top: -4.2%;
+	z-index: -1;
 }
 
 .signin-container {
 	box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
+	width: 25%;
+	margin-left: 65%;
 	/* margin-top: 3rem!important; 
     margin-bottom: 3rem!important; */
 }
 
 .form-container .form-side-image {
-	background-image: url('../img/bg-01.jpg');
-	width: calc(100% - 560px);
+	background-image: url('../img/usfq-campus.jpg');
+	width: 100%;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
@@ -44,8 +104,8 @@ html {
 
 .form-header-logo {
 	margin-bottom: 1.5rem!important;
-	width: 72px;
-	height: 72px
+	width: auto;
+	height: 170px
 }
 
 .form-header {
@@ -141,6 +201,10 @@ html {
 	color: #555555;
 }
 
+.txt1:hover, .txt2:hover, .txt3:hover {
+	color: #1b1b1b
+} 
+
 .form-container-btn {
 	text-align: center;
 	padding: 1rem;
@@ -150,14 +214,25 @@ html {
 	font-size: 16px;
 	min-width: 250px;
 	height: 40px;
-	border-radius: 20px;
+	border-radius: 10px;
 	text-transform: uppercase;
+	color: #ffffff;
+	background: #8f1606;
+	border: 1px solid #1a1816
+}
+
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:active{
+	color: #ffffff!important;
+	background-color: #8f1606!important;
+	border-color: #c22e2e!important;
 }
 
 .btn.btn-secondary {
-	color: #fff;
-	background-color: #6c757d!important;
-	border-color: #6c757d!important;
+	color: #2b2b28;
+	background-color: #D8D4CB!important;
+	border: 1px solid #D8D4CB!important;
 }
 
 .btn.btn-secondary:hover,
@@ -165,7 +240,7 @@ html {
 .btn.btn-secondary:active {
 	color: #fff;
 	background-color: #6c757d!important;
-	border-color: #6c757d!important;
+	border-color: #7d8185!important;
 }
 
 .sign-in-question-container {
@@ -173,10 +248,45 @@ html {
 	padding-bottom: 1rem!important;
 }
 
+/* Input Styles */
+
+.form-input {
+	background-color: #F2F2F2;
+    border: 1px solid #F2F2F2;
+}
+
+.form-input:focus {
+	background-color: #fafafa!important;
+	border-color: #848e99;
+}
+
+/* Footer Styles */
 .usfq-footer {
-	padding-top: 3rem;
-	padding-bottom: 3rem;
-	background: #f8f9fa!important;
+	background: #231F20!important;
+	color: white;
+}
+
+.usfq-footer .container {
+	padding: 3rem 5rem;
+}
+
+.usfq-footer a{
+	color: #ffff
+}
+
+.usfq-footer a:hover{
+	color: #ffff
+}
+
+.usfq-footer #footerLogo img{
+	height: 50px;
+	width: auto;
+}
+
+.usfq-footer .copyright{
+    font-size: 0.9em;
+    text-align: center;
+	padding: 3rem;
 }
 
 
@@ -195,10 +305,12 @@ html {
 }
 
 .password-container {
-	margin: 0 20%;
-	background: #fff;
 	border: 1px solid #c9c9c9;
-	padding: 4rem;
+    padding: 2rem 5rem;
+}
+
+.form-pwd-container {
+	padding: 0 10rem;
 }
 
 .form-container .lead {
@@ -215,7 +327,7 @@ html {
 
 .profile-container {
 	min-height: 650px;
-	padding: 5rem;
+	padding: 1rem;
 	box-shadow: 0px 20px 80px 0px rgba(153, 153, 153, 0.3);
 }
 
@@ -259,6 +371,10 @@ html {
 
 
 /* Meeting styles */
+.meetings-container {
+	border: 1px solid #c9c9c9;
+	padding: 0.5rem 2rem;
+}
 
 .meeting-container {
 	padding: 3rem 15rem;
@@ -295,11 +411,6 @@ html {
 	padding: 1rem;
 }
 
-.meeting-container .form-container-btn .btn.btn-primary {
-	border-radius: 5px;
-}
-
-
 /* Meeting modal styles */
 
 .meeting-id {
@@ -319,6 +430,10 @@ html {
 
 
 /* Reports Styles */
+.reports-container {
+	max-height: 800px;
+	overflow-y: scroll;
+}
 
 .kpi-section {
 	margin: 3rem 0;
@@ -365,13 +480,14 @@ html {
 
 /* Notification Styles */
 
-.notifications-container {
-	max-height: 700px;
-	overflow-y: scroll;
+.meeting-notifications-container {
+	padding: 2rem;
 }
 
-.notifications-container h1 {
-	font-size: 2rem;
+.notifications-container {
+
+	max-height: 700px;
+	overflow-y: scroll;
 }
 
 .meeting-info-container {
@@ -397,6 +513,10 @@ html {
 
 .meeting-section {
 	margin-bottom: 1.5rem;
+}
+
+.meeting-section h2 {
+	font-size: 2.5rem;
 }
 
 .meetingLabel {
@@ -517,21 +637,21 @@ html {
 /* Edit Profile Styles */
 
 .edit-profile-container {
-	padding: 0rem 5rem;
-	text-align: left
-}
-
-.form-edit-profile {
-	border: 1px solid black;
-	padding: 3rem 7rem;
+	padding: 3rem;
+	text-align: left;
+	border: 1px solid #c9c9c9;
 }
 
 .edit-personal-brand {
-	margin-bottom: 4rem;
+	margin-bottom: 1rem;
 }
 
-.edit-user-info .form-lbl {
-	padding-left: 6rem;
+.edit-personal-brand .row {
+	padding: 0rem 3rem;
+}
+
+.edit-user-info {
+	margin-top: 5rem;
 }
 
 
@@ -546,6 +666,7 @@ html {
 	top: 50%;
 	left: 1rem;
 	transform: translateY(-50%);
+	font-size: 0.8rem;
 }
 
 .image-area {
@@ -573,7 +694,7 @@ html {
 }
 
 .user-img-container .input-group {
-	margin: 0 8rem;
+	margin: 0 1rem;
 	height: 40px;
 	width: auto;
 }
@@ -581,7 +702,12 @@ html {
 .user-img-container .input-group .input-group-append {
 	position: absolute;
 	right: 0;
+	top: 0;
 	height: 100%;
+}
+
+.user-img-container .input-group .input-group-append .btn.rounded-pill{
+	font-size: 0.8rem;
 }
 
 .user-img-container .input-group .input-group-append i.fas {
@@ -601,7 +727,7 @@ html {
 }
 
 .gpa-by-semester-container .gpa-table-container {
-	max-height: 400px;
+	max-height: 250px;
 	overflow-y: scroll;
 }
 
@@ -648,10 +774,11 @@ html {
     top: 0;
     bottom: 0;
     left: 0;
-    z-index: 100; /* Behind the navbar */
+    z-index: 20; /* Behind the navbar */
     padding: 0;
 	box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-	height: 60vw;
+	height: calc(60vw - 112px);
+    top: 112px;
   }
   
   .sidebar .nav-link {
@@ -687,16 +814,20 @@ html {
       z-index: 500;
   }
   
-  .admin-navbar-brand {
-    padding-top: .75rem;
-    padding-bottom: .75rem;
-    font-size: 1rem;
+  .navbar-brand.admin-navbar-brand {
+    margin: 1rem;
   }
+
+  .admin-navbar .admin-navbar-brand img {
+	height: 50px;
+	width: auto;
+}
 
   .admin-navbar-nav {
       padding: 0 3rem;
       position: absolute;
-      right: 0;
+	  right: 1rem;
+	  top: 2rem;
   }
 
   .admin-navbar-nav .nav-item {
@@ -721,9 +852,9 @@ html {
   }
 
   .admin-sidebar {
-      top: 80px;
-	  height: calc(60vw - 80px);
-	  position: sticky;
+	height: calc(60vw - 150px);
+	top: 150px;
+	position: sticky;
   }
 
   .users-table-container {
@@ -847,4 +978,31 @@ html {
     margin-right: 15%;
     border: 1px solid black;
     padding: 3rem 5rem;
+  }
+
+  /* Table Styles */
+  .table-responsive {
+	  display: table;
+  }
+
+
+  /* Background Styles */
+
+  .background-container {
+	background: url('../img/usfq-campus-paseo.jpg');
+	background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+	position: absolute;
+	top: 5rem;
+    z-index: -1;
+  }
+
+  /* Message Styles */
+  .message-container {
+	position: absolute;
+    width: 100%;
+    padding: 1rem;
   }

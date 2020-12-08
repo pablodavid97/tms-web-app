@@ -1,60 +1,68 @@
 <div class="container edit-profile-container main-container">
     <div class="page-header">
         <h1>Editar Perfil</h1>
-        <img class="mb-4" src="./img/bootstrap-solid.svg" alt="" width="72" height="72">
+        <img class="mb-4 form-header-logo" src="./img/main-logo.svg" alt="" width="72" height="72">
     </div>
     <form action="/edit-profile" method="POST" class="form-edit-profile" enctype="multipart/form-data">
         <div class="edit-personal-brand">
-            <div class="user-img-container">
-                <!-- Uploaded image area-->
-                {{#if user.imagen}}
-                <div class="image-area mt-4"><img id="imgResult" src="/img/tmp/{{user.imagen.nombre}}" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
-                {{else}}
-                <div class="image-area mt-4"><img id="imgResult" src="/img/unknown-user-avatar.jpg" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
-                {{/if}}
-                <!-- Upload image input-->
-                <div class="input-group rounded-pill bg-white shadow-sm">
-                    <input id="profileImgInput" class="profile-img-input" name="file" type="file" onchange="readURL(this);" class="form-control border-0">
-                    <label id="profileImgInputLbl" for="profileImgInput" class="font-weight-light text-muted">Elige un archivo</label>
-                    <div class="input-group-append">
-                        <label for="profileImgInput" class="btn btn-light m-0 rounded-pill px-4"><i class="fas fa-cloud-upload-alt"></i><small class="text-uppercase font-weight-bold text-muted">Elegir archivo</small></label>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="user-img-container">
+                            <!-- Uploaded image area-->
+                            {{#if user.imagen}}
+                            <div class="image-area mt-4"><img id="imgResult" src="/img/tmp/{{user.imagen.nombre}}" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
+                            {{else}}
+                            <div class="image-area mt-4"><img id="imgResult" src="/img/unknown-user-avatar.jpg" alt="" class="img img-fluid shadow-sm mx-auto d-block"></div>
+                            {{/if}}
+
+                            <!-- Upload image input-->
+                            <div class="input-group rounded-pill bg-white shadow-sm">
+                                <input id="profileImgInput" class="profile-img-input" name="file" type="file" onchange="readURL(this);" class="form-control border-0">
+                                <label id="profileImgInputLbl" for="profileImgInput" class="font-weight-light text-muted">Elige un archivo</label>
+                                <div class="input-group-append">
+                                    <label for="profileImgInput" class="btn btn-light m-0 rounded-pill px-4"><i class="fas fa-cloud-upload-alt"></i><small class="text-uppercase font-weight-bold text-muted">Elegir archivo</small></label>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    <div class="col-md-7">
+                        <div class="edit-user-info">
+                            <div class="row">
+                                <div class="col-sm-5 form-lbl">
+                                    <label for="userNames">Nombres: </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="text" id="userNames" name="userNames" class="form-control form-input input-name" placeholder="Nombres" autofocus="" autocomplete="off" value="{{user.nombres}}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5 form-lbl">
+                                    <label for="userLastNames">Apellidos: </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="text" id="userLastNames" name="userLastNames" class="form-control form-input input-lastname" placeholder="Apellidos" autofocus="" autocomplete="off" value="{{user.apellidos}}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5 form-lbl">
+                                    <label for="userEmail">Correo Personal: </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" autofocus="" autocomplete="off" value="{{user.correoPersonal}}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5 form-lbl">
+                                    <label for="userPhone">Teléfono: </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="text" id="userPhone" name="userPhone" class="form-control form-input input-phone" placeholder="Teléfono" autofocus="" autocomplete="off" value="{{user.telefono}}">
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
-            </div>
-        </div>
-        <div class="edit-user-info">
-            <div class="row">
-                <div class="col-sm-6 form-lbl">
-                    <label for="userNames">Nombres: </label>
-                </div>
-                <div class="col-sm-5">
-                    <input type="text" id="userNames" name="userNames" class="form-control form-input input-name" placeholder="Nombres" autofocus="" autocomplete="off" value="{{user.nombres}}">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 form-lbl">
-                    <label for="userLastNames">Apellidos: </label>
-                </div>
-                <div class="col-sm-5">
-                    <input type="text" id="userLastNames" name="userLastNames" class="form-control form-input input-lastname" placeholder="Apellidos" autofocus="" autocomplete="off" value="{{user.apellidos}}">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 form-lbl">
-                    <label for="userEmail">Correo Personal: </label>
-                </div>
-                <div class="col-sm-5">
-                    <input type="email" id="userEmail" name="userEmail" class="form-control form-input input-email" placeholder="Email" autofocus="" autocomplete="off" value="{{user.correoPersonal}}">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 form-lbl">
-                    <label for="userPhone">Teléfono: </label>
-                </div>
-                <div class="col-sm-5">
-                    <input type="text" id="userPhone" name="userPhone" class="form-control form-input input-phone" placeholder="Teléfono" autofocus="" autocomplete="off" value="{{user.telefono}}">
-                </div>
-            </div>
         </div>
         <div class="form-container-btn">
             <button class="btn btn-primary" type="submit">Editar Perfil</button>
@@ -87,6 +95,6 @@
     function showFileName( event ) {
       var input = event.srcElement;
       var fileName = input.files[0].name;
-      infoArea.textContent = 'Nombre del archivo: ' + fileName;
+      infoArea.textContent = 'Archivo: ' + fileName;
     }
 </script>

@@ -29,7 +29,11 @@
         {{>  admin-nav }}
         {{>  nav }}
         {{> admin-sidenav}}
-        {{> message }} 
+        {{> message }}
+        {{#if (isNot isAdmin true)}}
+            <div class="background-container">
+            </div>
+        {{/if}} 
         {{{ body }}}
         {{> footer }}
         <!-- Date-Picker Script -->
