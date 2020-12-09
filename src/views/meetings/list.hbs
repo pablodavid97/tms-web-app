@@ -100,7 +100,7 @@
     </div>
     <div class="meetings-table-container">
         <table id="meetingsTable"class="table table-hover meetings-table table-responsive">
-            <thead class="thead-dark">
+            <thead class="table-header">
                 <tr>
                     {{#if isProfessor}}
                     <th scope="col">Número</th>
@@ -178,8 +178,24 @@
 <script>
     $(document).ready(function() {
         $("#meetingsTable").DataTable({
-            "lengthMenu":  [5, 10, 20, 30]
+            "lengthMenu":  [5, 10, 20, 30],
+            "pagingType": "full_numbers",
+            "language": {
+                "emptyTable": "No existen datos que mostrar.",
+                "info": "_END_ de _TOTAL_ filas",
+                "infoEmpty": "0 de 0 filas",
+                "lengthMenu":     "Mostrar _MENU_ filas",
+                "loadingRecords": "Cargando datos...",
+                "processing":     "Procesando datos...",
+                "search":         "Buscar:",
+                "zeroRecords":    "No se encontraron registros de acuerdo a la busqueda.",
+                "paginate": {
+                    "first": "Primero",
+                    "previous": "Anterior &lt",
+                    "next": "Siguiente &gt",
+                    "last": "Último"
+                }
+            }
         });
-        $(".meetings-length").addClass("bs-select");
     })
 </script>

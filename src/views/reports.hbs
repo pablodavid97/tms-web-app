@@ -5,34 +5,42 @@
     <div class="kpi-section row">
         <div class="kpi-container col-sm-3">
             <div id="createdMeetingsKPI" class="kpi">
+                <div class="kpi-frame-top"></div>
                 <div class="kpi-header">
                     <h4>Reuniones Creadas</h4>
                 </div>
                 <span class="kpi-value">{{meetingsNum}}</span>
+                <div class="kpi-frame-bottom"></div>
             </div>
         </div>
         <div class="kpi-container col-sm-3">
             <div id="deletedMeetingsKPI" class="kpi">
+                <div class="kpi-frame-top"></div>
                 <div class="kpi-header">
                     <h4 class="kpi-header">Reuniones Eliminadas</h4>
                 </div>
                 <span class="kpi-value">{{reunionesEliminadasNum}}</span>
+                <div class="kpi-frame-bottom"></div>
             </div>
         </div>
         <div class="kpi-container col-sm-3">
             <div id="averageGPAKPI" class="kpi">
+                <div class="kpi-frame-top"></div>
                 <div class="kpi-header">
                     <h4 class="kpi-header">GPA Promedio</h4>
                 </div>
                 <span class="kpi-value">{{gpa}}</span>
+                <div class="kpi-frame-bottom"></div>
             </div>
         </div>
         <div class="kpi-container col-sm-3">
             <div id="conditionedStudentsKPI" class="kpi">
+                <div class="kpi-frame-top"></div>
                 <div class="kpi-header">
                     <h4 class="kpi-header">Estudiantes Condicionados</h4>
                 </div>
                 <span class="kpi-value">{{conditionedNum}}</span>
+                <div class="kpi-frame-bottom"></div>
             </div>
         </div>
     </div>
@@ -64,7 +72,7 @@
     </div>
     <div class="meetings-table-container">
         <table id="meetingsTable"class="table table-hover meetings-table table-responsive">
-            <thead class="thead-dark">
+            <thead class="table-header">
                 <tr>
                     <th scope="col">Número</th>
                     <th scope="col">Tema</th>
@@ -101,10 +109,26 @@
 </div>
 <script>
     $(document).ready(function() {
-        $("#meetingsTable").DataTable({
-            "lengthMenu":  [5, 10, 20, 30]
+       $("#meetingsTable").DataTable({
+            "lengthMenu":  [5, 10, 20, 30],
+            "pagingType": "full_numbers",
+            "language": {
+                "emptyTable": "No existen datos que mostrar.",
+                "info": "_END_ de _TOTAL_ filas",
+                "infoEmpty": "0 de 0 filas",
+                "lengthMenu":     "Mostrar _MENU_ filas",
+                "loadingRecords": "Cargando datos...",
+                "processing":     "Procesando datos...",
+                "search":         "Buscar:",
+                "zeroRecords":    "No se encontraron registros de acuerdo a la busqueda.",
+                "paginate": {
+                    "first": "Primero",
+                    "previous": "Anterior &lt",
+                    "next": "Siguiente &gt",
+                    "last": "Último"
+                }
+            }
         });
-        $(".meetings-length").addClass("bs-select");
     })
     
     function generateCSV(jsonData) {

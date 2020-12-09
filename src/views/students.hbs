@@ -3,8 +3,8 @@
         <div class="page-header header-left">
             <h1>Estudiantes</h1>
         </div>
-        <table class="table table-hover students-table table-responsive">
-            <thead class="thead-dark">
+        <table id="usersTable" class="table table-hover students-table table-responsive">
+            <thead class="table-header">
                 <tr>
                     <th scope="col">Código</th>
                     <th scope="col">Nombres</th>
@@ -27,3 +27,27 @@
         </table>
     </div>
 </div>
+<script>
+     $(document).ready(function() {
+        $("#usersTable").DataTable({
+            "lengthMenu":  [3, 6, 9],
+            "pagingType": "full_numbers",
+            "language": {
+                "emptyTable": "No existen datos que mostrar.",
+                "info": "_END_ de _TOTAL_ filas",
+                "infoEmpty": "0 de 0 filas",
+                "lengthMenu":     "Mostrar _MENU_ filas",
+                "loadingRecords": "Cargando datos...",
+                "processing":     "Procesando datos...",
+                "search":         "Buscar:",
+                "zeroRecords":    "No se encontraron registros de acuerdo a la busqueda.",
+                "paginate": {
+                    "first": "Primero",
+                    "previous": "Anterior &lt",
+                    "next": "Siguiente &gt",
+                    "last": "Último"
+                }
+            }
+        });
+    });
+</script>

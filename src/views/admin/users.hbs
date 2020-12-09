@@ -30,7 +30,7 @@
         </form>
     </div>
     <h2>Usuarios Registrados</h2>
-    <div class="table-responsive users-table-container scrollable-container">
+    <div class="users-table-container scrollable-container">
         <table id="usersTable" class="table table-striped table-sm">
             <thead>
                 <tr>
@@ -73,8 +73,24 @@
 <script>
     $(document).ready(function() {
         $("#usersTable").DataTable({
-            "lengthMenu":  [5, 10, 20, 30]
+            "lengthMenu":  [5, 10, 20, 30],
+            "pagingType": "full_numbers",
+            "language": {
+                "emptyTable": "No existen datos que mostrar.",
+                "info": "_END_ de _TOTAL_ filas",
+                "infoEmpty": "0 de 0 filas",
+                "lengthMenu":     "Mostrar _MENU_ filas",
+                "loadingRecords": "Cargando datos...",
+                "processing":     "Procesando datos...",
+                "search":         "Buscar:",
+                "zeroRecords":    "No se encontraron registros de acuerdo a la busqueda.",
+                "paginate": {
+                    "first": "Primero",
+                    "previous": "Anterior &lt",
+                    "next": "Siguiente &gt",
+                    "last": "Último"
+                }
+            }
         });
-        //$(".meetings-length").addClass("bs-select");
     })
 </script>
