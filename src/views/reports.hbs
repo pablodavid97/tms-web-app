@@ -17,7 +17,7 @@
             <div id="deletedMeetingsKPI" class="kpi">
                 <div class="kpi-frame-top"></div>
                 <div class="kpi-header">
-                    <h4 class="kpi-header">Reuniones Eliminadas</h4>
+                    <h4>Reuniones Eliminadas</h4>
                 </div>
                 <span class="kpi-value">{{reunionesEliminadasNum}}</span>
                 <div class="kpi-frame-bottom"></div>
@@ -27,7 +27,7 @@
             <div id="averageGPAKPI" class="kpi">
                 <div class="kpi-frame-top"></div>
                 <div class="kpi-header">
-                    <h4 class="kpi-header">GPA Promedio</h4>
+                    <h4>GPA Promedio</h4>
                 </div>
                 <span class="kpi-value">{{gpa}}</span>
                 <div class="kpi-frame-bottom"></div>
@@ -37,7 +37,7 @@
             <div id="conditionedStudentsKPI" class="kpi">
                 <div class="kpi-frame-top"></div>
                 <div class="kpi-header">
-                    <h4 class="kpi-header">Estudiantes Condicionados</h4>
+                    <h4>Estudiantes Condicionados</h4>
                 </div>
                 <span class="kpi-value">{{conditionedNum}}</span>
                 <div class="kpi-frame-bottom"></div>
@@ -267,10 +267,10 @@
     
         // modify kpi values
         var meetingsNum = data.reuniones.length
-        createdMeetings[3].innerHTML = meetingsNum
-        deletedMeetings[3].innerHTML = data.reunionesEliminadas.length
-        averageGPA[3].innerHTML = data.gpa
-        conditionedStudents[3].innerHTML = data.conditionedUsersNum
+        createdMeetings[5].innerHTML = meetingsNum
+        deletedMeetings[5].innerHTML = data.reunionesEliminadas.length
+        averageGPA[5].innerHTML = data.gpa
+        conditionedStudents[5].innerHTML = data.conditionedUsersNum
     
         // replace button onclick
         const reportButton = document.getElementById("generateReportButton")
@@ -291,7 +291,7 @@
     
         let tHead = newMeetingsTable.createTHead();
         let row = tHead.insertRow();
-        tHead.classList.add("thead-dark")
+        tHead.classList.add("table-header")
     
         // inserts table headers
         var tHeaders = ["Número", "Tema", "Descripción", "Fecha", "Profesor", "Estudiante", "Semestre", "Estado", ""]
@@ -355,8 +355,24 @@
         }
     
         $("#meetingsTable").DataTable({
-            "lengthMenu": [5, 10, 20, 30]
+            "lengthMenu":  [5, 10, 20, 30],
+            "pagingType": "full_numbers",
+            "language": {
+                "emptyTable": "No existen datos que mostrar.",
+                "info": "_END_ de _TOTAL_ filas",
+                "infoEmpty": "0 de 0 filas",
+                "lengthMenu":     "Mostrar _MENU_ filas",
+                "loadingRecords": "Cargando datos...",
+                "processing":     "Procesando datos...",
+                "search":         "Buscar:",
+                "zeroRecords":    "No se encontraron registros de acuerdo a la busqueda.",
+                "paginate": {
+                    "first": "Primero",
+                    "previous": "Anterior &lt",
+                    "next": "Siguiente &gt",
+                    "last": "Último"
+                }
+            }
         });
-        $(".meetings-length").addClass("bs-select");
     }
 </script>

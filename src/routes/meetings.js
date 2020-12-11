@@ -1,5 +1,4 @@
 const express = require('express');
-const pool = require('../database');
 const {
   isLoggedIn,
   isProfessorUser,

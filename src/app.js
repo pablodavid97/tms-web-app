@@ -4,26 +4,18 @@ const path = require('path');
 const passport = require('passport');
 const flash = require('connect-flash');
 const uuid = require('uuid');
-const mysql = require('mysql');
 const axiosInstance = require('./http-client');
 
 // Dev dependencies
 const reload = require('reload');
 const morgan = require('morgan');
 
-// const { database } = require('./keys');
-
-// initializations
-require('dotenv').config();
-
 const hostname = '127.0.0.1';
 const port = 4000;
 const app = express();
 require('./lib/passport');
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
 const { body } = require('express-validator');
-const pool = require('./database');
 
 // settings
 app.set('port', process.env.PORT || port);
