@@ -44,7 +44,6 @@ app.use(
     secret: 'session_cookie_secret',
     resave: false,
     saveUninitialized: false
-    // store: new MySQLStore({}, pool)
   })
 );
 app.use(flash());
