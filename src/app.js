@@ -10,6 +10,7 @@ const axiosInstance = require('./http-client');
 const reload = require('reload');
 const morgan = require('morgan');
 
+require('dotenv').config();
 const hostname = '127.0.0.1';
 const port = 4000;
 const app = express();
