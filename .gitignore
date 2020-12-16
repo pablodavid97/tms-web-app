@@ -2,8 +2,9 @@
 .env
 
 # Ignor images
-src/public/img/tmp
-src/public/img/uploads
+src/public/img/tmp/*
+src/public/img/uploads/*
+src/public/tmp/*
 
 # Ignore node_modules folder
 node_modules
