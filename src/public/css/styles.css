@@ -664,7 +664,7 @@ h4 {
 /* Edit Profile Styles */
 
 .edit-profile-container {
-	padding: 3rem;
+	padding-bottom: 3rem;
 	text-align: left;
 	border: 1px solid #c9c9c9;
 }
@@ -750,7 +750,7 @@ h4 {
 
 /* Student GPA Styles */
 .gpa-by-semester-container {
-	padding: 3rem 5rem;
+	padding: 1rem 5rem;
 }
 
 .gpa-by-semester-container .gpa-table-container {
@@ -889,13 +889,6 @@ h4 {
 	overflow-y: scroll;
   }
   
-  /*
-   * Utilities
-   */
-  
-  .border-top { border-top: 1px solid #e5e5e5; }
-  .border-bottom { border-bottom: 1px solid #e5e5e5; }
-
 /* Admin home styles */
 .admin-container .current-semester-form {
 	margin-bottom: 5rem;
@@ -919,7 +912,7 @@ h4 {
 /* File inputs styles */
 
 .file-input {
-	margin: 0 3rem
+	margin: 0 1rem
 }
 
 .files-upload-container {
@@ -936,6 +929,8 @@ h4 {
 
 .files-upload-container .files-container {
 	margin-bottom: 4rem;
+	text-align: right;
+	padding: 0 20%;
 }
 
 /* Image Upload Styles */
@@ -1007,6 +1002,17 @@ h4 {
     padding: 3rem 5rem;
   }
 
+  .additional-files-container .files-container {
+	  text-align: right;
+	  padding: 0 15%;
+  }
+
+  /* Admin change password */
+  .admin-password-container {
+	  margin-left: 28vw;
+	  margin-top: 5rem;
+  }
+
   /* Table Styles */
   .table-responsive {
 	  display: table;
@@ -1076,4 +1082,10 @@ table a:hover {
 }
 
 
-/* Admin table styles */
+  /*
+   * Utilities
+   */
+  
+   .border-top { border-top: 1px solid #e5e5e5; }
+   .border-bottom { border-bottom: 1px solid #e5e5e5; }
+ 
